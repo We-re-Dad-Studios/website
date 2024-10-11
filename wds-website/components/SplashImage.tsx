@@ -13,9 +13,9 @@ export const SplashImage = () => {
         }
        if(hasPageMounted && hasImageLoaded && imageRef.current !== null){
         animate(imageRef.current!,{
-            y:[30,-45,-120],
+            y:[30,10,-120],
             opacity:[0,0,1],
-            scale:[0.8,1]
+            scale:[0.8,0.8,1]
         },{duration:0.7,ease:"easeOut",times:[0,0.5,1]});
         setTimeout(() => {
         if(imageRef.current){
@@ -26,7 +26,7 @@ export const SplashImage = () => {
                 repeatType: "reverse", // to scale down after scaling up
                 ease: "easeInOut",}) 
         }
-        }, 450);
+        }, 750);
        }
     },[hasPageMounted,hasImageLoaded,imageRef.current])
   return (
