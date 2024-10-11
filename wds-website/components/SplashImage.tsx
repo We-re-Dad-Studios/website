@@ -11,22 +11,24 @@ export const SplashImage = () => {
         if(!hasPageMounted){
             setHasPageMounted(true);
         }
-       if(hasPageMounted && hasImageLoaded){
+       if(hasPageMounted && hasImageLoaded && imageRef.current !== null){
         animate(imageRef.current!,{
             y:[30,-45,-120],
             opacity:[0,0,1],
             scale:[0.8,1]
         },{duration:0.7,ease:"easeOut",times:[0,0.5,1]});
         setTimeout(() => {
-        animate(imageRef.current!,{
-            scale:[1,1.05,0.95]
-        },{ duration: 1.5, // duration of one full cycle
-            repeat: Infinity, // repeat forever
-            repeatType: "reverse", // to scale down after scaling up
-            ease: "easeInOut",}) 
+        if(imageRef.current){
+            animate(imageRef.current!,{
+                scale:[1,1.05,0.95]
+            },{ duration: 1.5, // duration of one full cycle
+                repeat: Infinity, // repeat forever
+                repeatType: "reverse", // to scale down after scaling up
+                ease: "easeInOut",}) 
+        }
         }, 450);
        }
-    },[hasPageMounted,hasImageLoaded])
+    },[hasPageMounted,hasImageLoaded,imageRef.current])
   return (
     <Image  alt="logo" style={{opacity:0}}  ref={imageRef} onLoad={()=>{
         setHasImageLoaded(true);

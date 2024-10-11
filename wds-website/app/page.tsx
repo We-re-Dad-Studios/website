@@ -3,16 +3,15 @@ import { AnimatedArrow } from "@/components/AnimatedArrow";
 import { SplashImage } from "@/components/SplashImage";
 import { useSessionStorage } from "@/hooks/useSessionStorage";
 import { AnimatePresence,motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { ProjectsSection } from "@/components/ProjectsSection";
 import { Newsletter } from "@/components/Newsletter";
 export default function Home() {
   const {getItem,storeItem} = useSessionStorage();
-
+  const [hasPageMounted,setHasPageMounted]=useState<boolean>(false);
   const [hasVisited,setHasvisited]=useState<boolean>(()=>{
-    const state =sessionStorage.getItem("state");
-    console.log();
+    const state =hasPageMounted?sessionStorage.getItem("state"):null;
     if(!state){
       return false
     }
@@ -22,6 +21,24 @@ export default function Home() {
       return hasVisited as boolean;
     }
   })
+  useEffect(()=>{
+    if(!hasPageMounted){
+      setHasPageMounted(true);
+    }
+    else{
+      setHasvisited(()=>{
+        const state =hasPageMounted?sessionStorage.getItem("state"):null;
+        if(!state){
+          return false
+        }
+        else{
+          const {hasVisited} = JSON.parse(state);
+          console.log({hasVisited})
+          return hasVisited as boolean;
+        }
+      })
+    }
+  },[hasPageMounted])
   const handleVisited=()=>{
     storeItem("state",JSON.stringify({hasVisited:true}));
     setHasvisited(true);
