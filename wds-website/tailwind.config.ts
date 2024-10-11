@@ -24,7 +24,8 @@ const config: Config = {
         neutral_1000:"#151314",
         base_black:"#0a0a0b",
         primary:{
-          0:"#4F1787"
+          0:"#4F1787",
+          100:"#E9D9F9"
         }
       },
     },

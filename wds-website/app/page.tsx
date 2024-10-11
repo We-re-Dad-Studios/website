@@ -6,6 +6,7 @@ import { AnimatePresence,motion } from "framer-motion";
 import { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { ProjectsSection } from "@/components/ProjectsSection";
+import { Newsletter } from "@/components/Newsletter";
 export default function Home() {
   const {getItem,storeItem} = useSessionStorage();
 
@@ -55,7 +56,7 @@ export default function Home() {
       ) : (
         <motion.section
           key="main-section"
-          className="w-full min-h-screen flex flex-col"
+          className="w-full min-h-screen flex flex-col  "
           initial="hidden"
           animate="visible"
           exit="exit"
@@ -67,6 +68,7 @@ export default function Home() {
           <h1 className="text-[60px]">Coming Soon</h1>
        </div>
        <ProjectsSection/>
+       <Newsletter/>
         </motion.section>
       )}
     </AnimatePresence>

@@ -33,7 +33,7 @@ body {
 }
 
 .splash-image{
-  filter: drop-shadow(5px 5px 30px #7b24d2c9);
+  filter: drop-shadow(5px 12px 30px #7b24d2f1);
 }
 
 .welcome-btn{

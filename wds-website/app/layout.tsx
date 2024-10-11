@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 
 import "./globals.css";
 import {Bebas_Neue} from "next/font/google"
+import Head from "next/head";
+
 
 export const metadata: Metadata = {
   title: "WDS",
@@ -40,6 +42,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <Head>
+      <link rel="icon" type="image/x-icon" href="/images/favicon.ico"></link>
+      <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
+          <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png" />
+          <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png" />
+          <link rel="manifest" href="/favicons/site.webmanifest" />
+          <meta name="msapplication-TileColor" content="#0a0a0b" />
+    </Head>
       <body
         className={` ${bebas.className} antialiased bg-base_black`}
       >
