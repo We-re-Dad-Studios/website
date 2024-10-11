@@ -23,7 +23,7 @@ const ProjectCard=({image,name,description,type}:{image:string|null,name:string,
         <div className='w-[80vw] md:w-[320px] h-[450px] max-h-[40vh] relative rounded-tr-lg group overflow-hidden' >
             {
                 image?<Image src={image} alt={name + "image"} width={1000} className='w-full h-full' />:<div className='w-full h-full bg-neutral_900 rounded-tr-lg grid place-items-center'>
-                    <p className='text-[35px]'>Coming Soon</p>
+                    <p className='text-[35px] whitespace-nowrap'>Coming Soon</p>
                     </div>
             }
            <div className="absolute z-[2] w-full h-full top-0 left-0 p-2 flex flex-col ">
