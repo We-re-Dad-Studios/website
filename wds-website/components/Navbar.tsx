@@ -1,5 +1,5 @@
 "use client";
-import { TwitterIcon, Youtube, YoutubeIcon } from 'lucide-react';
+import { TwitterIcon, YoutubeIcon } from 'lucide-react';
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation';
@@ -21,7 +21,7 @@ const path=usePathname();
             <Link href={"/about-us"}>
             About Us</Link>
         </div>
-        
+
 
         <div className="flex items-center gap-x-2  text-neutral-500">
        <a className='cursor-pointer'>

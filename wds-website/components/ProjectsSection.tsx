@@ -10,7 +10,7 @@ export const ProjectsSection = () => {
         <p className='w-[520px] max-w-full text-subheading mt-8 text-justify'>Discover a world filled with thoughtfully curated projects, ranging from thrilling games and captivating novels, manga, manhwa, and animations.</p>
         <div className="mt-12 w-full overflow-x-auto flex-nowrap flex justify-start gap-x-4 px-[80px]">
             {
-                projects.map(project=><ProjectCard {...project}/>)
+                projects.map(project=><ProjectCard key={project.name} {...project}/>)
             }
         </div>
     </section>

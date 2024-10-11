@@ -4,7 +4,7 @@ import { SplashImage } from "@/components/SplashImage";
 import { useSessionStorage } from "@/hooks/useSessionStorage";
 import { AnimatePresence } from "framer-motion";
 
-import { useRouter } from "next/navigation";
+
 import { useState } from "react";
 import {motion} from "framer-motion"
 import { Navbar } from "@/components/Navbar";
@@ -12,7 +12,7 @@ import { ProjectsSection } from "@/components/ProjectsSection";
 
 export default function Home() {
   const {getItem,storeItem} = useSessionStorage();
-  const router = useRouter();
+
   const [hasVisited,setHasvisited]=useState<boolean>(()=>{
     const state = getItem("state");
     if(!state){

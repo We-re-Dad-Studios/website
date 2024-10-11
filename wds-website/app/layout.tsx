@@ -1,17 +1,7 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+
 import "./globals.css";
 import {Bebas_Neue} from "next/font/google"
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
 
 export const metadata: Metadata = {
   title: "WDS",
@@ -21,7 +11,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "WDS - Game Development & Creative Studio",
     description: "We craft captivating stories and immersive worlds in games, animation, manhwa, manga, and novels.",
-    url: "s", 
+    url: "/images/WDS LOGO WHITE.png", 
     siteName: "WDS",
     
     images: [
@@ -35,13 +25,7 @@ export const metadata: Metadata = {
     locale: "en_US",
     type: "website",
   },
-  twitter: {
-    card: "summary_large_image", 
-    title: "WDS - Game Development & Creative Studio",
-    description: "We build immersive worlds through games, animation, manhwa, manga, and novels.",
-    creator: "@WDS_Studio", // Your Twitter handle
-    images: ["/WDS LOGO BLACK_.png"], // Your image URL here
-  }
+
 
 };
 const bebas= Bebas_Neue({
