@@ -11,12 +11,14 @@ export default function Home() {
   const {getItem,storeItem} = useSessionStorage();
 
   const [hasVisited,setHasvisited]=useState<boolean>(()=>{
-    const state = getItem("state");
+    const state =sessionStorage.getItem("state");
+    console.log();
     if(!state){
       return false
     }
     else{
       const {hasVisited} = JSON.parse(state);
+      console.log({hasVisited})
       return hasVisited as boolean;
     }
   })
