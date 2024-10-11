@@ -3,16 +3,16 @@ import projects from "@/cached/newProjects.json"
 import Image from 'next/image'
 export const ProjectsSection = () => {
   return (
-    <section className='py-16 flex flex-col items-center px-4 bg-neutral_1000 my-4'>
+    <section className='py-16 flex flex-col overflow-hidden items-center px-4 bg-neutral_1000 my-4'>
         <h1 className='text-heading'>
             YOUR JOURNEY BEGINS HERE !
         </h1>
         <p className='w-[520px] max-w-full text-subheading mt-8 text-justify'>Discover a world filled with thoughtfully curated projects, ranging from thrilling games and captivating novels, manga, manhwa, and animations.</p>
-        <div className="mt-12 w-full overflow-x-auto flex-nowrap flex justify-start gap-x-4 px-[80px]">
+        <section className="mt-12 overflow-x-auto flex max-w-full gap-x-4">
             {
                 projects.map(project=><ProjectCard key={project.name} {...project}/>)
             }
-        </div>
+        </section>
     </section>
   )
 }
@@ -20,7 +20,7 @@ export const ProjectsSection = () => {
 
 const ProjectCard=({image,name,description,type}:{image:string|null,name:string,description:string,type:string})=>{
     return(
-        <div className='w-[80vw] md:w-[320px] h-[450px] max-h-[40vh] relative rounded-tr-lg group overflow-hidden' >
+        <div className='w-[90vw] md:w-[320px] h-[450px] max-h-[40vh] outline  relative rounded-tr-lg group overflow-hidden' >
             {
                 image?<Image src={image} alt={name + "image"} width={1000} className='w-full h-full' />:<div className='w-full h-full bg-neutral_900 rounded-tr-lg grid place-items-center'>
                     <p className='text-[35px] whitespace-nowrap'>Coming Soon</p>

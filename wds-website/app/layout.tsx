@@ -11,12 +11,12 @@ export const metadata: Metadata = {
   openGraph: {
     title: "WDS - Game Development & Creative Studio",
     description: "We craft captivating stories and immersive worlds in games, animation, manhwa, manga, and novels.",
-    url: "/images/WDS LOGO WHITE.png", 
+    url: "https://weredadstudios.netlify.app/images/WDS%20LOGO%20WHITE.png", 
     siteName: "WDS",
     
     images: [
       {
-        url: "/WDS LOGO BLACK_.png", 
+        url: "https://weredadstudios.netlify.app/images/WDS%20LOGO%20WHITE.png", 
         width: 1200,
         height: 630,
         alt: "WDS Logo",
