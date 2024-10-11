@@ -5,12 +5,13 @@ import React, { useEffect, useRef, useState } from 'react'
 
 export const SplashImage = () => {
     const imageRef = useRef<HTMLImageElement|null>(null);
-    const [hasPageMounted,setHasPageMounted]=useState<boolean>(false)
+    const [hasPageMounted,setHasPageMounted]=useState<boolean>(false);
+    const [hasImageLoaded,setHasImageLoaded]= useState<boolean>(true);
     useEffect(()=>{
         if(!hasPageMounted){
             setHasPageMounted(true);
         }
-       if(hasPageMounted){
+       if(hasPageMounted && hasImageLoaded){
         animate(imageRef.current!,{
             y:[30,-45,-120],
             opacity:[0,0,1],
@@ -25,8 +26,10 @@ export const SplashImage = () => {
             ease: "easeInOut",}) 
         }, 450);
        }
-    },[hasPageMounted])
+    },[hasPageMounted,hasImageLoaded])
   return (
-    <Image  alt="logo" style={{opacity:0}}  ref={imageRef} className="splash-image absolute drop-shadow-md max-w-[95vw] w-[600px]  object-cover" width={2000} height={2000} src={"/images/WDS LOGO WHITE.png"}/>
+    <Image  alt="logo" style={{opacity:0}}  ref={imageRef} onLoad={()=>{
+        setHasImageLoaded(true);
+    }} className="splash-image absolute drop-shadow-md max-w-[95vw] w-[600px]  object-cover" width={2000} height={2000} src={"/images/WDS LOGO WHITE.png"}/>
   )
 }
