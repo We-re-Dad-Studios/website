@@ -12,10 +12,10 @@ export const SplashImage = () => {
         }
        if(hasPageMounted){
         animate(imageRef.current!,{
-            y:[30,-25,-120],
+            y:[30,-45,-120],
             opacity:[0,0,1],
             scale:[0.8,1]
-        },{duration:0.4,ease:"easeOut",times:[0,0.5,1]});
+        },{duration:0.7,ease:"easeOut",times:[0,0.5,1]});
         setTimeout(() => {
         animate(imageRef.current!,{
             scale:[1,1.05,0.95]
