@@ -41,7 +41,7 @@ export const Logo =()=>{
           </linearGradient>
         </mask>
       </defs>
-      <g><motion.path initial={{opacity:0}} transition={hasFdedIn&&{duration:1,delay:0.2,ease:"easeOut",repeat:Infinity}} animate={hasFdedIn&&{opacity:[0.907],y:-300}} fill="#fefffe" d="M 1107.5,1655.5 C 1147.48,1695.15 1187.48,1734.81 1227.5,1774.5C 1228.83,1781.83 1228.83,1789.17 1227.5,1796.5C 1187.51,1757.01 1147.68,1717.35 1108,1677.5C 1107.5,1670.17 1107.33,1662.84 1107.5,1655.5 Z"/></g>
+      <g><motion.path initial={{opacity:0}} transition={hasFdedIn?{duration:1,delay:0.2,ease:"easeOut",repeat:Infinity}:{}} animate={hasFdedIn?{opacity:[0.907],y:-300}:{}} fill="#fefffe" d="M 1107.5,1655.5 C 1147.48,1695.15 1187.48,1734.81 1227.5,1774.5C 1228.83,1781.83 1228.83,1789.17 1227.5,1796.5C 1187.51,1757.01 1147.68,1717.35 1108,1677.5C 1107.5,1670.17 1107.33,1662.84 1107.5,1655.5 Z"/></g>
             <g ><motion.path initial={{opacity:0,y:0}} transition={hasFdedIn&&{duration:1,delay:0.25,ease:"easeOut",repeat:Infinity}} animate={hasFdedIn&& {opacity:[0.966],y:-300}} fill="#fefffe" d="M 1107.5,1755.5 C 1147.8,1795.3 1187.97,1835.3 1228,1875.5C 1228.83,1895.84 1228.67,1916.17 1227.5,1936.5C 1187.15,1896.99 1147.32,1856.99 1108,1816.5C 1107.5,1796.17 1107.33,1775.84 1107.5,1755.5 Z"/></g>
       {/* w below */}
       <g mask="url(#mask-gradient)">
