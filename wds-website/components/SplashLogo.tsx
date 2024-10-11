@@ -7,10 +7,10 @@ export const Logo =()=>{
         setHasFadedIn(true);
     }, 2100);
     return (
-     <motion.div  className=" relative w-[340px] h-[250px] "   // Duration of the fade-in
+     <motion.div  className=" absolute  left-[calc(50%+30px)] top-1/3 outline -translate-x-1/2 w-[400px] h-[350px] "   // Duration of the fade-in
      >
          <motion.svg
-         className="w-full h-full  absolute left-0 top-0"
+         className="object-cover"
          xmlns="http://www.w3.org/2000/svg"
          version="1.1"
          viewBox="0 0 4000 4000"

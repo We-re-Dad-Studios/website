@@ -22,7 +22,10 @@ const config: Config = {
         neutral_800:"#433e3f",
         neutral_900:"#2b2829",
         neutral_1000:"#151314",
-        base_black:"#0a0a0b"
+        base_black:"#0a0a0b",
+        primary:{
+          0:"#4F1787"
+        }
       },
     },
   },

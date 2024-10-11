@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-
+import {Bebas_Neue} from "next/font/google"
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -44,7 +44,11 @@ export const metadata: Metadata = {
   }
 
 };
-
+const bebas= Bebas_Neue({
+  subsets:["latin","latin-ext"],
+  weight:["400"],
+  variable:"--font-bebas"
+})
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -53,7 +57,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={` ${bebas.className} antialiased bg-base_black`}
       >
         {children}
       </body>
