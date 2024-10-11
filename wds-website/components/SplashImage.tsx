@@ -27,6 +27,6 @@ export const SplashImage = () => {
        }
     },[hasPageMounted])
   return (
-    <Image  alt="logo" style={{opacity:0}}  ref={imageRef} className="splash-image absolute drop-shadow-md max-w-[80vw] w-[600px]  object-cover" width={2000} height={2000} src={"/images/WDS LOGO WHITE.png"}/>
+    <Image  alt="logo" style={{opacity:0}}  ref={imageRef} className="splash-image absolute drop-shadow-md max-w-[95vw] w-[600px]  object-cover" width={2000} height={2000} src={"/images/WDS LOGO WHITE.png"}/>
   )
 }
