@@ -17,7 +17,6 @@ export default function Home() {
     }
     else{
       const {hasVisited} = JSON.parse(state);
-      console.log({hasVisited})
       return hasVisited as boolean;
     }
   })
@@ -33,7 +32,6 @@ export default function Home() {
         }
         else{
           const {hasVisited} = JSON.parse(state);
-          console.log({hasVisited})
           return hasVisited as boolean;
         }
       })
