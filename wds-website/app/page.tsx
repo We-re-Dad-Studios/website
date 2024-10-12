@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { ProjectsSection } from "@/components/ProjectsSection";
 import { Newsletter } from "@/components/Newsletter";
+import { Footer } from "@/components/Footer";
 export default function Home() {
   const {getItem,storeItem} = useSessionStorage();
   const [hasPageMounted,setHasPageMounted]=useState<boolean>(false);
@@ -86,6 +87,7 @@ export default function Home() {
        </div>
        <ProjectsSection/>
        <Newsletter/>
+       <Footer/>
         </motion.section>
       )}
     </AnimatePresence>
