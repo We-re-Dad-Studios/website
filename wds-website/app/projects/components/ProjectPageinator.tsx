@@ -6,7 +6,7 @@ import React from 'react'
 export const ProjectPageinator = () => {
 
   const response: TMockData = useFetchMockData(30, 1, 'manga')
-  console.log(response.data)
+ 
   
   return (
     <div className='flex flex-col items-center w-full px-16'>
