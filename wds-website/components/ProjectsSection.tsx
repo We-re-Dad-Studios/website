@@ -1,7 +1,6 @@
 import React from 'react'
 import projects from "@/cached/newProjects.json"
 import Image from 'next/image'
-import { useFetchMockData, TMockData } from '@/hooks/useFetchMockData'
 export const ProjectsSection = () => {
     // const data: TMockData = useFetchMockData(50, 1, 'manga')
 

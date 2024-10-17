@@ -1,8 +1,5 @@
 "use client";
-
-import { useSessionStorage } from "@/hooks/useSessionStorage";
 import { AnimatePresence,motion } from "framer-motion";
-import { useEffect, useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Newsletter } from "@/components/Newsletter";
 import { Footer } from "@/components/Footer";

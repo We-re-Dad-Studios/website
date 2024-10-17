@@ -1,6 +1,6 @@
 "use client";
 
-import React, { LegacyRef, useEffect, useMemo, useRef, useState } from "react";
+import React, {  useEffect, useMemo, useRef, useState } from "react";
 import {motion} from "framer-motion"
 import { ChevronDown } from "lucide-react";
 
@@ -20,16 +20,15 @@ export const SendEmail = () => {
 
 const Dropdown=({chosenCategory,setCategory}:{chosenCategory:category,setCategory:React.Dispatch<React.SetStateAction<category>>})=>{
   
-    const isMouseButtonDown=useRef(false);
     const [isDropdownOpen,setIsDropdownOpen]=useState<boolean>(false);
     const [isClient,setIsClient]=useState(false);
     const dropdownButtonRef= useRef<HTMLButtonElement|undefined>();
     const containerRef = useRef<HTMLDivElement|undefined>();
     const dropdownVariants =useMemo(()=>({
-        default:{top:isClient? dropdownButtonRef.current?.getBoundingClientRect().top! -20: -20,zIndex:-1,opacity:0},
-        open:{top:isClient? (dropdownButtonRef.current?.getBoundingClientRect().top!+dropdownButtonRef.current?.clientHeight! )+20:"110%",zIndex:999,opacity:100},
-        closed:{top:isClient?dropdownButtonRef.current?.getBoundingClientRect().top! -20: -20,zIndex:-1,opacity:0}
-    }),[isClient,isClient?window.innerWidth:undefined])
+        default:{top:isClient? dropdownButtonRef.current?.getBoundingClientRect().top||0 -20: -20,zIndex:-1,opacity:0},
+        open:{top:isClient? (dropdownButtonRef.current?.getBoundingClientRect().top||0+(dropdownButtonRef.current?.clientHeight ?dropdownButtonRef.current?.clientHeight:0) )+20:"110%",zIndex:999,opacity:100},
+        closed:{top:isClient?dropdownButtonRef.current?.getBoundingClientRect().top||0 -20: -20,zIndex:-1,opacity:0}
+    }),[isClient])
     useEffect(()=>{
         if(!isClient){
             setIsClient(true);

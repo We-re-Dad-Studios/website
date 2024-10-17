@@ -28,7 +28,7 @@ export const SplashImage = () => {
         }
         }, 750);
        }
-    },[hasPageMounted,hasImageLoaded,imageRef.current])
+    },[hasPageMounted,hasImageLoaded])
   return (
     <Image  alt="logo" style={{opacity:0}}  ref={imageRef} onLoad={()=>{
         setHasImageLoaded(true);

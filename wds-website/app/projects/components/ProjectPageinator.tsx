@@ -32,7 +32,7 @@ export const ProjectPageinator = () => {
       </div>
       <div className='flex flex-wrap gap-6 justify-center'>
       {
-                  !response.loading ? response.data.items.map((project:any)=>project.description != '' && <ProjectCard key={project.name} {...project} type='Manga' />) : <h1>Loading</h1>
+                  !response.loading ? response.data.items.map((project:{description:string,name:string,image:string,type:string})=>project.description != '' && <ProjectCard key={project.name} {...project} type='Manga' />) : <h1>Loading</h1>
                 }
       </div>
       <div className='flex gap-5 items-center [&>*]:text-[12px] [&>*]:cursor-pointer py-10'>

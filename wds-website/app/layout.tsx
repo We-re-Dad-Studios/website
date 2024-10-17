@@ -52,7 +52,7 @@ export default function RootLayout({
       </Head>
       <body
         //please lets not force the whole site to use one font 
-        className={`antialiased bg-base_black`}
+        className={`antialiased bg-base_black ${bebas.className}`}
       >
         {children}
       </body>

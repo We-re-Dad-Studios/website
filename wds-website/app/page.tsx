@@ -9,7 +9,7 @@ import { ProjectsSection } from "@/components/ProjectsSection";
 import { Newsletter } from "@/components/Newsletter";
 import { Footer } from "@/components/Footer";
 export default function Home() {
-  const {getItem,storeItem} = useSessionStorage();
+  const {storeItem} = useSessionStorage();
   const [hasPageMounted,setHasPageMounted]=useState<boolean>(false);
   const [hasVisited,setHasvisited]=useState<boolean>(()=>{
     const state =hasPageMounted?sessionStorage.getItem("state"):null;
