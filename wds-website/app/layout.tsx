@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import "./globals.css";
-import { Bebas_Neue } from "next/font/google"
+// import { Bebas_Neue } from "next/font/google"
 import Head from "next/head";
 
 
@@ -30,11 +30,11 @@ export const metadata: Metadata = {
 
 
 };
-const bebas = Bebas_Neue({
-  subsets: ["latin", "latin-ext"],
-  weight: ["400"],
-  variable: "--font-bebas"
-})
+// const bebas = Bebas_Neue({
+//   subsets: ["latin", "latin-ext"],
+//   weight: ["400"],
+//   variable: "--font-bebas"
+// })
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -52,7 +52,7 @@ export default function RootLayout({
       </Head>
       <body
         //please lets not force the whole site to use one font 
-        className={`antialiased bg-base_black ${bebas.className}`}
+        className={`antialiased bg-base_black `}
       >
         {children}
       </body>
