@@ -1,9 +1,17 @@
 import type { Metadata } from "next";
-
+import localFont from "next/font/local";
 import "./globals.css";
-import { Bebas_Neue } from "next/font/google"
-import Head from "next/head";
 
+const geistSans = localFont({
+  src: "./fonts/GeistVF.woff",
+  variable: "--font-geist-sans",
+  weight: "100 900",
+});
+const geistMono = localFont({
+  src: "./fonts/GeistMonoVF.woff",
+  variable: "--font-geist-mono",
+  weight: "100 900",
+});
 
 export const metadata: Metadata = {
   title: "WDS",
@@ -13,12 +21,12 @@ export const metadata: Metadata = {
   openGraph: {
     title: "WDS - Game Development & Creative Studio",
     description: "We craft captivating stories and immersive worlds in games, animation, manhwa, manga, and novels.",
-    url: "https://weredadstudios.netlify.app/images/WDS%20LOGO%20BLACK_.png",
+    url: "s", 
     siteName: "WDS",
-
+    
     images: [
       {
-        url: "https://weredadstudios.netlify.app/images/WDS%20LOGO%20BLACK_.png",
+        url: "/WDS LOGO BLACK_.png", 
         width: 1200,
         height: 630,
         alt: "WDS Logo",
@@ -27,14 +35,16 @@ export const metadata: Metadata = {
     locale: "en_US",
     type: "website",
   },
-
+  twitter: {
+    card: "summary_large_image", 
+    title: "WDS - Game Development & Creative Studio",
+    description: "We build immersive worlds through games, animation, manhwa, manga, and novels.",
+    creator: "@WDS_Studio", // Your Twitter handle
+    images: ["/WDS LOGO BLACK_.png"], // Your image URL here
+  }
 
 };
-const bebas = Bebas_Neue({
-  subsets: ["latin", "latin-ext"],
-  weight: ["400"],
-  variable: "--font-bebas"
-})
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -42,17 +52,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <Head>
-        <link rel="icon" type="image/x-icon" href="/images/favicon.ico"></link>
-        <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png" />
-        <link rel="manifest" href="/favicons/site.webmanifest" />
-        <meta name="msapplication-TileColor" content="#0a0a0b" />
-      </Head>
       <body
-        //please lets not force the whole site to use one font 
-        className={`antialiased bg-base_black`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
       </body>

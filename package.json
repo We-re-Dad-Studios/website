@@ -1,7 +1,5 @@
 {
   "dependencies": {
-    "@netlify/plugin-nextjs": "^5.7.4",
-    "framer-motion": "^11.9.0",
-    "lucide-react": "^0.451.0"
+    "framer-motion": "^11.9.0"
   }
 }

@@ -11,27 +11,19 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
-        neutral_whtie: "#fafafa",
-        neutral_100: "#120E11",
-        neutral_200: "#cccbcb",
-        neutral_300: "#b5b3b3",
-        neutral_400: "#9f9c9c",
-        neutral_500: "#898384",
-        neutral_600: "#726c6c",
-        neutral_700: "#5a5555",
-        neutral_800: "#433e3f",
-        neutral_900: "#2b2829",
-        neutral_1000: "#151314",
-        base_black: "#0a0a0b",
-        primary: {
-          0: "#4F1787",
-          100: "#E9D9F9"
-        }
+        neutral_whtie:"#fafafa",
+        neutral_100:"#120E11",
+        neutral_200:"#cccbcb",
+        neutral_300:"#b5b3b3",
+        neutral_400:"#9f9c9c",
+        neutral_500:"#898384",
+        neutral_600:"#726c6c",
+        neutral_700:"#5a5555",
+        neutral_800:"#433e3f",
+        neutral_900:"#2b2829",
+        neutral_1000:"#151314",
+        base_black:"#0a0a0b"
       },
-      fontFamily: {
-        bebas: ['"Bebas Neue"', 'sans-serif'],
-        agdasima: ['"agdasima"', 'sans-serif']
-      }
     },
   },
   plugins: [],
