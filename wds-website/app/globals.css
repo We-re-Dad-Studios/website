@@ -1,16 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Agdasima:wght@400;700&family=Bebas+Neue&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-
 :root {
   --background: #ffffff;
   --foreground: #171717;
-}
-*{
-  box-sizing: border-box;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -25,67 +19,9 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
-.bounce{
-  animation-timing-function: cubic-bezier(0.175,0.885,0.32,1.275);
-  transition-timing-function: cubic-bezier(0.175,0.885,0.32,1.275);
-}
-.setfont{
-  font-weight: 400;
-  font-style: normal;
-}
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
-  .text-heading{
-    @apply md:text-[50px] text-[32px]
-  }
-  .text-subheading{
-    @apply text-[20px]
-  }
 }
-
-.splash-image{
-  filter: drop-shadow(5px 12px 30px #7b24d2f1);
-}
-
-.welcome-btn{
-  filter: drop-shadow(0px 8px 20px #9747FF29);
-  @apply text-[24px] rounded-md;
-}
-
-.welcome-btn:hover{
-  animation: pulse 1.2s infinite ease-in-out;
-  
-}
-@keyframes pulse {
-  0% {
-    filter: drop-shadow(0px 8px 20px #9747ff77);
-  }
-  50% {
-    filter: drop-shadow(0px 12px 30px #9747ffaa); /* Increase shadow size and blur */
-  }
-  100% {
-    filter: drop-shadow(0px 8px 20px #9747ff77); /* Back to the original state */
-  }
-}
-.main-btn{
-  background: linear-gradient(96.07deg, #4F1787 2.42%, #5D1E9D 80.86%, #39185A 110.06%);
-}
-
-.nav-main{
-  border: 0.5px solid  transparent;
-border-image-source: linear-gradient(91.77deg, #CCCBCB 0%, #BCBCBC 45.19%, #575757 97.8%);
-border-image-slice: 0;
-border-radius: 40px;
-}
-
-.news-1{
-  clip-path: polygon(0 0, 75% 0, 83% 100%, 0% 100%);
-}
-.news-2{
-  clip-path: polygon(3% 0, 65% 0%, 73% 100%, 10% 100%);
-}
-
-
