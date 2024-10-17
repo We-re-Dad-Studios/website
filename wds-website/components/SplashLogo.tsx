@@ -1,16 +1,16 @@
 "use client";
 import {motion} from "framer-motion"
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 export const Logo =()=>{
     const [hasFdedIn,setHasFadedIn]=useState(false)
     setTimeout(() => {
         setHasFadedIn(true);
     }, 2100);
     return (
-     <motion.div  className=" relative w-[340px] h-[250px] "   // Duration of the fade-in
+     <motion.div  className=" absolute  left-[calc(50%+30px)] top-1/3 outline -translate-x-1/2 w-[400px] h-[350px] "   // Duration of the fade-in
      >
          <motion.svg
-         className="w-full h-full  absolute left-0 top-0"
+         className="object-cover"
          xmlns="http://www.w3.org/2000/svg"
          version="1.1"
          viewBox="0 0 4000 4000"
@@ -41,15 +41,15 @@ export const Logo =()=>{
           </linearGradient>
         </mask>
       </defs>
-      <g><motion.path initial={{opacity:0}} transition={hasFdedIn&&{duration:1,delay:0.2,ease:"easeOut",repeat:Infinity}} animate={hasFdedIn&&{opacity:[0.907],y:-300}} fill="#fefffe" d="M 1107.5,1655.5 C 1147.48,1695.15 1187.48,1734.81 1227.5,1774.5C 1228.83,1781.83 1228.83,1789.17 1227.5,1796.5C 1187.51,1757.01 1147.68,1717.35 1108,1677.5C 1107.5,1670.17 1107.33,1662.84 1107.5,1655.5 Z"/></g>
-            <g ><motion.path initial={{opacity:0,y:0}} transition={hasFdedIn&&{duration:1,delay:0.25,ease:"easeOut",repeat:Infinity}} animate={hasFdedIn&& {opacity:[0.966],y:-300}} fill="#fefffe" d="M 1107.5,1755.5 C 1147.8,1795.3 1187.97,1835.3 1228,1875.5C 1228.83,1895.84 1228.67,1916.17 1227.5,1936.5C 1187.15,1896.99 1147.32,1856.99 1108,1816.5C 1107.5,1796.17 1107.33,1775.84 1107.5,1755.5 Z"/></g>
+      <g><motion.path initial={{opacity:0}} transition={hasFdedIn?{duration:1,delay:0.2,ease:"easeOut",repeat:Infinity}:{}} animate={hasFdedIn?{opacity:[0.907],y:-300}:{}} fill="#fefffe" d="M 1107.5,1655.5 C 1147.48,1695.15 1187.48,1734.81 1227.5,1774.5C 1228.83,1781.83 1228.83,1789.17 1227.5,1796.5C 1187.51,1757.01 1147.68,1717.35 1108,1677.5C 1107.5,1670.17 1107.33,1662.84 1107.5,1655.5 Z"/></g>
+            <g ><motion.path initial={{opacity:0,y:0}} transition={hasFdedIn?{duration:1,delay:0.25,ease:"easeOut",repeat:Infinity}:{}} animate={hasFdedIn?{opacity:[0.966],y:-300}:{}} fill="#fefffe" d="M 1107.5,1755.5 C 1147.8,1795.3 1187.97,1835.3 1228,1875.5C 1228.83,1895.84 1228.67,1916.17 1227.5,1936.5C 1187.15,1896.99 1147.32,1856.99 1108,1816.5C 1107.5,1796.17 1107.33,1775.84 1107.5,1755.5 Z"/></g>
       {/* w below */}
       <g mask="url(#mask-gradient)">
         <motion.path
           style={{ opacity: 0.994 }} fill="#fefffe" d="M 647.5,1875.5 C 687.5,1875.5 727.5,1875.5 767.5,1875.5C 767.333,1934.83 767.5,1994.17 768,2053.5C 824.04,1997.13 880.373,1941.13 937,1885.5C 993.654,1941.49 1050.32,1997.49 1107,2053.5C 1107.33,2027.5 1107.67,2001.5 1108,1975.5C 1148,2015.5 1188,2055.5 1228,2095.5C 1228.83,2175.5 1228.67,2255.5 1227.5,2335.5C 1130.82,2238.99 1033.99,2142.65 937,2046.5C 840.667,2142.83 744.333,2239.17 648,2335.5C 647.5,2182.17 647.333,2028.83 647.5,1875.5 Z"/></g>
     
     <g><path style={{opacity:0.906}} fill="#fefffe" d="M 1262.5,1875.5 C 1269.51,1875.33 1276.51,1875.5 1283.5,1876C 1323.35,1915.68 1363.01,1955.51 1402.5,1995.5C 1395.52,1996.66 1388.52,1996.83 1381.5,1996C 1341.25,1956.25 1301.58,1916.08 1262.5,1875.5 Z"/></g>
-    <g><motion.path  initial={{opacity:0,y:0}} transition={hasFdedIn&&{duration:1,delay:0.3,ease:"easeOut",repeat:Infinity}} animate={hasFdedIn&& {opacity:[0.969],y:-300}} fill="#fefffe" d="M 1107.5,1875.5 C 1147.8,1915.3 1187.97,1955.3 1228,1995.5C 1228.83,2022.51 1228.67,2049.51 1227.5,2076.5C 1187.51,2037.01 1147.68,1997.35 1108,1957.5C 1107.5,1930.17 1107.33,1902.84 1107.5,1875.5 Z"/></g>
+    <g><motion.path  initial={{opacity:0,y:0}} transition={hasFdedIn?{duration:1,delay:0.3,ease:"easeOut",repeat:Infinity}:{}} animate={hasFdedIn?{opacity:[0.969],y:-300}:{}} fill="#fefffe" d="M 1107.5,1875.5 C 1147.8,1915.3 1187.97,1955.3 1228,1995.5C 1228.83,2022.51 1228.67,2049.51 1227.5,2076.5C 1187.51,2037.01 1147.68,1997.35 1108,1957.5C 1107.5,1930.17 1107.33,1902.84 1107.5,1875.5 Z"/></g>
     <g><path style={{opacity:0.963}} fill="#fefffe" d="M 1361.5,1876.5 C 1382,1875.34 1402.66,1875.17 1423.5,1876C 1463.35,1915.68 1503.01,1955.51 1542.5,1995.5C 1522.17,1996.67 1501.84,1996.83 1481.5,1996C 1441.63,1955.97 1401.63,1916.13 1361.5,1876.5 Z"/></g>
     {/* d below */}
     <g mask="url(#mask-gradient)">
