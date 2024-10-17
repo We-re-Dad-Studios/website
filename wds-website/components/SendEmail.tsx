@@ -24,11 +24,24 @@ const Dropdown=({chosenCategory,setCategory}:{chosenCategory:category,setCategor
     const [isClient,setIsClient]=useState(false);
     const dropdownButtonRef= useRef<HTMLButtonElement|undefined>();
     const containerRef = useRef<HTMLDivElement|undefined>();
-    const dropdownVariants =useMemo(()=>({
-        default:{top:isClient? dropdownButtonRef.current?.getBoundingClientRect().top||0 -20: -20,zIndex:-1,opacity:0},
-        open:{top:isClient? (dropdownButtonRef.current?.getBoundingClientRect().top||0+(dropdownButtonRef.current?.clientHeight ?dropdownButtonRef.current?.clientHeight:0) )+20:"110%",zIndex:999,opacity:100},
-        closed:{top:isClient?dropdownButtonRef.current?.getBoundingClientRect().top||0 -20: -20,zIndex:-1,opacity:0}
-    }),[isClient])
+    const dropdownVariants =useMemo(()=>{if(dropdownButtonRef.current){
+        return{
+            default:{top:isClient? dropdownButtonRef.current.getBoundingClientRect().top||0 -20: -20,zIndex:-1,opacity:0},
+            open:{top:isClient? (dropdownButtonRef.current.getBoundingClientRect().top+(dropdownButtonRef.current?.clientHeight ?dropdownButtonRef.current?.clientHeight:0)+10 ):"110%",zIndex:999,opacity:100},
+            closed:{top:isClient?dropdownButtonRef.current?.getBoundingClientRect().top||0 -20: -20,zIndex:-1,opacity:0}
+        }
+
+    }
+    else{
+        return{
+            default:{top:0,zIndex:-1,opacity:0},
+            open:{top:0,zIndex:999,opacity:100},
+            closed:{top:0,zIndex:-1,opacity:0}
+        }
+    }
+
+
+},[isClient,dropdownButtonRef.current])
     useEffect(()=>{
         if(!isClient){
             setIsClient(true);

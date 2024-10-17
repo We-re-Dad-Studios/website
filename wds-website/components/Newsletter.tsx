@@ -17,8 +17,8 @@ export const Newsletter = () => {
     </div>
      </div>
      <div className='ml-auto min-h-[50vh] py-4 h-max bg-primary-100  lg:px-0 md:max-w-[70%] w-full lg:w-[35%] flex flex-col justify-center items-center rounded-r-lg'>
-        <p className='bg-[#F21170] px-2 xl:px-4 py-2 rounded-lg border-[2px] border-black text-[18px] whitespace-nowrap lg:text-[28px]'>JOIN THE ADVENTURE - SUBSCRIBE NOW!</p>
-        <p className='w-[90%] lg:w-[70%] text-center text-neutral_900 lg:text-[18px] text-[14px] mt-4'>Be the first to know about our latest releases, exclusive content, and behind-the-scenes updates. just for you. Subscribe today and never miss out!</p>
+        <p className='bg-[#F21170] px-2 xl:px-4 py-2 rounded-lg border-[2px] border-black text-[16px]  lg:text-[18px]'>JOIN THE ADVENTURE - SUBSCRIBE NOW!</p>
+        <p className='w-[90%] lg:w-[70%] text-center text-neutral_900 lg:text-[14px] text-[12px] my-4'>Be the first to know about our latest releases, exclusive content, and behind-the-scenes updates. just for you. Subscribe today and never miss out!</p>
      <SendEmail/>
      </div>
      </div>
