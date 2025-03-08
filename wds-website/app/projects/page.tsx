@@ -1,8 +1,5 @@
 "use client";
 import { AnimatePresence,motion } from "framer-motion";
-import { Navbar } from "@/components/Navbar";
-import { Newsletter } from "@/components/Newsletter";
-import { Footer } from "@/components/Footer";
 import {ProjectPageinator} from "./components/ProjectPageinator"
 
 
@@ -24,15 +21,14 @@ export default function Home() {
           variants={fadeInOutVariants}
           transition={{ duration: 0.5 }} // Control the animation speed
         >
-       <Navbar/>
+  
        <div className="w-full h-[40vh] bg-neutral_1000 grid place-items-center overflow-hidden">
           <div className="text-[60px] brightness-50">
             <video src="video/jumbotronSite.mp4" autoPlay loop className="w-[100vw]"></video>
           </div>
        </div>
        <ProjectPageinator/>
-       <Newsletter/>
-       <Footer/>
+     
         </motion.section>
     </AnimatePresence>
   );

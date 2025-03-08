@@ -4,10 +4,9 @@ import { SplashImage } from "@/components/SplashImage";
 import { useSessionStorage } from "@/hooks/useSessionStorage";
 import { AnimatePresence,motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { Navbar } from "@/components/Navbar";
+
 import { ProjectsSection } from "@/components/ProjectsSection";
-import { Newsletter } from "@/components/Newsletter";
-import { Footer } from "@/components/Footer";
+
 export default function Home() {
   const {storeItem} = useSessionStorage();
   const [hasPageMounted,setHasPageMounted]=useState<boolean>(false);
@@ -81,13 +80,12 @@ export default function Home() {
           variants={fadeInOutVariants}
           transition={{ duration: 0.5 }} // Control the animation speed
         >
-       <Navbar/>
+   
        <div className="w-full h-[90vh] bg-neutral_1000 grid place-items-center">
           <h1 className="text-[60px]">Coming Soon</h1>
        </div>
        <ProjectsSection/>
-       <Newsletter/>
-       <Footer/>
+       
         </motion.section>
       )}
     </AnimatePresence>

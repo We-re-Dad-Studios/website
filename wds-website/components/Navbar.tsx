@@ -16,7 +16,7 @@ const path=usePathname();
        <div className="w-max font-agdasima rounded-lg overflow-hidden h-max py-1.5 px-4 nav-main gap-x-14 text-[18px] bg-neutral-900  items-center md:flex hidden  [&>*:hover]:drop-shadow-[0_10px_10px_rgba(255,255,255,1)] [&>*:hover]:text-[20px] [&>*]:hover:duration-75 hover:gap-x-24 transition-[column-gap]  bounce">
             <Link href={"/"}  className={path=== "/"?"text-neutral-500":""}>
             Home</Link>
-            <Link href={"/"} className={path=== "/projects"?"text-neutral-500":""}>
+            <Link href={"/projects"} className={path=== "/projects"?"text-neutral-500":""}>
             Projects</Link>
             <Link href={"/"}>
             About Us</Link>

@@ -3,6 +3,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 // import { Bebas_Neue } from "next/font/google"
 import Head from "next/head";
+import { Navbar } from "@/components/Navbar";
+import { Newsletter } from "@/components/Newsletter";
+import { Footer } from "@/components/Footer";
 
 
 export const metadata: Metadata = {
@@ -52,9 +55,12 @@ export default function RootLayout({
       </Head>
       <body
         //please lets not force the whole site to use one font 
-        className={`antialiased bg-base_black `}
+        className={`antialiased bg-base_black  text-[#FAFAFA]`}
       >
+        <Navbar/>
         {children}
+        <Newsletter/>
+       <Footer/>
       </body>
     </html>
   );

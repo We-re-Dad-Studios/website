@@ -1,6 +1,7 @@
 import React from 'react'
 import projects from "@/cached/newProjects.json"
 import Image from 'next/image'
+import Link from 'next/link'
 export const ProjectsSection = () => {
     // const data: TMockData = useFetchMockData(50, 1, 'manga')
 
@@ -14,7 +15,7 @@ export const ProjectsSection = () => {
             <p className='w-[520px] max-w-full text-subheading mt-8 text-justify'>Discover a world filled with thoughtfully curated projects, ranging from thrilling games and captivating novels, manga, manhwa, and animations.</p>
             <section className="mt-12 overflow-x-auto flex w-[100vw] gap-x-4 justify-start px-[20px] lg:px-[80px] py-2">
                 {
-                    projects.map(project => <ProjectCard key={project.name} {...project} />)
+                    projects.map(project => <ProjectCard to={ project.to?project.to:"/"} key={project.name} {...project} />)
                 }
 
             </section>
@@ -23,7 +24,7 @@ export const ProjectsSection = () => {
 }
 
 
-export const ProjectCard = ({ image, name, description, type }: { image: string | null, name: string, description: string, type: string }) => {
+export const ProjectCard = ({ image, name, description, type,to }: { image: string | null, name: string, description: string, type: string,to:string }) => {
     return (
         <div className='flex-shrink-0 w-[300px]  h-[950px] md:h-[450px] max-h-[43vh]  relative rounded-tr-xl group border border-neutral-50/30 overflow-hidden '>
             {
@@ -35,19 +36,21 @@ export const ProjectCard = ({ image, name, description, type }: { image: string 
                     </div>
                 )
             }
-            <div className="absolute z-[2] w-full h-full top-0 left-0  items-center flex flex-col justify-end  hover:gap-x-[100%]   [&>div>Button]:hover:relative [&>div>Button]:hover:opacity-100 [&>div]:hover:h-[100%] [&>div]:hover:bg-opacity-20 [&>div]:hover:backdrop-blur-sm cursor-pointer">
+            <div className="absolute z-[2] w-full h-full top-0 left-0  group items-center flex flex-col justify-end  hover:gap-x-[100%] [&>div>Button]:hover:[&>.description]:line-clamp-none  [&>div>Button]:hover:relative [&>div>Button]:hover:opacity-100 [&>div]:hover:h-[100%] [&>div]:hover:bg-opacity-20 [&>div]:hover:backdrop-blur-sm cursor-pointer">
                 <div className='flex flex-col h-[40%] p-2  transition-all  duration-500 justify-between bg-primary-0 bg-opacity-0 bounce'>
                     <div>
                         <div className="flex items-center justify-between">
                             <p className='mt-auto text-[28px] font-agdasima '>{name}</p>
                             <p className='text-[10px] w-max px-2 h-max py-1 rounded-sm bg-[#F94C10]'>{type}</p>
                         </div>
-                        <div className='opacity-50  text-[10px] w-[85%] transition-opacity line-clamp-4'>
-                            <p>{description}</p>
+                        <div className='opacity-50  text-[10px] w-[85%] transition-opacity group-hover:line-clamp-[10] line-clamp-4'>
+                            <p className='description'>{description}</p>
 
                         </div>
                     </div>
-                    <button className='w-full py-2 my-3 border border-white rounded-md font-agdasima text-[18px] hover:text-primary-0 hover:bg-white hover:font-[700] z-[6]  opacity-0 transition-all duration-700'>See More</button>
+                   
+                   <button className='w-full py-2 my-3 border border-white rounded-md font-agdasima text-[18px] hover:text-primary-0 hover:bg-white hover:font-[700] z-[6]  opacity-0 transition-all duration-700'><Link prefix='/projects' className='w-full h-full ' prefetch href={to}>See More</Link></button>
+                  
                 </div>
 
 
