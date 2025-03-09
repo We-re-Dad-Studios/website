@@ -98,7 +98,7 @@ export const ProjectCard = ({  name, description, to }: {  name: string, descrip
                 <div className='flex flex-col h-[40%] p-2  transition-all  duration-500 justify-between bg-primary-0 bg-opacity-0 bounce'>
                     <div>
                         <div className="flex items-center justify-between">
-                            <p className='mt-auto text-[28px] font-agdasima '>{name}</p>
+                            <p className='mt-auto text-[28px] font-agdasima  line-clamp-2   '>{name}</p>
                             
                         </div>
                         <div className='opacity-50  text-[10px]  transition-opacity group-hover:line-clamp-[10] line-clamp-4 w-full'>

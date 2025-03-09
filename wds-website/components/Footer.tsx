@@ -1,7 +1,12 @@
+"use client";
 import { InstagramIcon, TwitterIcon, YoutubeIcon } from "lucide-react"
 import Image from "next/image"
+import { usePathname } from "next/navigation";
 
 export const Footer = () => {
+  const state =sessionStorage?.getItem("state")||null;
+  const path = usePathname();
+  if(path === "/" && !state) return <></>
   return (
     <footer className="w-[98%] pt-6 pb-12 bg-primary-0 mt-6  mx-auto rounded-t-lg flex flex-col items-center">
      <Image className='lg:w-80 md:w-40 w-32 outline  h-40  object-cover mx-auto' alt='WDS Logo' src={"/images/WDS LOGO WHITE.png"} width={1000} height={1000}/>

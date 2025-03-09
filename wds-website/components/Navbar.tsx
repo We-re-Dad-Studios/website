@@ -6,7 +6,9 @@ import { usePathname } from 'next/navigation';
 import React from 'react'
 
 export const Navbar = () => {
-const path=usePathname();
+  const state =sessionStorage?.getItem("state")||null;
+  const path = usePathname();
+  if(path === "/" && !state) return <></>
   return (
     <nav className='w-full bg-base_black flex items-center justify-between px-2 md:px-[80px] h-[80px] py-2'>
         <Link href={"/"}>

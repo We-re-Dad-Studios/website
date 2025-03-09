@@ -4,13 +4,14 @@ import { FadedContent } from "./_components/Content";
 import Image from "next/image";
 import { Metadata } from "next";
 
-export default async function Page({params}:{params:{id:string}}) {
+export default async function Page(props:{params: Promise<{id:string}>}) {
+    const params = await props.params;
     const client = createClient({
         space: process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID!,
         accessToken: process.env.NEXT_PUBLIC_CONTENTFUL_CDAPI!,
     });
     const post = (await client.getEntry(params.id)).fields;
-    
+
     const coverField = post?.cover as Entry<EntrySkeletonType> | Asset | undefined;
 
     // Check if coverField is an Asset (which has a file and URL)
@@ -18,12 +19,11 @@ export default async function Page({params}:{params:{id:string}}) {
       ? (coverField.fields.file as { url: string }).url
       : undefined;
 
-    console.log({url,coverField})
     return (
         <section>
             <div className="flex items-center justify-center w-full h-[400px] overflow-hidden">
             {
-                url?<Image src={url.startsWith("//")?"https:"+url:url} alt={`${post.title}`+"Cover"} width={500} height={500} className="w-full object-scale-down"/>: <Image src={"/images/WDS LOGO WHITE.png"} alt={post.title + " image"} width={100} height={100} className='w-full h-full' />
+                url?<Image src={url.startsWith("//")?"https:"+url:url} alt={`${post.title}`+"Cover"} width={500} height={500} className="w-full object-scale-down"/>: <Image src={"/images/WDS LOGO WHITE.png"} alt={post.title + " image"} width={100} height={100} className='w-[50%] ' />
 
             }
             </div>
@@ -33,7 +33,8 @@ export default async function Page({params}:{params:{id:string}}) {
     );
 }
 
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<{ id: string }> }): Promise<Metadata> {
+    const params = await props.params;
     const client = createClient({
         space: process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID!,
         accessToken: process.env.NEXT_PUBLIC_CONTENTFUL_CDAPI!,
