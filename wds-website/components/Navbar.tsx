@@ -3,10 +3,14 @@ import { TwitterIcon, YoutubeIcon } from 'lucide-react';
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation';
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 export const Navbar = () => {
-  const state =sessionStorage?.getItem("state")||null;
+    const [isClient,setIsClient] = useState<boolean>(false);
+    useEffect(()=>{
+      setIsClient(true);
+    })
+    const state =isClient?sessionStorage?.getItem("state")||null:null;
   const path = usePathname();
   if(path === "/" && !state) return <></>
   return (

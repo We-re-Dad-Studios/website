@@ -1,11 +1,15 @@
 "use client";
 import Image from 'next/image'
-import React from 'react'
+import  { useEffect,useState } from 'react'
 import { SendEmail } from './SendEmail'
 import { usePathname } from 'next/navigation';
 
 export const Newsletter = () => {
-  const state =sessionStorage?.getItem("state")||null;
+  const [isClient,setIsClient] = useState<boolean>(false);
+  useEffect(()=>{
+    setIsClient(true);
+  })
+  const state =isClient?sessionStorage?.getItem("state")||null:null;
   const path = usePathname();
   if(path === "/" && !state) return <></>
   return (

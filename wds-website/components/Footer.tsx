@@ -2,9 +2,14 @@
 import { InstagramIcon, TwitterIcon, YoutubeIcon } from "lucide-react"
 import Image from "next/image"
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export const Footer = () => {
-  const state =sessionStorage?.getItem("state")||null;
+    const [isClient,setIsClient] = useState<boolean>(false);
+    useEffect(()=>{
+      setIsClient(true);
+    })
+    const state =isClient?sessionStorage?.getItem("state")||null:null;
   const path = usePathname();
   if(path === "/" && !state) return <></>
   return (
