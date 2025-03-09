@@ -29,7 +29,7 @@ export default async function Page(props:{params: Promise<{id:string}>}) {
             }
             </div>
           
-            <FadedContent content={post.content as string}/>
+            <FadedContent title={post.title as string} content={post.content as string}/>
         </section>
     );
 }
