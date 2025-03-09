@@ -1,4 +1,4 @@
-"use server";
+"--force-dynamic";
 import { createClient } from "contentful";
 import {Main} from "./_components/main"
   async function Page() {
