@@ -3,10 +3,11 @@ import type { Config } from "tailwindcss";
 const config: Config = {
     darkMode: ["class"],
     content: [
-    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
+		"./pages/**/*.{js,ts,jsx,tsx,mdx}",
+		"./components/**/*.{js,ts,jsx,tsx,mdx}",
+		"./app/**/*.{js,ts,jsx,tsx,mdx}",
+		"./styles/**/*.{css,scss}", // Include styles folder if used
+	  ],
   theme: {
   	extend: {
   		colors: {
@@ -66,15 +67,9 @@ const config: Config = {
   			}
   		},
   		fontFamily: {
-  			bebas: [
-  				'Bebas Neue"',
-  				'sans-serif'
-  			],
-  			agdasima: [
-  				'agdasima"',
-  				'sans-serif'
-  			]
-  		},
+			bebas: ['Bebas Neue', 'sans-serif'],
+			agdasima: ['Agdasima', 'sans-serif']
+		  },		  
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
