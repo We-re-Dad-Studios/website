@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Agdasima:wght@400;700&family=Bebas+Neue&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -15,17 +14,7 @@
   font-style: normal;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-  .text-heading{
-    @apply md:text-[50px] text-[32px]
-  }
-  .text-subheading{
-    @apply text-[20px]
-  }
-}
+
 
 .splash-image{
   filter: drop-shadow(5px 12px 30px #7b24d2f1);
@@ -123,9 +112,6 @@ border-radius: 40px;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
   }
-}
-
-@layer base {
   * {
     @apply border-border;
   }
@@ -135,3 +121,15 @@ border-radius: 40px;
 }
 
 
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .text-heading{
+    @apply md:text-[50px] text-[32px]
+  }
+  .text-subheading{
+    @apply text-[20px]
+  }
+}
