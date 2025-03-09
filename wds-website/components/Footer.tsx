@@ -11,7 +11,7 @@ export const Footer = () => {
     })
     const state =isClient?sessionStorage?.getItem("state")||null:null;
   const path = usePathname();
-  if(path === "/" && !state) return <></>
+  if(path === "/" && !state && !isClient) return <></>
   return (
     <footer className="w-[98%] pt-6 pb-12 bg-primary-0 mt-6  mx-auto rounded-t-lg flex flex-col items-center">
      <Image className='lg:w-80 md:w-40 w-32 outline  h-40  object-cover mx-auto' alt='WDS Logo' src={"/images/WDS LOGO WHITE.png"} width={1000} height={1000}/>

@@ -19,6 +19,7 @@ export default async function Page(props:{params: Promise<{id:string}>}) {
       ? (coverField.fields.file as { url: string }).url
       : undefined;
 
+
     return (
         <section>
             <div className="flex items-center justify-center w-full h-[400px] overflow-hidden">

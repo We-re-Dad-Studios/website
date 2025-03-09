@@ -12,7 +12,7 @@ export const Navbar = () => {
     })
     const state =isClient?sessionStorage?.getItem("state")||null:null;
   const path = usePathname();
-  if(path === "/" && !state) return <></>
+  if(path === "/" && !state && !isClient) return <></>
   return (
     <nav className='w-full bg-base_black flex items-center justify-between px-2 md:px-[80px] h-[80px] py-2'>
         <Link href={"/"}>

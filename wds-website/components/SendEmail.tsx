@@ -9,7 +9,7 @@ export const SendEmail = () => {
   const [category, setCategory] = useState<category>("All Categories");
   return (
     <div className="flex flex-col gap-y-3 w-full">
-      <div className="w-[80%] mx-auto rounded-lg relative bg-white p-2 flex items-center">
+      <div className="w-full lg:w-[80%] mx-auto rounded-lg relative bg-white p-2 flex items-center">
         <input
           type="text"
           className="bg-transparent flex-1 h-full  p-1 outline-none focus-within:outline-none focus:outline-none text-black"
@@ -38,7 +38,7 @@ const Dropdown = ({
       <SelectTrigger
         id="dropdown"
         
-        className="hover:bg-primary-0 ring-transparent border-none focus-within:ring-transparent focus:ring-transparent  dark:hover:text-white dark:text-black h-full px-3 py-1.5 rounded text-black flex items-center justify-center gap-x-1.5 hover:text-white transition-colors"
+        className="hover:bg-primary-0 ring-transparent border-none focus-within:ring-transparent focus:ring-transparent w-max  dark:hover:text-white dark:text-black h-full px-3 py-1.5 rounded text-black flex items-center justify-center gap-x-1.5 hover:text-white transition-colors"
       
       >
         {chosenCategory?chosenCategory:"All Categories"}
@@ -46,7 +46,7 @@ const Dropdown = ({
 
       <SelectContent
        
-        className="w-40 h-max py-2 cursor-pointer fixed bg-primary-0 rounded-lg px-1.5 text-white dark:text-white ring-transparent border-none"
+        className="w-40 h-max py-4 lg:py-2 cursor-pointer fixed bg-primary-0 rounded-lg px-1.5 text-white dark:text-white ring-transparent border-none"
         
       >  
           <SelectItem
