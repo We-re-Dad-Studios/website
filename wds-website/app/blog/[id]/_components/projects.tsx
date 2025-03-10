@@ -117,4 +117,5 @@ const ProjectCard = ({  name, description, to }: {  name: string, description: s
         </div>
     )
 }
+
 export default Projects

@@ -1,37 +1,38 @@
-"use client";
-import { AnimatePresence,motion } from "framer-motion";
-import { ProjectPageinator } from "./[id]/_components/ProjectPaginator";
 
-
-
-export default function Home() {
+import { Home } from "./[id]/_components/Home";
+export default function Page() {
   
-  const fadeInOutVariants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1 },
-    exit: { opacity: 0 },
-  };
+
   return (
-    <AnimatePresence mode="wait" >
-        <motion.section
-          key="main-section"
-          className="w-full min-h-screen flex flex-col  "
-          initial="hidden"
-          animate="visible"
-          exit="exit"
-          variants={fadeInOutVariants}
-          transition={{ duration: 0.5 }} // Control the animation speed
-        >
-  
-       <div className="w-full h-[40vh] bg-neutral_1000 grid place-items-center overflow-hidden">
-          <div className="text-[60px] brightness-50">
-            <video src="video/jumbotronSite.mp4" autoPlay loop className="w-[100vw]"></video>
-          </div>
-       </div>
-       <ProjectPageinator/>
-     
-        </motion.section>
-    </AnimatePresence>
+    <Home/>
   );
 }
 
+export async function generateMetadata() {
+    return {
+      title: "WDS Blog | Latest Updates & Insights",
+      description: "Stay updated with the latest news, insights, and developments from WDS. Explore in-depth articles, project updates, and industry trends.",
+      openGraph: {
+        type: "website",
+        locale: "en_US",
+        url: "https://your-wds-site.com/blog",
+        title: "WDS Blog | Latest Updates & Insights",
+        description: "Stay updated with the latest news, insights, and developments from WDS. Explore in-depth articles, project updates, and industry trends.",
+        siteName: "WDS",
+        images: [
+          {
+            url: "https://your-wds-site.com/images/blog-banner.jpg",
+            width: 1200,
+            height: 630,
+            alt: "WDS Blog",
+          },
+        ],
+      },
+      twitter: {
+        card: "summary_large_image",
+        site: "@yourtwitterhandle",
+        creator: "@yourtwitterhandle",
+      },
+    };
+  }
+   
