@@ -7,27 +7,22 @@ import { usePathname } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 
 export const Navbar = () => {
-    const [isClient,setIsClient] = useState<boolean>(false);
-        const {getItem}= useSessionStorage()
-        useEffect(()=>{
-          setIsClient(true);
-        },[])
-        const path = usePathname();
-        const [show,setShow]=useState<boolean>(false);
-        useEffect(()=>{
-          if(isClient){
-            const state = getItem("state");
-            if(path === "/" && !Boolean(JSON.parse(state||"{}").hasVisited)){
-              setShow(false);
-            }
-            else if (Boolean(JSON.parse(state||"{}").hasVisited)){
-              setShow(true);
-            }
-          }
-          
-          
-        },[isClient])
-      if(!show) return <></>
+  const [isClient, setIsClient] = useState<boolean>(false);
+  const path=usePathname();
+  const { getItem } = useSessionStorage();
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+  const [show, setShow] = useState<boolean>(false);
+  useEffect(() => {
+    if (isClient) {
+      const state = getItem("state");
+      if (Boolean(JSON.parse(state || "{}").hasVisited)) {
+        setShow(true);
+      }
+    }
+  });
+  if (!show) return <></>;
   return (
     <nav className='w-full bg-base_black flex items-center justify-between px-2 md:px-[80px] h-[80px] py-2'>
         <Link href={"/"}>

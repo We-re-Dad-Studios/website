@@ -6,26 +6,21 @@ import { usePathname } from 'next/navigation';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 export const Newsletter = () => {
-  const [isClient,setIsClient] = useState<boolean>(false);
-      const {getItem}= useSessionStorage()
-      useEffect(()=>{
-        setIsClient(true);
-      })
-      const path = usePathname();
-      const [show,setShow]=useState<boolean>(false);
-      useEffect(()=>{
-        if(isClient){
-          const state = getItem("state");
-          if(path === "/" && !Boolean(JSON.parse(state||"{}").hasVisited)){
-            setShow(false);
-          }
-          else if (Boolean(JSON.parse(state||"{}").hasVisited)){
-            setShow(true);
-          }
-        }
- 
-      },[isClient])
-    if(!show) return <></>
+  const [isClient, setIsClient] = useState<boolean>(false);
+  const { getItem } = useSessionStorage();
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+  const [show, setShow] = useState<boolean>(false);
+  useEffect(() => {
+    if (isClient) {
+      const state = getItem("state");
+      if (Boolean(JSON.parse(state || "{}").hasVisited)) {
+        setShow(true);
+      }
+    }
+  });
+  if (!show) return <></>;
   return (
     <div className='w-full xl:w-[80vw] mx-auto rounded-lg flex mb-12 overflow-hidden px-2'>
      <div className="flex-1  rounded-l-lg flex relative bg-black">
