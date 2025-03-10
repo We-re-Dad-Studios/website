@@ -2,7 +2,6 @@
 import Image from 'next/image'
 import  { useEffect,useState } from 'react'
 import { SendEmail } from './SendEmail'
-import { usePathname } from 'next/navigation';
 import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 export const Newsletter = () => {
