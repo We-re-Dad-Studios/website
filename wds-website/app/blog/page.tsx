@@ -21,7 +21,7 @@ export async function generateMetadata() {
         siteName: "WDS",
         images: [
           {
-            url: "https://weredadstudios.netlify.app/images/android-chrome-512x512.png",
+            url: "https://weredadstudios.netlify.app/images/WDS%20LOGO%20BLACK_.png",
             width: 1200,
             height: 630,
             alt: "WDS Blog",
