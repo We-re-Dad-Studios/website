@@ -1,5 +1,5 @@
 "use client";
-import { Search, SlidersHorizontalIcon } from "lucide-react"
+import { Search, SlidersHorizontalIcon, X } from "lucide-react"
 import { useEffect, useState } from "react";
 import { Entry, EntrySkeletonType } from "contentful";
 import { useContentfulClient } from "@/hooks/useContentfulClient";
@@ -8,8 +8,8 @@ import Link from "next/link";
 
 const Projects =  () => {
     const [tags, setTags] = useState<Entry<EntrySkeletonType,undefined,string>[]>([]);
-    const [currentTag, setCurrentTag] = useState<{name:string,id:string}>();
-
+    const [currentTag, setCurrentTag] = useState<{name:string,id:string|undefined}>();
+    const [search,setSearch]=useState<string>("")
    
    
     const client= useContentfulClient();
@@ -38,7 +38,7 @@ const Projects =  () => {
         })
     },[currentTag])
     useEffect(()=>{
-         client.getEntries({content_type:process.env.NEXT_PUBLIC_TAGS_ID!}).then((resp)=>{
+         client.getEntries({content_type:process.env.NEXT_PUBLIC_POST_TAG_ID!}).then((resp)=>{
             setTags(resp.items);
          });
     
@@ -46,6 +46,7 @@ const Projects =  () => {
   return (
     <div className="w-full">
          <div className=' flex w-full justify-between [&>*]:text-[12px] [&>*]:cursor-pointer pb-10'>
+        <div className="flex items-center gap-2">
         <div className='flex gap-x-3 [&>*]:bg-white [&>*]:bg-opacity-10 [&>*]:transition-all  [&>*:hover]:scale-110 [&>*]:bounce [&>*:hover]:bg-primary-0 [&>*]:h-max [&>*]:rounded-md  [&>*]:px-5 [&>*]:py-2'>
           {
             Array.isArray(tags) && tags.length>0&& tags.map((tag) => (
@@ -54,11 +55,16 @@ const Projects =  () => {
                 </div>
             ))
           }
+          
+        </div>
+        <button onClick={()=>{setCurrentTag({name:"",id:undefined})}} className="w-max ml-2 h-max p-1.5 flex items-center justify-center bg-primary-0 text-white rounded">
+            <X className="w-4 h-4"/>
+          </button>
         </div>
         <div className='flex gap-4 ml-3 [&>*]:flex [&>*]:gap-x-3 [&>*]:items-center [&>*]:bg-white [&>*]:rounded-md [&>*]:bg-opacity-10 [&>*]:px-3'>
           <div className='bg'>
             <Search />
-            <input type="text" name="" id="" className='bg-transparent outline-transparent' />
+            <input type="text"  className='bg-transparent focus:outline-none outline-none' onChange={(e)=>{setSearch(e.target.value.trim())}} />
           </div>
           <div>
             <SlidersHorizontalIcon />
@@ -67,11 +73,12 @@ const Projects =  () => {
         </div>
       </div>
       <div className='flex flex-wrap gap-6 md:justify-evenly mx-auto justify-center'>
-          {Array.isArray(projects) && projects.length>0 && projects.map((post) => 
+          {Array.isArray(projects) && projects.length>0 && projects.filter((project)=>(project.fields.title as string).toLowerCase().includes(search)).map((post) => 
              <ProjectCard key={post.sys.id} name={post.fields.title as string} description={post.fields.description as string} to={`/blog/${post.sys.id}`}/>
 
 
           )}
+          
       </div>
       <div className='flex gap-5 items-center [&>*]:text-[12px] [&>*]:cursor-pointer py-10'>
         <div className='text-gray-600'>Prev</div>
