@@ -15,13 +15,13 @@ export async function generateMetadata() {
       openGraph: {
         type: "website",
         locale: "en_US",
-        url: "https://your-wds-site.com/blog",
+        url: "https://weredadstudios.netlify.app/blog",
         title: "WDS Blog | Latest Updates & Insights",
         description: "Stay updated with the latest news, insights, and developments from WDS. Explore in-depth articles, project updates, and industry trends.",
         siteName: "WDS",
         images: [
           {
-            url: "https://your-wds-site.com/images/blog-banner.jpg",
+            url: "https://weredadstudios.netlify.app/images/android-chrome-512x512.png",
             width: 1200,
             height: 630,
             alt: "WDS Blog",
@@ -30,8 +30,8 @@ export async function generateMetadata() {
       },
       twitter: {
         card: "summary_large_image",
-        site: "@yourtwitterhandle",
-        creator: "@yourtwitterhandle",
+        site: "@wds",
+        creator: "@wds",
       },
     };
   }
