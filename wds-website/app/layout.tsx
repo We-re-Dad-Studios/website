@@ -55,7 +55,7 @@ export default function RootLayout({
       </Head>
       <body
         //please lets not force the whole site to use one font 
-        className={`antialiased bg-base_black  text-[#FAFAFA]`}
+        className={`antialiased bg-base_black font-agdasima setfont text-[#FAFAFA]`}
       >
         <Navbar/>
         {children}

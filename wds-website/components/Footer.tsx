@@ -1,4 +1,5 @@
 "use client";
+import { useSessionStorage } from "@/hooks/useSessionStorage";
 import { InstagramIcon, TwitterIcon, YoutubeIcon } from "lucide-react"
 import Image from "next/image"
 import { usePathname } from "next/navigation";
@@ -6,12 +7,26 @@ import { useEffect, useState } from "react";
 
 export const Footer = () => {
     const [isClient,setIsClient] = useState<boolean>(false);
+    const {getItem}= useSessionStorage()
     useEffect(()=>{
       setIsClient(true);
     })
-    const state =isClient?sessionStorage?.getItem("state")||null:null;
-  const path = usePathname();
-  if(path === "/" && !state && !isClient) return <></>
+    const path = usePathname();
+    const [show,setShow]=useState<boolean>(false);
+    useEffect(()=>{
+      if(isClient){
+        const state = getItem("state");
+        if(path === "/" && !Boolean(JSON.parse(state||"{}").hasVisited)){
+          setShow(false);
+        }
+        else if (Boolean(JSON.parse(state||"{}").hasVisited)){
+          setShow(true);
+        }
+      }
+      
+      
+    },[isClient])
+  if(!show) return <></>
   return (
     <footer className="w-[98%] pt-6 pb-12 bg-primary-0 mt-6  mx-auto rounded-t-lg flex flex-col items-center">
      <Image className='lg:w-80 md:w-40 w-32 outline  h-40  object-cover mx-auto' alt='WDS Logo' src={"/images/WDS LOGO WHITE.png"} width={1000} height={1000}/>

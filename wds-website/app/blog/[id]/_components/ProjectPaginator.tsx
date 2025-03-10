@@ -1,6 +1,5 @@
-
 import React from 'react'
-import Projects from './Projects'
+import Projects from './projects'
 
 export const ProjectPageinator = () => {
   return (
@@ -10,4 +9,3 @@ export const ProjectPageinator = () => {
     </div>
   )
 }
-

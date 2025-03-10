@@ -26,7 +26,7 @@ export const ProjectsSection = () => {
 
 export const ProjectCard = ({ image, name, description, type,to }: { image: string | null, name: string, description: string, type: string,to:string }) => {
     return (
-        <div className='flex-shrink-0 w-[300px]  h-[950px] md:h-[450px] max-h-[43vh]  relative rounded-tr-xl group border border-neutral-50/30 overflow-hidden '>
+        <div className='flex-shrink-0 w-[300px] lg:mx-0 mx-auto  h-[950px] md:h-[450px] max-h-[43vh]  relative rounded-tr-xl group border border-neutral-50/30 overflow-hidden '>
             {
                 image ? (
                     <Image src={image} alt={name + " image"} width={1000} className='w-full h-full' />
@@ -49,7 +49,7 @@ export const ProjectCard = ({ image, name, description, type,to }: { image: stri
                         </div>
                     </div>
                    
-                   <button className='w-full py-2 my-3 border border-white rounded-md font-agdasima text-[18px] hover:text-primary-0 hover:bg-white hover:font-[700] z-[6]  opacity-0 transition-all duration-700'><Link prefix='/projects' className='w-full h-full ' prefetch href={to}>See More</Link></button>
+                   <button className='w-full py-2 my-3 border border-white rounded-md font-agdasima text-[18px] hover:text-primary-0 hover:bg-white hover:font-[700] z-[6]  opacity-0 transition-all duration-700'><Link prefix='/projects' className='block' prefetch href={to}>See More</Link></button>
                   
                 </div>
 

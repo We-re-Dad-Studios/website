@@ -6,10 +6,12 @@
   import { useEffect, useState } from "react";
 
   import { ProjectsSection } from "@/components/ProjectsSection";
+import { useRouter } from "next/navigation";
 
   export default function Home() {
     const {storeItem} = useSessionStorage();
     const [hasPageMounted,setHasPageMounted]=useState<boolean>(false);
+    const router = useRouter();
     const [hasVisited,setHasvisited]=useState<boolean>(()=>{
       const state =hasPageMounted?sessionStorage.getItem("state"):null;
       if(!state){
@@ -40,6 +42,7 @@
     const handleVisited=()=>{
       storeItem("state",JSON.stringify({hasVisited:true}));
       setHasvisited(true);
+      router.refresh();
     }
     const fadeInOutVariants = {
       hidden: { opacity: 0 },

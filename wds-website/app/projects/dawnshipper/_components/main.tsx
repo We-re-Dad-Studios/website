@@ -75,7 +75,7 @@ import Link from "next/link";
              Related Posts
          </p>
  
-         <div className="mt-4 mb-8 flex items-start gap-4 flex-wrap">
+         <div className="mt-4 mb-8 flex mx-auto justify-center lg:items-start gap-4 flex-wrap">
              {
                  relatedPosts.map((post)=>
                  <ProjectCard key={post.sys.id} name={post.fields.title as string} description={post.fields.description as string} to={`/blog/${post.sys.id}`}/>
@@ -107,7 +107,7 @@ export const ProjectCard = ({  name, description, to }: {  name: string, descrip
                         </div>
                     </div>
                    
-                   <button className='w-full py-2 my-3 border border-white rounded-md font-agdasima text-[18px] hover:text-primary-0 hover:bg-white hover:font-[700] z-[6]  opacity-0 transition-all duration-700'><Link className='w-full h-full ' prefetch href={to}>See More</Link></button>
+                   <button className='w-full py-2 my-3 border border-white rounded-md font-agdasima text-[18px] hover:text-primary-0 hover:bg-white hover:font-[700] z-[6]  opacity-0 transition-all duration-700'><Link className='block' prefetch href={to}>See More</Link></button>
                   
                 </div>
 

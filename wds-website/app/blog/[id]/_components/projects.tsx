@@ -3,7 +3,8 @@ import { Search, SlidersHorizontalIcon } from "lucide-react"
 import { useEffect, useState } from "react";
 import { Entry, EntrySkeletonType } from "contentful";
 import { useContentfulClient } from "@/hooks/useContentfulClient";
-import { ProjectCard } from "@/components/ProjectsSection";
+import Image from "next/image";
+import Link from "next/link";
 
 const Projects =  () => {
     const [tags, setTags] = useState<Entry<EntrySkeletonType,undefined,string>[]>([]);
@@ -17,11 +18,11 @@ const Projects =  () => {
         if(client){
            
             if(!currentTag){
-              const projects = (await client.getEntries({content_type:process.env.NEXT_PUBLIC_PROJECTS_ID!})).items;
+              const projects = (await client.getEntries({content_type:process.env.NEXT_PUBLIC_BLOGS_ID!})).items;
               return projects
            }
            else{
-              const projects = (await (client.getEntries({content_type:process.env.NEXT_PUBLIC_PROJECTS_ID!,'fields.tags.sys.id':currentTag.id}))).items;
+              const projects = (await (client.getEntries({content_type:process.env.NEXT_PUBLIC_BLOGS_ID!,'fields.tags.sys.id':currentTag.id}))).items;
               return projects;
            }
         }
@@ -65,9 +66,9 @@ const Projects =  () => {
           </div>
         </div>
       </div>
-      <div className='flex flex-wrap gap-6 justify-center'>
-          {Array.isArray(projects) && projects.length>0 && projects.map((project) => 
-            <ProjectCard key={project.sys.id} to={project.fields.useInternalRoute?project.fields.to as string:project.sys.id} image={null} name={project.fields.name as unknown as string} description={project.fields.description as unknown as string} type={currentTag?.name as string}/>
+      <div className='flex flex-wrap gap-6 md:justify-evenly mx-auto justify-center'>
+          {Array.isArray(projects) && projects.length>0 && projects.map((post) => 
+             <ProjectCard key={post.sys.id} name={post.fields.title as string} description={post.fields.description as string} to={`/blog/${post.sys.id}`}/>
 
 
           )}
@@ -86,5 +87,34 @@ const Projects =  () => {
     </div>
   )
 }
+const ProjectCard = ({  name, description, to }: {  name: string, description: string, to:string }) => {
+    return (
+        <div className='flex-shrink-0 w-[300px]  h-[950px] md:h-[450px] max-h-[43vh]  relative rounded-tr-xl group border border-neutral-50/30 overflow-hidden '>
+           
+                    <Image src={"/images/WDS LOGO WHITE.png"} alt={name + " image"} width={100} height={100} className='w-full h-full' />
+               
+            
+            <div className="absolute z-[2] w-full h-full top-0 left-0  group items-center flex flex-col justify-end  hover:gap-x-[100%] [&>div>Button]:hover:[&>.description]:line-clamp-none  [&>div>Button]:hover:relative [&>div>Button]:hover:opacity-100 [&>div]:hover:h-[100%] [&>div]:bg-opacity-10 [&>div]:hover:bg-opacity-20 [&>div]:hover:backdrop-blur-sm cursor-pointer">
+                <div className='flex flex-col h-[40%] p-2  transition-all  duration-500 justify-between bg-primary-0 bg-opacity-0 bounce'>
+                    <div>
+                        <div className="flex items-center justify-between">
+                            <p className='mt-auto text-[28px] font-agdasima  line-clamp-2   '>{name}</p>
+                            
+                        </div>
+                        <div className='opacity-50  text-[10px]  transition-opacity group-hover:line-clamp-[10] line-clamp-4 w-full'>
+                            <p className='description'>{description}</p>
 
+                        </div>
+                    </div>
+                   
+                   <button className='w-full py-2 my-3 border border-white rounded-md font-agdasima text-[18px] hover:text-primary-0 hover:bg-white hover:font-[700] z-[6]  opacity-0 transition-all duration-700'><Link className='block' prefetch href={to}>See More</Link></button>
+                  
+                </div>
+
+
+            </div>
+
+        </div>
+    )
+}
 export default Projects

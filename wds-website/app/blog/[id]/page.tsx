@@ -22,9 +22,9 @@ export default async function Page(props:{params: Promise<{id:string}>}) {
 
     return (
         <section>
-            <div className="flex items-center justify-center w-full h-[400px] overflow-hidden">
+            <div className="flex items-center justify-center w-full h-[400px] relative overflow-hidden">
             {
-                url?<Image src={url.startsWith("//")?"https:"+url:url} alt={`${post.title}`+"Cover"} width={500} height={500} className="w-full object-scale-down"/>: <Image src={"/images/WDS LOGO WHITE.png"} alt={post.title + " image"} width={100} height={100} className='w-[50%] ' />
+                url?<Image src={url.startsWith("//")?"https:"+url:url} alt={`${post.title}`+"Cover"} width={500} height={500} className="max-w-full aspect-video w-full object-top h-full object-contain"/>: <Image src={"/images/WDS LOGO WHITE.png"} alt={post.title + " image"} width={100} height={100} className='w-[50%] ' />
 
             }
             </div>

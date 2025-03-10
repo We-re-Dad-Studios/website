@@ -1,4 +1,5 @@
 "use client";
+import { useSessionStorage } from '@/hooks/useSessionStorage';
 import { TwitterIcon, YoutubeIcon } from 'lucide-react';
 import Image from 'next/image'
 import Link from 'next/link'
@@ -7,12 +8,26 @@ import React, { useEffect, useState } from 'react'
 
 export const Navbar = () => {
     const [isClient,setIsClient] = useState<boolean>(false);
-    useEffect(()=>{
-      setIsClient(true);
-    })
-    const state =isClient?sessionStorage?.getItem("state")||null:null;
-  const path = usePathname();
-  if(path === "/" && !state && !isClient) return <></>
+        const {getItem}= useSessionStorage()
+        useEffect(()=>{
+          setIsClient(true);
+        },[])
+        const path = usePathname();
+        const [show,setShow]=useState<boolean>(false);
+        useEffect(()=>{
+          if(isClient){
+            const state = getItem("state");
+            if(path === "/" && !Boolean(JSON.parse(state||"{}").hasVisited)){
+              setShow(false);
+            }
+            else if (Boolean(JSON.parse(state||"{}").hasVisited)){
+              setShow(true);
+            }
+          }
+          
+          
+        },[isClient])
+      if(!show) return <></>
   return (
     <nav className='w-full bg-base_black flex items-center justify-between px-2 md:px-[80px] h-[80px] py-2'>
         <Link href={"/"}>
@@ -24,6 +39,8 @@ export const Navbar = () => {
             Home</Link>
             <Link href={"/projects"} className={path=== "/projects"?"text-neutral-500":""}>
             Projects</Link>
+            <Link href={"/blog"} className={path=== "/projects"?"text-neutral-500":""}>
+            Blog</Link>
             <Link href={"/"}>
             About Us</Link>
         </div>

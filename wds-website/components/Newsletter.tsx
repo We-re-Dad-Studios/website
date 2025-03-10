@@ -3,15 +3,29 @@ import Image from 'next/image'
 import  { useEffect,useState } from 'react'
 import { SendEmail } from './SendEmail'
 import { usePathname } from 'next/navigation';
+import { useSessionStorage } from '@/hooks/useSessionStorage';
 
 export const Newsletter = () => {
   const [isClient,setIsClient] = useState<boolean>(false);
-  useEffect(()=>{
-    setIsClient(true);
-  },[])
-  const state =isClient?sessionStorage?.getItem("state")||null:null;
-  const path = usePathname();
-  if(path === "/" && !state && !isClient) return <></>
+      const {getItem}= useSessionStorage()
+      useEffect(()=>{
+        setIsClient(true);
+      })
+      const path = usePathname();
+      const [show,setShow]=useState<boolean>(false);
+      useEffect(()=>{
+        if(isClient){
+          const state = getItem("state");
+          if(path === "/" && !Boolean(JSON.parse(state||"{}").hasVisited)){
+            setShow(false);
+          }
+          else if (Boolean(JSON.parse(state||"{}").hasVisited)){
+            setShow(true);
+          }
+        }
+ 
+      },[isClient])
+    if(!show) return <></>
   return (
     <div className='w-full xl:w-[80vw] mx-auto rounded-lg flex mb-12 overflow-hidden px-2'>
      <div className="flex-1  rounded-l-lg flex relative bg-black">
