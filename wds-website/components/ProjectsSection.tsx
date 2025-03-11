@@ -41,7 +41,7 @@ export const ProjectCard = ({ image, name, description, type,to }: { image: stri
                     <div>
                         <div className="flex items-center justify-between">
                             <p className='mt-auto text-[28px] font-agdasima '>{name}</p>
-                            <p className='text-[10px] w-max px-2 h-max py-1 rounded-sm bg-[#F94C10]'>{type}</p>
+                            <p className='text-[10px] w-max px-2 h-max py-1 rounded-sm bg-[#F94C10] hidden'>{type}</p>
                         </div>
                         <div className='opacity-50  text-[10px] w-[85%] transition-opacity group-hover:line-clamp-[10] line-clamp-4'>
                             <p className='description'>{description}</p>
