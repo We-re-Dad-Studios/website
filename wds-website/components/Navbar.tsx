@@ -17,7 +17,7 @@ export const Navbar = () => {
   useEffect(() => {
     if (isClient) {
       const state = getItem("state");
-      if (Boolean(JSON.parse(state || "{}").hasVisited)) {
+      if (Boolean(JSON.parse(state || "{}").hasVisited)|| path !== "/") {
         setShow(true);
       }
     }

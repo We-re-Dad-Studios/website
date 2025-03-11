@@ -31,7 +31,7 @@ import Link from "next/link";
                  Fantasy Tech
                 </span>
                 <span className="bg-white/10 rounded text-white w-max block p-2">
-                 Academy Tech
+                 Academy Fantasy
                 </span>
                 </div>
  

@@ -3,9 +3,11 @@ import Image from 'next/image'
 import  { useEffect,useState } from 'react'
 import { SendEmail } from './SendEmail'
 import { useSessionStorage } from '@/hooks/useSessionStorage';
+import { usePathname } from 'next/navigation';
 
 export const Newsletter = () => {
   const [isClient, setIsClient] = useState<boolean>(false);
+  const path = usePathname();
   const { getItem } = useSessionStorage();
   useEffect(() => {
     setIsClient(true);
@@ -14,7 +16,7 @@ export const Newsletter = () => {
   useEffect(() => {
     if (isClient) {
       const state = getItem("state");
-      if (Boolean(JSON.parse(state || "{}").hasVisited)) {
+      if (Boolean(JSON.parse(state || "{}").hasVisited)|| path !== "/") {
         setShow(true);
       }
     }

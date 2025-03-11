@@ -2,10 +2,12 @@
 import { useSessionStorage } from "@/hooks/useSessionStorage";
 import { InstagramIcon, TwitterIcon, YoutubeIcon } from "lucide-react";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export const Footer = () => {
   const [isClient, setIsClient] = useState<boolean>(false);
+  const path = usePathname();
   const { getItem } = useSessionStorage();
   useEffect(() => {
     setIsClient(true);
@@ -14,7 +16,7 @@ export const Footer = () => {
   useEffect(() => {
     if (isClient) {
       const state = getItem("state");
-      if (Boolean(JSON.parse(state || "{}").hasVisited)) {
+      if (Boolean(JSON.parse(state || "{}").hasVisited)|| path !== "/") {
         setShow(true);
       }
     }
