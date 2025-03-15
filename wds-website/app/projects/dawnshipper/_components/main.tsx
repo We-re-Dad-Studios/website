@@ -39,11 +39,11 @@ import Link from "next/link";
                  Description
                 </p>
                 <p className="text-sm mb-8 mt-3 text-justify text-white">
-                The world of Thaloria is on the brink of war. The noble houses of Sinai and Lothara fight for dominance, their fragile alliances crumbling as they seek control over mana-rich lands. In the midst of this rising conflict, Devvyn, a lowborn scavenger with no claim to power, dares to challenge fate. He enters the Gauntlet Trials, a brutal competition designed to forge warriors for the future. Victory means a place at Goldleaf Academy, where noble heirs train to become leaders. Failure means death.
- 
- But when Devvyn stumbles upon a power never meant to be wielded, everything changes. Flux, a chaotic force unlike any known Echo, marks him as an anomaly—one that Thaloria’s rulers would rather erase than understand. As he struggles to survive in a world that sees him as both a threat and an opportunity, the war between nations accelerates, and hidden forces move in the shadows, waiting for the right moment to strike.
- 
- With battle lines drawn and enemies on all sides, Devvyn must navigate treacherous politics, dangerous rivalries, and the truth of his own forgotten past. The trials were only the beginning. The real war is yet to come.
+                In the world of Thaloria, power is everything. Humans have learned to wield elemental magic by forming connections with Echoes—semi-sentient conduits of magic. The dominant houses of Sinai, Lothara, Baridi, and Umbralis are on the brink of a significant crisis, as the threat of civil war looms over their longstanding alliance. However, beneath this shifting political landscape lies an even more insidious plot that threatens all life in Thaloria.
+
+Amidst this chaos, Devvyn, a lowborn troublemaker, bonds with Flux, the Echo of Chaos. This relationship transforms him into a living contradiction, granting him unpredictable powers that challenge the established limits of magic.
+
+As tensions rise and circumstances change across the continent, Devvyn finds himself at the center of a deep-rooted conflict connected to his family’s lost legacy. Alongside new friends he meets at GoldLeaf Academy and with old enemies emerging from the shadows, Devvyn must determine whether he will become Thaloria’s savior or the spark that ignites its downfall.
                 </p>
              </div>
              <div className="flex flex-col items-center w-full lg:w-[30%] ml-auto">
