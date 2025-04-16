@@ -47,8 +47,8 @@ Operating within a dangerous liminal realm known as the Light, elite operatives 
 But something in the Light is shifting. Missions are failing, entire Walker teams are vanishing without a trace. 
 <br  className="my-3"/>
 
-When seventeen-year-old Vania Illia's whole team is wiped out during a simple retrieval mission, leaving her as the sole survivor, she&apos;s quietly reassigned to Team Zero, a squad of seasoned Walkers sidelined for one reason or the other. 
-No one believes her story, they think she's crazy. But as Vania begins to uncover the truth behind her survival, and the mysterious disappearances happening in the Light, She realizes the truth is far more ominous than she could have ever imagined.
+When seventeen-year-old Vania Illia&apos;s whole team is wiped out during a simple retrieval mission, leaving her as the sole survivor, she&apos;s quietly reassigned to Team Zero, a squad of seasoned Walkers sidelined for one reason or the other. 
+No one believes her story, they think she&apos;s crazy. But as Vania begins to uncover the truth behind her survival, and the mysterious disappearances happening in the Light, She realizes the truth is far more ominous than she could have ever imagined.
                 </p>
              </div>
              <div className="flex flex-col items-center w-full lg:w-[30%] ml-auto">
