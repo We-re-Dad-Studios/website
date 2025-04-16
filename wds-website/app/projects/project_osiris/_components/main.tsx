@@ -41,36 +41,14 @@ import Link from "next/link";
                  Description
                 </p>
                 <p className="text-xl  tracking-wider mb-8 mt-3 text-justify text-neutral-200 bg-white/10 p-3 ">
-                In the near future, death has become negotiable—but 
-only for the rich. Thanks to Osiris Inc., the world’s 
-first and only soul-retrieval company, anyone with 
-deep pockets can be pulled back from the 
-afterlife—provided their Time of Death (TOD) hasn’t 
-exceeded 48 hours. <br  className="my-4"/>
-Operating in a dangerous liminal space between life 
-and death known as The Light, elite field agents 
-called Walkers are trained to locate and extract souls 
-before they cross into Purgatory, the final no-return 
-zone patrolled by divine enforcers: Angels. <br />
-The company’s founder, Alina Blackwool, is a psychic 
-who died, came back, and used her fragmented memories 
-of the Light to blueprint an unthinkable operation: 
-Project Osiris. Using a hybrid of science and 
-mysticism called Par-Tech, she developed a system that 
-chemically suspends Walkers between life and death 
-long enough to breach the afterlife and retrieve the 
-dead. <br  className="my-4"/>
-But the Light is changing. Missions are growing 
-deadlier. Walkers are going missing. And now Team 
-Alpha, the company's flagship unit led by war hero 
-Sami Illia, has vanished. <br  className="my-4"/>
-Enter Vania Illia, a rookie tracker stuck in Team Zero, 
-a forgotten squad of aging Walkers considered little 
-more than backup. When Team Zero is reluctantly 
-activated to investigate the growing threat, Vania 
-uncovers something deeper than demonic 
-activity—something that could fracture the veil 
-between the living and the dead forever.
+                In the near future, death has become negotiable—but only for the rich.
+Thanks to Osiris Inc., the world&apos;s first and only soul-retrieval company, anyone with enough money can be brought back from the dead—so long as their Time of Death hasn&apos;t exceeded 48 hours. 
+Operating within a dangerous liminal realm known as the Light, elite operatives called Walkers are trained to extract souls before they cross into Purgatory, the point of no return.
+But something in the Light is shifting. Missions are failing, entire Walker teams are vanishing without a trace. 
+<br  className="my-3"/>
+
+When seventeen-year-old Vania Illia's whole team is wiped out during a simple retrieval mission, leaving her as the sole survivor, she&apos;s quietly reassigned to Team Zero, a squad of seasoned Walkers sidelined for one reason or the other. 
+No one believes her story, they think she's crazy. But as Vania begins to uncover the truth behind her survival, and the mysterious disappearances happening in the Light, She realizes the truth is far more ominous than she could have ever imagined.
                 </p>
              </div>
              <div className="flex flex-col items-center w-full lg:w-[30%] ml-auto">
