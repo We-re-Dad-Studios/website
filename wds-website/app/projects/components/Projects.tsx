@@ -67,7 +67,7 @@ const Projects =  () => {
       </div>
       <div className='flex flex-wrap gap-6 justify-center'>
           {Array.isArray(projects) && projects.length>0 && projects.map((project) => 
-            <ProjectCard key={project.sys.id} to={project.fields.useInternalRoute?project.fields.to as string:project.sys.id} image={null} name={project.fields.name as unknown as string} description={project.fields.description as unknown as string} type={currentTag?.name as string}/>
+            <ProjectCard key={project.sys.id} to={project.fields.useInternalRoute?project.fields.to as string:`/project/${project.sys.id}`} image={null} name={project.fields.name as unknown as string} description={project.fields.description as unknown as string} type={currentTag?.name as string}/>
 
 
           )}
