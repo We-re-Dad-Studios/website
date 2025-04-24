@@ -47,11 +47,14 @@ const Projects =  () => {
          <div className=' flex w-full justify-between [&>*]:text-[12px] [&>*]:cursor-pointer pb-10'>
         <div className='flex gap-x-3 [&>*]:bg-white [&>*]:bg-opacity-10 [&>*]:transition-all  [&>*:hover]:scale-110 [&>*]:bounce [&>*:hover]:bg-primary-0 [&>*]:h-max [&>*]:rounded-md  [&>*]:px-5 [&>*]:py-2'>
           {
-            Array.isArray(tags) && tags.length>0&& tags.map((tag) => (
-                <div key={tag.sys.id} role="button" className={tag.fields.name === currentTag?.name ? 'bg-primary-0 bg-opacity-10 rounded-md px-3 py-1 text-primary-0 font-semibold' : 'bg-white bg-opacity-10 rounded-md px-3 py-1'} onClick={() => setCurrentTag({name:tag.fields.name as unknown as string,id:tag.sys.id})}>
-                    {tag.fields.name as unknown as string}
-                </div>
-            ))
+            Array.isArray(tags) && tags.length>0&& tags.map((tag) => {
+              if(tag.fields.name){
+                return  <div key={tag.sys.id} role="button" className={tag.fields.name === currentTag?.name ? 'bg-primary-0 bg-opacity-10 rounded-md px-3 py-1 text-primary-0 font-semibold' : 'bg-white bg-opacity-10 rounded-md px-3 py-1'} onClick={() => setCurrentTag({name:tag.fields.name as unknown as string,id:tag.sys.id})}>
+                {tag.fields.name as unknown as string}
+            </div>
+              }
+                
+})
           }
         </div>
         <div className='flex gap-4 ml-3 [&>*]:flex [&>*]:gap-x-3 [&>*]:items-center [&>*]:bg-white [&>*]:rounded-md [&>*]:bg-opacity-10 [&>*]:px-3'>

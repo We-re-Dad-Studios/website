@@ -16,10 +16,8 @@ import Link from "next/link";
              Novel
           </span>
           </div>
-                <div className="w-full flex justify-center items-center bg-white/10 p-2 h-[450px]  rounded-md">
-                    <p className="text-3xl">
-                        Coming Soon...
-                    </p>
+                <div className="w-full flex justify-center items-center bg-white/10 p-1 h-[450px]  rounded-md">
+                    <Image width={300} height={200} alt="Project Osiris cover" className="w-full h-full" src="/images/osiris-main.jpg" />
                 </div>
  
                 <p className="text-sm font-semibold mt-4 mb-2">
