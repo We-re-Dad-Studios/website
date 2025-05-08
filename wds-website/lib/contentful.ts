@@ -58,3 +58,15 @@ const client = createClient({
     const chapter = response.items[0];
     return chapter.fields;
   }
+
+  export async function getChapterByNumber(chapterNumber:number){
+    const response = await client.getEntries({
+      content_type: 'chapter',
+      'fields.chapterNumber': chapterNumber,
+      limit: 1,
+    })
+    if(Array.isArray(response.items) && response.items.length > 0){
+      return response.items[0].fields;
+    }
+    return null;
+  }

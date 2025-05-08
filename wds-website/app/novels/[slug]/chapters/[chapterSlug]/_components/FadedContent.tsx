@@ -2,7 +2,7 @@
 import { withFadeIn } from "@/utils/withFadeIn";
 import { documentToReactComponents, Options } from "@contentful/rich-text-react-renderer";
 import { BLOCKS, Document } from "@contentful/rich-text-types";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { ReactNode, useEffect, useState } from "react";
 
 const options: Options = {
@@ -45,8 +45,8 @@ const options: Options = {
     }, []);
   },
 };
-export const Content = withFadeIn(({content,chapter}:{content:Document,chapter:Chapter})=>
-    <ChapterReader chapter={chapter} content={content}/>
+export const Content = withFadeIn(({content,chapter,previousChapter,nextChapter}:{content:Document,chapter:Chapter,previousChapter?:string,nextChapter?:string})=>
+    <ChapterReader chapter={chapter} content={content} prevChapter={previousChapter} nextChapter={nextChapter}/>
 
 )
 interface extendedWindow extends Window {
@@ -61,6 +61,7 @@ export interface Chapter {
     releaseDate: string;
     content?: Document;
     isFree?: boolean;
+    slug: string;
   }
   
 //   interface Novel {
@@ -78,13 +79,14 @@ export interface Chapter {
   function ChapterReader({ 
     chapter, 
     content,
-
+    nextChapter,
+    prevChapter,
   }: ChapterReaderProps) {
     const [fontSize, setFontSize] = useState<"sm"|"md"|"lg"|"xl">('md');
     const [theme, setTheme] = useState('dark');
     const [isScrolling, setIsScrolling] = useState(false);
     const {slug:Novel}=useParams();
-    
+    const router = useRouter();
     // Track reading progress
     useEffect(() => {
       if(typeof window !== 'undefined') {
@@ -127,7 +129,7 @@ export interface Chapter {
     //   };
   
     return (
-      <div className={`min-h-screen ${themes[theme as Theme]} transition-colors duration-300`}>
+      <div className={`min-h-screen ${themes[theme as Theme]} transition-colors duration-300 `}>
         {/* Floating Header */}
         <header className={`fixed top-0 left-0 right-0 z-10 bg-gradient-to-b from-black/90 to-transparent p-4 transition-opacity duration-300 ${isScrolling ? 'opacity-100' : 'opacity-0 hover:opacity-100'}`}>
           <div className="container mx-auto flex justify-between items-center">
@@ -168,7 +170,7 @@ export interface Chapter {
         </header>
   
         {/* Chapter Content */}
-        <div className="container mx-auto px-4 pt-24 pb-16 max-w-3xl">
+        <div className="container mx-auto px-4 pt-24 pb-20 max-w-3xl">
           <div className="mb-12 text-center border-b border-gray-700 pb-8">
             <h1 className="text-4xl font-bold text-amber-400 mb-2 font-mono">{`${Novel[0].toUpperCase()}${Novel.slice(1,Novel.length)}`}</h1>
             <h2 className="text-2xl text-gray-300 mb-4">Chapter {chapter.chapterNumber}: {chapter.title}</h2>
@@ -182,7 +184,7 @@ export interface Chapter {
           </div>
   
           <div 
-            className={`${fontSizes[fontSize]} leading-relaxed text-justify prose prose-invert max-w-none prose-headings:text-amber-300 prose-a:text-amber-400 hover:prose-a:text-amber-300 prose-strong:text-gray-200`}
+            className={`${fontSizes[fontSize]} leading-relaxed pb-12 text-justify prose prose-invert max-w-none prose-headings:text-amber-300 prose-a:text-amber-400 hover:prose-a:text-amber-300 prose-strong:text-gray-200`}
            
           >
             {documentToReactComponents(content,options)}
@@ -192,7 +194,9 @@ export interface Chapter {
         {/* Navigation Footer */}
         <footer className="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-4">
           <div className="container mx-auto flex justify-between items-center">
-            <button className="px-4 py-2 bg-gray-800/80 hover:bg-gray-700/90 text-amber-400 rounded-lg border border-gray-700 flex items-center">
+            <button disabled={!prevChapter} onClick={()=>{
+              router.push(`/novels/${Novel}/chapters/${prevChapter}`)
+            }} className="px-4 py-2 bg-gray-800/80 hover:bg-gray-700/90 text-amber-400 rounded-lg border border-gray-700 flex items-center">
               <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
@@ -203,7 +207,9 @@ export interface Chapter {
               {/* {chapter.chapterNumber} / {chapter.totalChapters} */}
             </div>
             
-            <button className="px-4 py-2 bg-gray-800/80 hover:bg-gray-700/90 text-amber-400 rounded-lg border border-gray-700 flex items-center">
+            <button disabled={!nextChapter} onClick={()=>{
+              router.push(`/novels/${Novel}/chapters/${nextChapter}`)
+            }} className="px-4 py-2 bg-gray-800/80 hover:bg-gray-700/90 text-amber-400 rounded-lg border border-gray-700 flex items-center">
               Next
               <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

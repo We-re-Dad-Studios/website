@@ -1,4 +1,4 @@
-import { getChapterBySlug } from "@/lib/contentful";
+import { getChapterByNumber, getChapterBySlug } from "@/lib/contentful";
 import { redirect } from "next/navigation";
 import { Chapter, Content } from "./_components/FadedContent";
 import { Document } from "@contentful/rich-text-types";
@@ -7,12 +7,14 @@ import { Metadata } from "next";
 export default async function Page(props:{params:Promise<{chapterSlug:string}>}) {
     const {chapterSlug}= await props.params;
     const chapterContent = await getChapterBySlug(chapterSlug);
+    const nextChapter = await getChapterByNumber(chapterContent?.chapterNumber as number + 1);
+    const prevChapter = await getChapterByNumber(chapterContent?.chapterNumber as number - 1);
     if (!chapterContent) {
        redirect("/projects")
     }
     return (
         <div>
-<Content content={chapterContent.content as unknown as Document} chapter={chapterContent as unknown as Chapter}/>
+<Content previousChapter={prevChapter? (prevChapter as unknown as Chapter).slug:undefined} nextChapter={nextChapter? (nextChapter as unknown as Chapter).slug:undefined} content={chapterContent.content as unknown as Document} chapter={chapterContent as unknown as Chapter}/>
         </div>
     );
 }
@@ -27,7 +29,7 @@ export const generateMetadata = async (props: { params: Promise<{ chapterSlug: s
         openGraph: {
             title: `${chapterContent?.title} | Dawnshipper`,
             description: chapterContent?.previewText as string || "Read more about this chapter by clicking the link.",
-            url: `https://weredadstudios.com/projects/${slug}/chapters/${chapterSlug}`,
+            url: `https://weredadstudios.com/novels/${slug}/chapters/${chapterSlug}`,
             siteName: "Dawnshipper",
             images: [
                 {
