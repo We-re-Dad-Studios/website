@@ -1,10 +1,50 @@
 "use client";
 import { withFadeIn } from "@/utils/withFadeIn";
-import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
-import { Document } from "@contentful/rich-text-types";
+import { documentToReactComponents, Options } from "@contentful/rich-text-react-renderer";
+import { BLOCKS, Document } from "@contentful/rich-text-types";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 
+const options: Options = {
+  renderNode: {
+    [BLOCKS.PARAGRAPH]: (node, children) => {
+      return <p className="mb-6 last:mb-0">{children}</p>;
+    },
+    [BLOCKS.HEADING_1]: (node, children) => {
+      return <h1 className="text-3xl font-bold text-amber-300 mt-12 mb-6">{children}</h1>;
+    },
+    [BLOCKS.HEADING_2]: (node, children) => {
+      return <h2 className="text-2xl font-bold text-amber-300 mt-10 mb-5">{children}</h2>;
+    },
+    [BLOCKS.HEADING_3]: (node, children) => {
+      return <h3 className="text-xl font-bold text-amber-300 mt-8 mb-4">{children}</h3>;
+    },
+    [BLOCKS.UL_LIST]: (node, children) => {
+      return <ul className="list-disc pl-6 mb-6 space-y-2">{children}</ul>;
+    },
+    [BLOCKS.OL_LIST]: (node, children) => {
+      return <ol className="list-decimal pl-6 mb-6 space-y-2">{children}</ol>;
+    },
+    [BLOCKS.LIST_ITEM]: (node, children) => {
+      return <li className="pl-2">{children}</li>;
+    },
+    [BLOCKS.QUOTE]: (node, children) => {
+      return (
+        <blockquote className="border-l-4 border-amber-500 pl-4 my-6 italic text-gray-300">
+          {children}
+        </blockquote>
+      );
+    },
+    [BLOCKS.HR]: () => {
+      return <hr className="my-8 border-gray-700" />;
+    },
+  },
+  renderText: (text) => {
+    return text.split('\n').reduce((children: ReactNode[], textSegment, index) => {
+      return [...children, index > 0 && <br key={index} />, textSegment];
+    }, []);
+  },
+};
 export const Content = withFadeIn(({content,chapter}:{content:Document,chapter:Chapter})=>
     <ChapterReader chapter={chapter} content={content}/>
 
@@ -145,7 +185,7 @@ export interface Chapter {
             className={`${fontSizes[fontSize]} leading-relaxed text-justify prose prose-invert max-w-none prose-headings:text-amber-300 prose-a:text-amber-400 hover:prose-a:text-amber-300 prose-strong:text-gray-200`}
            
           >
-            {documentToReactComponents(content)}
+            {documentToReactComponents(content,options)}
             </div>
         </div>
   
