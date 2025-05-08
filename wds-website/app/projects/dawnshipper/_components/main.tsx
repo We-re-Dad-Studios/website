@@ -4,8 +4,9 @@ import { Entry, EntrySkeletonType } from "contentful";
 import { InstagramIcon, TwitterIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { chapter } from "../page";
 
-  function NotMain({relatedPosts}:{relatedPosts:Entry<EntrySkeletonType,undefined,string>[]}) {
+  function NotMain({relatedPosts,chapters}:{relatedPosts:Entry<EntrySkeletonType,undefined,string>[],chapters:chapter[]}) {
     return (
         <div>
           <div className="flex lg:flex-row flex-col w-full h-full pb-10">
@@ -50,9 +51,52 @@ As tensions rise and circumstances change across the continent, Devvyn finds him
              <p className="text-subheading font-semibold mb-2 h-[45px]">
                  Ready to dive in?
              </p>
-             <button className="bg-primary-0 hover:bg-primary-0/50 transition-colors duration-500 w-[70%] h-auto py-2  rounded-lg">
+             <div className="space-y-4 max-h-[300px] overflow-y-auto w-full">
+  {chapters.map((chapter) => (
+    <div 
+      key={chapter.id}
+      className="group relative p-4 bg-gradient-to-r from-gray-900/80 w-[80%] mx-auto to-gray-800/80 border-l-4 border-amber-500 hover:border-amber-300 transition-all duration-300 rounded-r-lg shadow-lg hover:shadow-amber-500/20 hover:translate-x-1"
+    >
+      <div className="flex justify-between items-center gap-3">
+        <div>
+          <Link href={`/novels/dawnshipper/chapters/${chapter.slug}`} className="text-xl font-mono font-medium text-amber-100 group-hover:text-white transition-colors">
+            {chapter.title}
+          </Link>
+          <div className="flex items-center mt-1 space-x-3">
+            <span className="text-xs font-mono px-2 py-1 bg-gray-700/50 text-amber-300 rounded">
+              Ch. {chapter.chapterNumber}
+            </span>
+            {chapter.isFree && (
+              <span className="text-xs font-mono px-2 py-1 bg-amber-800/30 text-amber-200 rounded border border-amber-700/50">
+                Free
+              </span>
+            )}
+          </div>
+        </div>
+        <div className="text-right ">
+          <p className="text-sm font-mono text-gray-400">
+            {new Date(chapter.releaseDate).toLocaleDateString('en-US', {
+              month: 'short',
+              day: 'numeric',
+              year: 'numeric'
+            })}
+          </p>
+          <p className="text-xs font-mono mt-1 text-gray-500 group-hover:text-gray-400 transition-colors">
+            {new Date(chapter.releaseDate).toLocaleTimeString([], {
+              hour: '2-digit',
+              minute: '2-digit'
+            })}
+          </p>
+        </div>
+      </div>
+      
+     
+    </div>
+  ))}
+</div>
+             {/* <button className="bg-primary-0 hover:bg-primary-0/50 transition-colors duration-500 w-[70%] h-auto py-2  rounded-lg">
                  Chapters coming soon...
-             </button>
+             </button> */}
  
              <div className="mt-[50px] bg-white/10 py-4 px-8 rounded text-center" >
                  <p className=" font-semibold">
@@ -118,6 +162,6 @@ export const ProjectCard = ({  name, description, to }: {  name: string, descrip
     )
 }
 
-export const Main = withFadeIn(({ relatedPosts }: { relatedPosts: Entry<EntrySkeletonType, undefined, string>[] }) => (
-    <NotMain relatedPosts={relatedPosts} />
+export const Main = withFadeIn(({ relatedPosts,chapters }: { relatedPosts: Entry<EntrySkeletonType, undefined, string>[],chapters:chapter[] }) => (
+    <NotMain relatedPosts={relatedPosts} chapters={chapters}/>
 ));
