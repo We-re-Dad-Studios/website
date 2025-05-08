@@ -23,12 +23,12 @@ export interface Chapter {
     isFree?: boolean;
   }
   
-  interface Novel {
-    id: string;
-    title: string;
-    slug: string;
-    totalChapters?: number;
-  }
+//   interface Novel {
+//     id: string;
+//     title: string;
+//     slug: string;
+//     totalChapters?: number;
+//   }
   interface ChapterReaderProps {
     chapter: Chapter;
     content: Document;
@@ -54,10 +54,10 @@ export interface Chapter {
             (window as unknown as extendedWindow).scrollTimer = setTimeout(() => setIsScrolling(false), 1000);
             
             // Calculate reading progress
-            const progress = Math.round(
-              (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100
-            );
-            // You could save this to user's progress tracking
+            // const progress = Math.round(
+            //   (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100
+            // );
+            // // You could save this to user's progress tracking
           };
       
           window.addEventListener('scroll', handleScroll);
@@ -78,13 +78,13 @@ export interface Chapter {
         light: 'bg-white text-gray-900'
       };
     
-      const formatDate = (dateString: string): string => {
-        return new Date(dateString).toLocaleDateString('en-US', { 
-          year: 'numeric', 
-          month: 'long', 
-          day: 'numeric' 
-        });
-      };
+    //   const formatDate = (dateString: string): string => {
+    //     return new Date(dateString).toLocaleDateString('en-US', { 
+    //       year: 'numeric', 
+    //       month: 'long', 
+    //       day: 'numeric' 
+    //     });
+    //   };
   
     return (
       <div className={`min-h-screen ${themes[theme as Theme]} transition-colors duration-300`}>

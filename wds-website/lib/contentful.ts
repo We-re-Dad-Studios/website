@@ -22,12 +22,13 @@ const client = createClient({
     return novel;
   }
   
-  export async function getChapterList(novelId:string, preview = false) {
+  export async function getChapterList(novelId:string) {
 
   
     const response = await client.getEntries({
       content_type: 'chapter',
       'fields.project.sys.id': novelId,
+    //   eslint-disable-next-line @typescript-eslint/no-explicit-any
       order: 'fields.chapterNumber' as any,
       
       limit: 1000,
@@ -44,11 +45,11 @@ const client = createClient({
 
 
   
-  export async function getChapterContent(chapterId:string, preview = false) {
+  export async function getChapterContent(chapterId:string) {
     const response = await client.getEntry(chapterId);
     return response.fields.content;
   }
-  export async function getChapterBySlug(slug:string, preview = false) {
+  export async function getChapterBySlug(slug:string) {
     const response = await client.getEntries({
         content_type: 'chapter',
         'fields.slug': slug,
