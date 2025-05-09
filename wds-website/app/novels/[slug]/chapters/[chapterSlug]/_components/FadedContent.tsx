@@ -4,6 +4,7 @@ import { documentToReactComponents, Options } from "@contentful/rich-text-react-
 import { BLOCKS, Document } from "@contentful/rich-text-types";
 import { useParams, useRouter } from "next/navigation";
 import { ReactNode, useEffect, useState } from "react";
+import { Comments } from "./Comments";
 
 const options: Options = {
   renderNode: {
@@ -170,7 +171,7 @@ export interface Chapter {
         </header>
   
         {/* Chapter Content */}
-        <div className="container mx-auto px-4 pt-24 pb-20 max-w-3xl">
+        <div className="container mx-auto px-4 pt-24 pb-20 max-w-4xl">
           <div className="mb-12 text-center border-b border-gray-700 pb-8">
             <h1 className="text-4xl font-bold text-amber-400 mb-2 font-mono">{`${Novel[0].toUpperCase()}${Novel.slice(1,Novel.length)}`}</h1>
             <h2 className="text-2xl text-gray-300 mb-4">Chapter {chapter.chapterNumber}: {chapter.title}</h2>
@@ -192,7 +193,7 @@ export interface Chapter {
         </div>
   
         {/* Navigation Footer */}
-        <footer className="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-4">
+        <footer className="fixed bottom-0 left-0 z-1 right-0 bg-gradient-to-t from-black/90 to-transparent p-4">
           <div className="container mx-auto flex justify-between items-center">
             <button disabled={!prevChapter} onClick={()=>{
               router.push(`/novels/${Novel}/chapters/${prevChapter}`)
@@ -217,6 +218,9 @@ export interface Chapter {
             </button>
           </div>
         </footer>
+       <div className="w-full px-4">
+       <Comments title={`${Novel}: chapter-${chapter.chapterNumber}`}/>
+       </div>
       </div>
     );
   }
