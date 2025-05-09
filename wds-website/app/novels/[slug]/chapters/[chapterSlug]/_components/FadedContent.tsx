@@ -193,7 +193,7 @@ export interface Chapter {
         </div>
   
         {/* Navigation Footer */}
-        <footer className="fixed bottom-0 left-0 z-1 right-0 bg-gradient-to-t from-black/90 to-transparent p-4">
+        <footer className="fixed bottom-0 left-0 z-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-4">
           <div className="container mx-auto flex justify-between items-center">
             <button disabled={!prevChapter} onClick={()=>{
               router.push(`/novels/${Novel}/chapters/${prevChapter}`)
@@ -218,7 +218,7 @@ export interface Chapter {
             </button>
           </div>
         </footer>
-       <div className="w-full px-4">
+       <div className="w-full px-4 mb-32">
        <Comments title={`${Novel}: chapter-${chapter.chapterNumber}`}/>
        </div>
       </div>
