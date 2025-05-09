@@ -39,7 +39,7 @@ import { chapter } from "../page";
                 <p className="text-subheading tracking-wider text-neutral_400 font-semibold mt-4">
                  Description
                 </p>
-                <p className="text-xl mb-8 mt-3 text-justify leading-relaxed text-white">
+                <p className="text-xl mb-8 mt-3 text-justify leading-relaxed text-white font-mono">
                 In the world of Thaloria, power is everything. Humans have learned to wield elemental magic by forming connections with Echoes—semi-sentient conduits of magic. The dominant houses of Sinai, Lothara, Baridi, and Umbralis are on the brink of a significant crisis, as the threat of civil war looms over their longstanding alliance. However, beneath this shifting political landscape lies an even more insidious plot that threatens all life in Thaloria.
 
 Amidst this chaos, Devvyn, a lowborn troublemaker, bonds with Flux, the Echo of Chaos. This relationship transforms him into a living contradiction, granting him unpredictable powers that challenge the established limits of magic.
