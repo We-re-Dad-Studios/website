@@ -55,7 +55,7 @@ As tensions rise and circumstances change across the continent, Devvyn finds him
   {chapters.map((chapter) => (
     <div 
       key={chapter.id}
-      className="group relative p-4 bg-gradient-to-r from-gray-900/80 w-full md:w-[80%] mx-auto to-gray-800/80 border-l-4 border-amber-500 hover:border-amber-300 transition-all duration-300 rounded-r-lg shadow-lg hover:shadow-amber-500/20 hover:translate-x-1"
+      className="group relative p-4 bg-gradient-to-r from-gray-900/80 w-full md:w-[80%] mx-auto to-gray-800/80 border-l-4 border-amber-500 hover:border-amber-300 transition-all duration-300 rounded-r-lg shadow-lg hover:shadow-amber-500/20 md:hover:translate-x-1"
     >
       <div className="flex justify-between items-center gap-3">
         <div>

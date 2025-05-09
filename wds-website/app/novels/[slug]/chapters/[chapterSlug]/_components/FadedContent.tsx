@@ -135,7 +135,7 @@ export interface Chapter {
         <header className={`fixed top-0 left-0 right-0 z-10 bg-gradient-to-b from-black/90 to-transparent p-4 transition-opacity duration-300 ${isScrolling ? 'opacity-100' : 'opacity-0 hover:opacity-100'}`}>
           <div className="container mx-auto flex justify-between items-center">
             <button 
-              onClick={() => window.history.back()}
+              onClick={() => router.push(`/projects/${Novel}`)}
               className="flex items-center text-amber-400 hover:text-amber-300"
             >
               <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
