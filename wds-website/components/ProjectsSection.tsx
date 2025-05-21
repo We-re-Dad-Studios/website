@@ -36,14 +36,14 @@ export const ProjectCard = ({ image, name, description, type,to }: { image: stri
                     </div>
                 )
             }
-            <div className="absolute z-[2] w-full h-full top-0 left-0  group items-center flex flex-col justify-end  hover:gap-x-[100%] [&>div>Button]:hover:[&>.description]:line-clamp-none  [&>div>Button]:hover:relative [&>div>Button]:hover:opacity-100 [&>div]:hover:h-[100%] [&>div]:hover:bg-opacity-20 [&>div]:hover:backdrop-blur-sm cursor-pointer">
+            <div className="absolute z-[2] w-full h-full top-0 left-0  group items-center flex flex-col justify-end  hover:gap-x-[100%] [&>div>Button]:hover:[&>.description]:line-clamp-none [&>div>Button]:hover:relative [&>div>Button]:hover:opacity-100 [&>div]:hover:h-[100%] [&>div]:hover:bg-opacity-20 [&>div]:hover:backdrop-blur-sm cursor-pointer">
                 <div className='flex flex-col h-[40%] p-2  transition-all  duration-500 justify-between bg-primary-0 bg-opacity-0 bounce'>
                     <div>
                         <div className="flex items-center justify-between">
                             <p className='mt-auto text-[28px] font-agdasima '>{name}</p>
                             <p className='text-[10px] w-max px-2 h-max py-1 rounded-sm bg-[#F94C10] hidden'>{type}</p>
                         </div>
-                        <div className='opacity-50  text-lg w-[85%] transition-opacity group-hover:line-clamp-[6] lg:group-hover:line-clamp-[10] line-clamp-4'>
+                        <div className='opacity-50  text-lg w-[85%] transition-opacity group-hover:line-clamp-[6] lg:group-hover:line-clamp-[6] line-clamp-4'>
                             <p className='description'>{description}</p>
 
                         </div>
