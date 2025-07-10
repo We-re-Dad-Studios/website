@@ -50,48 +50,44 @@ import { useRouter } from "next/navigation";
       exit: { opacity: 0 },
     };
     return (
-      <AnimatePresence mode="wait" >
-        {!hasVisited ? (
-          <motion.section
-            key="welcome-section"
-            className="w-full min-h-screen flex justify-center items-center flex-col"
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-            variants={fadeInOutVariants}
-            transition={{ duration: 0.5 }} // Control the animation speed
-          >
-            {/* Your first section content */}
-            <SplashImage />
-            <button
-              onClick={handleVisited}
-              className={
-                "mt-4 transition-all duration-300 z-[20] flex flex-row items-center py-2 px-10 max-w-full welcome-btn main-btn " +
-            ""
-              }
-            >
-              Begin Your Journey <AnimatedArrow />
-            </button>
-          </motion.section>
-        ) : (
-          <motion.section
-            key="main-section"
-            className="w-full min-h-screen flex flex-col  "
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-            variants={fadeInOutVariants}
-            transition={{ duration: 0.5 }} // Control the animation speed
-          >
-    
-        <div className="w-full h-[90vh] bg-neutral_1000 grid place-items-center">
-            <h1 className="text-[60px]">Coming Soon</h1>
-        </div>
-        <ProjectsSection/>
-        
-          </motion.section>
-        )}
-      </AnimatePresence>
+     <AnimatePresence mode="wait">
+  {!hasVisited ? (
+    <motion.section
+      key="welcome-section"
+      className="w-full min-h-screen flex justify-center items-center flex-col relative"
+      initial="hidden"
+      animate="visible"
+      exit="exit"
+      variants={fadeInOutVariants}
+      transition={{ duration: 0.5 }}
+    >
+      <SplashImage />
+      <button
+        onClick={handleVisited}
+        className="mt-8 transition-all duration-300 z-[20] flex flex-row items-center gap-2 py-3 px-12 welcome-btn main-btn hover:gap-4 hover:scale-105"
+      >
+        Begin Your Journey <AnimatedArrow />
+      </button>
+    </motion.section>
+  ) : (
+    <motion.section
+      key="main-section"
+      className="w-full min-h-screen flex flex-col"
+      initial="hidden"
+      animate="visible"
+      exit="exit"
+      variants={fadeInOutVariants}
+      transition={{ duration: 0.5 }}
+    >
+      <div className="w-full h-[90vh] bg-neutral_1000 grid place-items-center relative overflow-hidden">
+        <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary-0 to-primary-300 animate-pulse">
+          Coming Soon
+        </h1>
+      </div>
+      <ProjectsSection />
+    </motion.section>
+  )}
+</AnimatePresence>
     );
   }
 

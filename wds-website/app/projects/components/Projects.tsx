@@ -45,30 +45,42 @@ const Projects =  () => {
   return (
     <div className="w-full">
          <div className=' flex w-full justify-between [&>*]:text-[12px] [&>*]:cursor-pointer pb-10'>
-        <div className='flex gap-x-3 [&>*]:bg-white [&>*]:bg-opacity-10 [&>*]:transition-all  [&>*:hover]:scale-110 [&>*]:bounce [&>*:hover]:bg-primary-0 [&>*]:h-max [&>*]:rounded-md  [&>*]:px-5 [&>*]:py-2'>
-          {
-            Array.isArray(tags) && tags.length>0&& tags.map((tag) => {
-              if(tag.fields.name){
-                return  <div key={tag.sys.id} role="button" className={tag.fields.name === currentTag?.name ? 'bg-primary-0 bg-opacity-10 rounded-md px-3 py-1 text-primary-0 font-semibold' : 'bg-white bg-opacity-10 rounded-md px-3 py-1'} onClick={() => setCurrentTag({name:tag.fields.name as unknown as string,id:tag.sys.id})}>
-                {tag.fields.name as unknown as string}
-            </div>
-              }
-                
-})
-          }
-        </div>
-        <div className='flex gap-4 ml-3 [&>*]:flex [&>*]:gap-x-3 [&>*]:items-center [&>*]:bg-white [&>*]:rounded-md [&>*]:bg-opacity-10 [&>*]:px-3'>
-          <div className='bg'>
-            <Search />
-            <input type="text" name="" id="" className='bg-transparent outline-transparent' />
-          </div>
-          <div>
-            <SlidersHorizontalIcon />
-            <p>Filter</p>
-          </div>
-        </div>
+       <div className="flex flex-col md:flex-row w-full justify-between items-start md:items-center gap-4 pb-10">
+  {/* Tags */}
+  <div className="flex flex-wrap gap-2">
+    {tags.map((tag) => (
+      <button
+        key={tag.sys.id}
+        className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+          tag.fields.name === currentTag?.name
+            ? 'bg-primary-500 text-white shadow-md'
+            : 'bg-white/10 text-gray-200 hover:bg-white/20'
+        }`}
+        onClick={() => setCurrentTag({name: tag.fields.name as unknown as string, id: tag.sys.id})}
+      >
+        {tag.fields.name as unknown as string}
+      </button>
+    ))}
+  </div>
+
+  {/* Search/Filter */}
+  <div className="flex gap-3 w-full md:w-auto">
+    <div className="flex items-center bg-white/10 rounded-lg px-3 py-2 gap-2 focus-within:ring-2 focus-within:ring-primary-500 transition-all">
+      <Search className="w-4 h-4 text-gray-400" />
+      <input 
+        type="text" 
+        placeholder="Search projects..." 
+        className="bg-transparent outline-none text-sm w-full placeholder-gray-400"
+      />
+    </div>
+    <button className="flex items-center gap-2 bg-white/10 hover:bg-white/20 rounded-lg px-3 py-2 text-sm transition-all">
+      <SlidersHorizontalIcon className="w-4 h-4" />
+      <span>Filter</span>
+    </button>
+  </div>
+</div>
       </div>
-      <div className='flex flex-wrap gap-6 justify-center'>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
           {Array.isArray(projects) && projects.length>0 && projects.map((project) => 
             <ProjectCard key={project.sys.id} to={project.fields.useInternalRoute?project.fields.to as string:`/project/${project.sys.id}`} image={null} name={project.fields.name as unknown as string} description={project.fields.description as unknown as string} type={currentTag?.name as string}/>
 

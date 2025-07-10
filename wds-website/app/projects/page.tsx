@@ -22,11 +22,11 @@ export default function Home() {
           transition={{ duration: 0.5 }} // Control the animation speed
         >
   
-       <div className="w-full h-[40vh] bg-neutral_1000 grid place-items-center overflow-hidden">
+       {/* <div className="w-full h-[40vh] bg-neutral_1000 grid place-items-center overflow-hidden">
           <div className="text-[60px] brightness-50">
             <video src="video/jumbotronSite.mp4" autoPlay loop className="w-[100vw]"></video>
           </div>
-       </div>
+       </div> */}
        <ProjectPageinator/>
      
         </motion.section>
