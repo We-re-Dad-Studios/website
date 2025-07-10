@@ -50,6 +50,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+     
+<script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+
       <Head>
         <link rel="icon" type="image/x-icon" href="/images/favicon.ico"></link>
         <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
