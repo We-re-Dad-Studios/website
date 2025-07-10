@@ -7,6 +7,7 @@ import { Navbar } from "@/components/Navbar";
 import { Newsletter } from "@/components/Newsletter";
 import { Footer } from "@/components/Footer";
 import { PostHogProvider } from "@/components/PostHogProvider";
+import dynamic from "next/dynamic";
 
 export const metadata: Metadata = {
   title: "WDS",
@@ -38,6 +39,10 @@ export const metadata: Metadata = {
 //   weight: ["400"],
 //   variable: "--font-bebas"
 // })
+
+const PageView = dynamic(()=>import("@/components/PhPageView"),{
+  ssr:false
+})
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -58,6 +63,7 @@ export default function RootLayout({
         className={`antialiased bg-base_black font-agdasima setfont text-[#FAFAFA]`}
       >
         <PostHogProvider>
+          <PageView/>
           <Navbar />
           {children}
           <Newsletter />
