@@ -6,7 +6,7 @@ import Head from "next/head";
 import { Navbar } from "@/components/Navbar";
 import { Newsletter } from "@/components/Newsletter";
 import { Footer } from "@/components/Footer";
-
+import { PostHogProvider } from "@/components/PostHogProvider";
 
 export const metadata: Metadata = {
   title: "WDS",
@@ -57,10 +57,12 @@ export default function RootLayout({
         //please lets not force the whole site to use one font 
         className={`antialiased bg-base_black font-agdasima setfont text-[#FAFAFA]`}
       >
-        <Navbar/>
-        {children}
-        <Newsletter/>
-       <Footer/>
+        <PostHogProvider>
+          <Navbar />
+          {children}
+          <Newsletter />
+          <Footer />
+        </PostHogProvider>
       </body>
     </html>
   );
