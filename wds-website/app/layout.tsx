@@ -11,12 +11,15 @@ import dynamic from "next/dynamic";
 
 export const metadata: Metadata = {
   title: "WDS",
-  description: "WDS is a creative studio specializing in game development, animation, manhwa, manga, and novel creation. We build immersive worlds and craft compelling stories that captivate audiences across different mediums.",
-  keywords: "game development, animation, manhwa, manga, novel creation, creative studio, WDS",
+  description:
+    "WDS is a creative studio specializing in game development, animation, manhwa, manga, and novel creation. We build immersive worlds and craft compelling stories that captivate audiences across different mediums.",
+  keywords:
+    "game development, animation, manhwa, manga, novel creation, creative studio, WDS",
   viewport: "width=device-width, initial-scale=1",
   openGraph: {
     title: "WDS - Game Development & Creative Studio",
-    description: "We craft captivating stories and immersive worlds in games, animation, manhwa, manga, and novels.",
+    description:
+      "We craft captivating stories and immersive worlds in games, animation, manhwa, manga, and novels.",
     url: "https://weredadstudios.netlify.app/images/WDS%20LOGO%20BLACK_.png",
     siteName: "WDS",
 
@@ -31,8 +34,6 @@ export const metadata: Metadata = {
     locale: "en_US",
     type: "website",
   },
-
-
 };
 // const bebas = Bebas_Neue({
 //   subsets: ["latin", "latin-ext"],
@@ -40,9 +41,9 @@ export const metadata: Metadata = {
 //   variable: "--font-bebas"
 // })
 
-const PageView = dynamic(()=>import("@/components/PhPageView"),{
-  ssr:false
-})
+const PageView = dynamic(() => import("@/components/PhPageView"), {
+  ssr: false,
+});
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -50,29 +51,44 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-     
-<script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
-
       <Head>
+        <script
+          async
+          src="https://scripts.simpleanalyticscdn.com/latest.js"
+        ></script>
         <link rel="icon" type="image/x-icon" href="/images/favicon.ico"></link>
-        <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png" />
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="/images/apple-touch-icon.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/images/favicon-32x32.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/images/favicon-16x16.png"
+        />
         <link rel="manifest" href="/favicons/site.webmanifest" />
         <meta name="msapplication-TileColor" content="#0a0a0b" />
       </Head>
-      <body
-        //please lets not force the whole site to use one font 
-        className={`antialiased bg-base_black font-agdasima setfont text-[#FAFAFA]`}
-      >
-        <PostHogProvider>
-          <PageView/>
+      <PostHogProvider>
+        <body
+          //please lets not force the whole site to use one font
+          className={`antialiased bg-base_black font-agdasima setfont text-[#FAFAFA]`}
+        >
+          <PageView />
           <Navbar />
           {children}
           <Newsletter />
           <Footer />
-        </PostHogProvider>
-      </body>
+        </body>
+      </PostHogProvider>
     </html>
   );
 }
