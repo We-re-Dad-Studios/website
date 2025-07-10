@@ -130,7 +130,7 @@ export interface Chapter {
     //   };
   
     return (
-      <div className={`min-h-screen ${themes[theme as Theme]} transition-colors duration-300 `}>
+      <div className={`min-h-screen ${themes[theme as Theme]} transition-colors duration-300 mb-12`}>
         {/* Floating Header */}
         <header className={`fixed top-0 left-0 right-0 z-10 bg-gradient-to-b from-black/90 to-transparent p-4 transition-opacity duration-300 ${isScrolling ? 'opacity-100' : 'opacity-0 hover:opacity-100'}`}>
           <div className="container mx-auto flex justify-between items-center">
@@ -173,7 +173,7 @@ export interface Chapter {
         {/* Chapter Content */}
         <div className="container mx-auto px-4 pt-24 pb-20 max-w-4xl">
           <div className="mb-12 text-center border-b border-gray-700 pb-8">
-            <h1 className="text-4xl font-bold text-amber-400 mb-2 font-mono">{`${Novel[0].toUpperCase()}${Novel.slice(1,Novel.length)}`}</h1>
+            <h1 className="text-4xl font-bold text-amber-400 mb-2 font-mono">{`${Novel[0].toUpperCase()}${(Novel as string).replace("_"," ").slice(1,Novel.length)}`}</h1>
             <h2 className="text-2xl text-gray-300 mb-4">Chapter {chapter.chapterNumber}: {chapter.title}</h2>
             <p className="text-gray-400 text-sm">
               Released: {new Date(chapter.releaseDate).toLocaleDateString('en-US', { 
@@ -193,7 +193,7 @@ export interface Chapter {
         </div>
   
         {/* Navigation Footer */}
-        <footer className="fixed bottom-0 left-0 z-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-4">
+        <footer className="mb-12 bg-gradient-to-b from-black/90 to-transparent p-4">
           <div className="container mx-auto flex justify-between items-center">
             <button disabled={!prevChapter} onClick={()=>{
               router.push(`/novels/${Novel}/chapters/${prevChapter}`)

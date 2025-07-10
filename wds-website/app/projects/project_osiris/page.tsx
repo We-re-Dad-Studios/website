@@ -1,6 +1,8 @@
 "--force-dynamic";
 import { createClient } from "contentful";
 import {Main} from "./_components/main"
+import { getChapterList } from "@/lib/contentful";
+import { chapter } from "../dawnshipper/page";
   async function Page() {
     const client = createClient({
         space: process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID!,
@@ -11,9 +13,10 @@ import {Main} from "./_components/main"
         limit: 7,
         'fields.tags.sys.id':'3vpLAavSzdhisJZebqZrtu',
     })).items
+    const chapters = await getChapterList("1xuruQrzy6FbZDqnBVtsEk") as chapter[];
     return (
        <div>
-        <Main relatedPosts={relatedPosts}/>
+        <Main relatedPosts={relatedPosts} chapters={chapters}/>
        </div>
     );
 }

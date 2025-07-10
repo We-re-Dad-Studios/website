@@ -4,8 +4,10 @@ import { Entry, EntrySkeletonType } from "contentful";
 import { InstagramIcon, TwitterIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { chapter } from "../../dawnshipper/page";
+import { ChapterListComponent } from "../../components/chapter-list-component";
 
-  function NotMain({relatedPosts}:{relatedPosts:Entry<EntrySkeletonType,undefined,string>[]}) {
+  function NotMain({relatedPosts,chapters}:{relatedPosts:Entry<EntrySkeletonType,undefined,string>[],chapters:chapter[]}) {
     return (
         <div>
           <div className="flex lg:flex-row flex-col w-full h-full pb-10">
@@ -17,7 +19,7 @@ import Link from "next/link";
           </span>
           </div>
                 <div className="w-full flex justify-center items-center bg-white/10 p-1 h-[450px]  rounded-md">
-                    <Image width={300} height={200} alt="Project Osiris cover" className="w-full h-full" src="/images/osiris-main.jpg" />
+                    <Image width={300} height={200} alt="Project Osiris cover" draggable={false} className="w-full h-full object-cover" src="/images/osiris-main.jpg" />
                 </div>
  
                 <p className="text-sm font-semibold mt-4 mb-2">
@@ -53,9 +55,7 @@ No one believes her story, they think she&apos;s crazy. But as Vania begins to u
              <p className="text-subheading font-semibold mb-2 h-[45px]">
                  Ready to dive in?
              </p>
-             <button className="bg-primary-0 hover:bg-primary-0/50 transition-colors duration-500 w-[70%] h-auto py-2  rounded-lg">
-                 Chapters coming soon...
-             </button>
+            <ChapterListComponent chapters={chapters} projectSlug="project_osiris"/>
  
              <div className="mt-[50px] bg-white/10 py-4 px-8 rounded text-center" >
                  <p className=" font-semibold">
@@ -121,6 +121,6 @@ export const ProjectCard = ({  name, description, to }: {  name: string, descrip
     )
 }
 
-export const Main = withFadeIn(({ relatedPosts }: { relatedPosts: Entry<EntrySkeletonType, undefined, string>[] }) => (
-    <NotMain relatedPosts={relatedPosts} />
+export const Main = withFadeIn(({ relatedPosts,chapters }: { relatedPosts: Entry<EntrySkeletonType, undefined, string>[],chapters:chapter[] }) => (
+    <NotMain relatedPosts={relatedPosts}  chapters={chapters} />
 ));
