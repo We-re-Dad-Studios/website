@@ -19,7 +19,7 @@ export async function POST(req: Request) {
     }
      return new Response(JSON.stringify({message:"unsubscribed successfully!"}), {
       status: 200});
-  } catch (error) {
+  } catch  {
    return new Response(JSON.stringify({ error: "error unsubscribing" }), {
       status: 400});
   }

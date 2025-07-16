@@ -44,7 +44,7 @@ const WelcomeEmail: React.FC<WelcomeEmailProps> = ({ subscriberName = 'there' })
                 Thanks for joining us, {subscriberName}!
               </h2>
               <p style={{ fontSize: '16px', color: '#E5E5E5', lineHeight: '1.6' }}>
-                You're now part of our exclusive community. Get ready for chapter updates, 
+                You&apos;re now part of our exclusive community. Get ready for chapter updates, 
                 behind-the-scenes content, and special announcements delivered straight to your inbox.
               </p>
               <a 
@@ -93,7 +93,7 @@ const WelcomeEmail: React.FC<WelcomeEmailProps> = ({ subscriberName = 'there' })
           {/* Footer */}
           <tr>
             <td align="center" style={{ padding: '20px', fontSize: '13px', color: '#888888' }}>
-              &copy; {new Date().getFullYear()} Your Novel Title. All rights reserved.<br />
+              &copy; {new Date().getFullYear()} We're Dad Studios. All rights reserved.<br />
                <a 
                 href="https://weredadstudios.com" 
                 style={{ color: '#4F1787', textDecoration: 'none' }}
