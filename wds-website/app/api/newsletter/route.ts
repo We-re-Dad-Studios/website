@@ -1,5 +1,4 @@
 import WelcomeEmail from "@/components/EmailTemplate";
-import { NextApiRequest } from "next";
 import { Resend } from "resend";
 export  async function POST(req:Request) {
  
