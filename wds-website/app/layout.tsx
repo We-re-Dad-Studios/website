@@ -8,6 +8,7 @@ import { Newsletter } from "@/components/Newsletter";
 import { Footer } from "@/components/Footer";
 import { PostHogProvider } from "@/components/PostHogProvider";
 import dynamic from "next/dynamic";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "WDS",
@@ -86,6 +87,7 @@ export default function RootLayout({
           <Navbar />
           {children}
           <Newsletter />
+          <Toaster/>
           <Footer />
         </body>
       </PostHogProvider>

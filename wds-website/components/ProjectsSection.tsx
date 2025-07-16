@@ -24,8 +24,8 @@ export const ProjectsSection = () => {
           <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-neutral_1000 to-transparent z-10"></div>
           <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-neutral_1000 to-transparent z-10"></div>
           
-          <div className="overflow-x-auto pb-8 ">
-            <div className="flex gap-6 w-max px-8 mx-auto py-4">
+          <div className="pl-12 ">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 3xl:grid-cols-5 gap-6">
               {projects.map((project) => (
                 <ProjectCard
                   to={project.to ? project.to : "/"}
@@ -55,7 +55,7 @@ export const ProjectCard = ({
   to: string;
 }) => {
   return (
-     <div className="relative w-[280px] md:w-[320px] h-[420px] md:h-[480px] rounded-xl border-2 border-neutral-700 overflow-hidden group transition-all duration-300 hover:border-primary-0 hover:scale-[1.02]">
+     <div className="relative  col-span-1  h-[420px] md:h-[480px] rounded-xl border-2 border-neutral-700 overflow-hidden group transition-all duration-300 hover:border-primary-0 hover:scale-[1.02]">
       {/* Image Background */}
       <div className="absolute inset-0 bg-neutral_900">
         {image ? (
@@ -76,7 +76,7 @@ export const ProjectCard = ({
 
       {/* Content Overlay */}
       <div className="absolute inset-0 flex flex-col justify-end p-6 bg-gradient-to-t from-black via-black/30 to-transparent">
-        <div className="transform translate-y-10 group-hover:translate-y-0 transition-transform duration-300">
+        <div className="transform  translate-y-4 md:translate-y-10 group-hover:translate-y-0 transition-transform duration-300">
           <div className="flex justify-between items-start mb-3">
             <h3 className="text-2xl md:text-3xl font-bold text-white">{name}</h3>
             {type && (

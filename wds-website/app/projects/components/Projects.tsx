@@ -33,7 +33,7 @@ const Projects =  () => {
         getProjects().then((resp)=>{
         setProjects(resp);
         }).catch((err)=>{
-            console.log(err)
+            // console.log(err)
         })
     },[currentTag])
     useEffect(()=>{
@@ -80,7 +80,7 @@ const Projects =  () => {
   </div>
 </div>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 3xl:grid-cols-5 gap-6">
           {Array.isArray(projects) && projects.length>0 && projects.map((project) => 
             <ProjectCard key={project.sys.id} to={project.fields.useInternalRoute?project.fields.to as string:`/project/${project.sys.id}`} image={null} name={project.fields.name as unknown as string} description={project.fields.description as unknown as string} type={currentTag?.name as string}/>
 

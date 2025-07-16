@@ -1,26 +1,67 @@
 "use client";
 
-import React, {  useState } from "react";
+import React from "react";
 
 import { Select, SelectContent, SelectItem, SelectTrigger } from "./ui/select";
+import { toast } from "sonner";
+
 
 type category = "All Categories" | "Games" | "Novels" | "Visual Projects";
 export const SendEmail = () => {
-  const [category, setCategory] = useState<category>("All Categories");
+  // const [category, setCategory] = useState<category>("All Categories");
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    toast.promise(
+      fetch("/api/newsletter", {method:"post",body:JSON.stringify({
+        email: formData.get("email"),firstName: formData.get("firstName"),lastName: formData.get("lastName")
+      }),headers:{"Content-Type":"application/json"}}),{
+        loading: "Subscribing to newsletter...",
+        success: ()=>{
+          localStorage.setItem("newsletterInfo", JSON.stringify({email: formData.get("email"),subscribed:true}));
+          return "Subscribed to newsletter successfully!";
+        },
+        error:(error)=>{
+          console.log({error});
+          return "Failed to subscribe to newsletter!";
+        } ,
+      })
+  }
   return (
-    <div className="flex flex-col gap-y-3 w-full">
-      <div className="w-full lg:w-[80%] mx-auto rounded-lg relative bg-white p-2 flex items-center">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-y-3 w-full">
+      <div className="w-full lg:w-[80%]  mx-auto rounded-lg relative bg-white p-2 flex flex-col">
         <input
-          type="text"
+        name="email"
+          type="email"
+          required
           className="bg-transparent flex-1 h-full  p-1 outline-none focus-within:outline-none focus:outline-none text-black"
           placeholder="Enter your email address"
         />
-        <Dropdown chosenCategory={category} setCategory={setCategory} />
+        <span className="my-4 block h-[1px] bg-primary-0/40">
+
+        </span>
+        <div className="flex gap-2.5 items-center">
+          <input
+          name="firstName"
+          type="text"
+          required
+          className="bg-transparent flex-1 h-full  p-1 outline-none focus-within:outline-none focus:outline-none text-black"
+          placeholder="Enter your first name"
+        />
+        <input
+        name="lastName"
+          type="text"
+          required
+          className="bg-transparent flex-1 h-full  p-1 outline-none focus-within:outline-none focus:outline-none text-black"
+          placeholder="Enter your last name"
+        />
+        </div>
+        {/* <Dropdown chosenCategory={category} setCategory={setCategory} /> */}
       </div>
-      <button className="w-60 max-w-[80%] mx-auto rounded-lg bg-primary-0 py-2 px-6 text-white">
+      <button type="submit" className="w-60 max-w-[80%] mx-auto rounded-lg bg-primary-0 py-2 px-6 text-white">
         Submit
       </button>
-    </div>
+    </form>
   );
 };
 
