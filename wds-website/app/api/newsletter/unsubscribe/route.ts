@@ -4,7 +4,8 @@ import { Resend } from "resend";
 export async function POST(req: Request) {
   const { email } = (await req.json()) as { email: string };
   if (!email) {
-    return NextResponse.redirect("/?unsubscribe=invalid_email");
+    return new Response(JSON.stringify({ error: "Invalid email" }), {
+      status: 400});
   }
   const resend = new Resend("re_eSSgwyaw_L9wFX7xBFYWMW3UuV68JLjJ2");
 
@@ -14,10 +15,13 @@ export async function POST(req: Request) {
       audienceId: "c35d7a1d-2e23-4346-b060-3902a38feeb0",
     });
     if (error) {
-      return NextResponse.redirect("/?unsubscribe=failed");
+       return new Response(JSON.stringify({ error: "error unsubscribing" }), {
+      status: 400});
     }
-    return NextResponse.redirect("/?unsubscribe=success");
+     return new Response(JSON.stringify({message:"unsubscribed successfully!"}), {
+      status: 200});
   } catch (error) {
-    return NextResponse.redirect("/?unsubscribe=failed");
+   return new Response(JSON.stringify({ error: "error unsubscribing" }), {
+      status: 400});
   }
 }

@@ -66,8 +66,3 @@ export  async function POST(req:Request) {
 }
 
 
-export const config = {
-    api:{
-        bodyParer:false
-    }
-}
