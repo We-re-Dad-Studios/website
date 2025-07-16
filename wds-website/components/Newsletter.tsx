@@ -84,7 +84,7 @@ export const Newsletter = () => {
         </p>
         {"subscribed" in newSletterInfo && newSletterInfo.subscribed ? (
           <div className="flex flex-col gap-4">
-            <p className="text-[18px] text-neutral_900">
+            <p className="text-[18px] text-neutral_900 w-full text-center">
               You are already Subscribed!{" "}
             </p>
             <button
