@@ -68,51 +68,51 @@ export const SendEmail = () => {
   );
 };
 
-const Dropdown = ({
-  chosenCategory,
-  setCategory,
-}: {
-  chosenCategory: category;
-  setCategory: React.Dispatch<React.SetStateAction<category>>;
-}) => {
+// const Dropdown = ({
+//   chosenCategory,
+//   setCategory,
+// }: {
+//   chosenCategory: category;
+//   setCategory: React.Dispatch<React.SetStateAction<category>>;
+// }) => {
 
-  return (
-    <div className="relative pr-2">
-        <Select onValueChange={(value)=>{setCategory(value as unknown as category)}} value={chosenCategory}>
-      <SelectTrigger
-        id="dropdown"
+//   return (
+//     <div className="relative pr-2">
+//         <Select onValueChange={(value)=>{setCategory(value as unknown as category)}} value={chosenCategory}>
+//       <SelectTrigger
+//         id="dropdown"
         
-        className="hover:bg-primary-0 ring-transparent border-none focus-within:ring-transparent focus:ring-transparent w-max  dark:hover:text-white dark:text-black h-full px-3 py-1.5 rounded text-black flex items-center justify-center gap-x-1.5 hover:text-white transition-colors"
+//         className="hover:bg-primary-0 ring-transparent border-none focus-within:ring-transparent focus:ring-transparent w-max  dark:hover:text-white dark:text-black h-full px-3 py-1.5 rounded text-black flex items-center justify-center gap-x-1.5 hover:text-white transition-colors"
       
-      >
-        {chosenCategory?chosenCategory:"All Categories"}
-      </SelectTrigger>
+//       >
+//         {chosenCategory?chosenCategory:"All Categories"}
+//       </SelectTrigger>
 
-      <SelectContent
+//       <SelectContent
        
-        className="w-40 h-max py-4 lg:py-2 cursor-pointer fixed bg-primary-0 rounded-lg px-1.5 text-white dark:text-white ring-transparent border-none"
+//         className="w-40 h-max py-4 lg:py-2 cursor-pointer fixed bg-primary-0 rounded-lg px-1.5 text-white dark:text-white ring-transparent border-none"
         
-      >  
-          <SelectItem
-            value="Games"
-            className="focus:bg-slate-100/10 cursor-pointer focus:text-white"
-          >
-            Games
-          </SelectItem>
-          <SelectItem
-            value="Novels"
-            className="focus:bg-slate-100/10 cursor-pointer focus:text-white"
-          >
-            Novels
-          </SelectItem>
-          <SelectItem
-            value="Visual Projects"
-            className="focus:bg-slate-100/10 cursor-pointer focus:text-white"
-          >
-            Visual Projects
-          </SelectItem>
-        </SelectContent>
-      </Select>
-    </div>
-  );
-};
+//       >  
+//           <SelectItem
+//             value="Games"
+//             className="focus:bg-slate-100/10 cursor-pointer focus:text-white"
+//           >
+//             Games
+//           </SelectItem>
+//           <SelectItem
+//             value="Novels"
+//             className="focus:bg-slate-100/10 cursor-pointer focus:text-white"
+//           >
+//             Novels
+//           </SelectItem>
+//           <SelectItem
+//             value="Visual Projects"
+//             className="focus:bg-slate-100/10 cursor-pointer focus:text-white"
+//           >
+//             Visual Projects
+//           </SelectItem>
+//         </SelectContent>
+//       </Select>
+//     </div>
+//   );
+// };

@@ -32,7 +32,7 @@ const Projects =  () => {
     useEffect(()=>{
         getProjects().then((resp)=>{
         setProjects(resp);
-        }).catch((err)=>{
+        }).catch(()=>{
             // console.log(err)
         })
     },[currentTag])
