@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
 
-type category = "All Categories" | "Games" | "Novels" | "Visual Projects";
+// type category = "All Categories" | "Games" | "Novels" | "Visual Projects";
 export const SendEmail = () => {
   // const [category, setCategory] = useState<category>("All Categories");
   const router = useRouter();
