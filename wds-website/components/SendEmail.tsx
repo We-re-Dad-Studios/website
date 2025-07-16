@@ -4,11 +4,13 @@ import React from "react";
 
 import { Select, SelectContent, SelectItem, SelectTrigger } from "./ui/select";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 
 type category = "All Categories" | "Games" | "Novels" | "Visual Projects";
 export const SendEmail = () => {
   // const [category, setCategory] = useState<category>("All Categories");
+  const router = useRouter();
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -19,6 +21,7 @@ export const SendEmail = () => {
         loading: "Subscribing to newsletter...",
         success: ()=>{
           localStorage.setItem("newsletterInfo", JSON.stringify({email: formData.get("email"),subscribed:true}));
+          router.refresh();
           return "Subscribed to newsletter successfully!";
         },
         error:(error)=>{
