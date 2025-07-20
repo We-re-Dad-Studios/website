@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   description:
     "WDS is a creative studio specializing in game development, animation, manhwa, manga, and novel creation. We build immersive worlds and craft compelling stories that captivate audiences across different mediums.",
   keywords:
-    "game development, animation, manhwa, manga, novel creation, creative studio, WDS",
+    "game development, animation, manhwa, manga, novel creation, creative studio, WDS, webnovel, webtoon, indie games, storytelling, immersive worlds, creative content, digital art, interactive media, game design, narrative design, character design, world-building, visual storytelling, indie studio, fantasy novels,fantasy novels for adults,fantasy manhwa,fantasy novel series, african game studio,african game development stuido,fantasy novels for teens,fantasy novels to read",
   viewport: "width=device-width, initial-scale=1",
   openGraph: {
     title: "WDS - Game Development & Creative Studio",
