@@ -18,7 +18,7 @@ export const ProjectsSection = () => {
         </p>
       </div>
       
-      <div className="mt-16 w-full">
+      <div className="mt-16 w-full container mx-auto">
         <div className="relative">
           {/* Gradient fade effect on sides */}
           <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-neutral_1000 to-transparent z-10"></div>

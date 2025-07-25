@@ -77,4 +77,4 @@ export const generateMetadata = async (): Promise<Metadata> => {
 }
   
 export default Page;
-
+ 

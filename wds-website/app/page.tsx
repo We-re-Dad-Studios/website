@@ -8,6 +8,7 @@ import { AnimatedArrow } from "@/components/AnimatedArrow";
 import { SplashImage } from "@/components/SplashImage";
 import { ProjectsSection } from "@/components/ProjectsSection";
 import { useSessionStorage } from "@/hooks/useSessionStorage";
+import Image from "next/image";
 
 const fadeInOutVariants = {
   hidden: { opacity: 0 },
@@ -70,10 +71,12 @@ export default function Home() {
           variants={fadeInOutVariants}
           transition={{ duration: 0.5 }}
         >
-          <div className="w-full h-[90vh] bg-neutral_1000 grid place-items-center relative overflow-hidden">
-            <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary-0 to-primary-300 animate-pulse">
-              Coming Soon
-            </h1>
+          <div className="w-full h-[95vh] bg-neutral_1000 grid place-items-center relative overflow-hidden">
+            <Image className="w-full h-full  object-cover " height={1200} width={1900} alt="WDS cover image" src={"https://downloads.ctfassets.net/3gg0xih7foqh/3rxvtQJQc3xmwVWRZzm5fS/c773572af2f7a1a49a886aa04135c5ef/Final_Withlogo.jpg"}/>
+            <div className="absolute left-1/2 top-1/2 w-max h-max  -translate-y-1/2 flex flex-col items-center justify-center gap-4">
+              <Image src={"/images/WDS LOGO WHITE.png"} className=" w-80 aspect-square -translate-x-1/2 opacity-60" alt="wds logo" draggable={false} width={200} height={200}/>
+            </div>
+          
           </div>
           <ProjectsSection />
         </motion.section>
