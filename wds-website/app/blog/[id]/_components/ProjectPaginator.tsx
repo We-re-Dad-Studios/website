@@ -5,7 +5,7 @@ import {motion} from "framer-motion"
 export const ProjectPageinator = () => {
   return (
     <motion.div 
-      className="flex flex-col items-center w-full px-4 md:px-16 py-8"
+      className="flex flex-col items-center w-full px-4 md:px-8 lg:px-16 py-8"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.3, duration: 0.5 }}

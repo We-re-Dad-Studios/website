@@ -13,6 +13,7 @@
     "@contentful/rich-text-react-renderer": "^16.0.1",
     "@contentful/rich-text-types": "^17.0.0",
     "@netlify/plugin-nextjs": "^5.8.0",
+    "@radix-ui/react-popover": "^1.1.14",
     "@radix-ui/react-select": "^2.1.6",
     "axios": "^1.7.7",
     "class-variance-authority": "^0.7.1",

@@ -1,10 +1,11 @@
 "use client";
 import { useSessionStorage } from '@/hooks/useSessionStorage';
-import { TwitterIcon, YoutubeIcon } from 'lucide-react';
+import { MenuIcon, TwitterIcon, YoutubeIcon } from 'lucide-react';
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
+import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 
 export const Navbar = () => {
   const [isClient, setIsClient] = useState<boolean>(false);
@@ -39,8 +40,8 @@ export const Navbar = () => {
             <Link href={"/"}>
             About Us</Link>
         </div>
-
-
+    
+        <HamburgerMenu />
         <div className="flex items-center gap-x-5  text-neutral-500">
        <a className='cursor-pointer'>
        <YoutubeIcon />
@@ -51,5 +52,24 @@ export const Navbar = () => {
         
         </div>
     </nav>
+  )
+}
+const HamburgerMenu = ()=>{
+    const path=usePathname();
+  return(
+    <Popover>
+      <PopoverTrigger className='w-max mx-auto grid place-items-center h-max p-1.5 lg:hidden bg-primary-0 text-white rounded-md'>
+        <MenuIcon className='w-5 h-5 '/>
+      </PopoverTrigger>
+      <PopoverContent className='flex flex-col items-start gap-y-4 p-4 bg-neutral-900 border-primary-0 text-white rounded-lg'>
+      
+            <Link href={"/projects"} className={path=== "/projects"?"text-neutral-500":""}>
+            Projects</Link>
+            <Link href={"/blog"} className={path=== "/projects"?"text-neutral-500":""}>
+            Blog</Link>
+            <Link href={"/"}>
+            About Us</Link>
+      </PopoverContent>
+    </Popover>
   )
 }
