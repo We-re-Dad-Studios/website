@@ -1,6 +1,6 @@
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-    siteUrl: 'https://www.weredadstudios.com', // replace with your domain
+    siteUrl: 'https://weredadstudios.com', // replace with your domain
     generateRobotsTxt: true, // optional but recommended
     changefreq: 'daily',
     priority: 0.7,
