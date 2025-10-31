@@ -25,7 +25,7 @@ export const Navbar = () => {
   });
   if (!show) return <></>;
   return (
-    <nav className='w-full bg-base_black flex items-center justify-between px-2 md:px-[80px] h-[80px] py-2'>
+    <nav className='w-full bg-base_black relative z-[999] flex items-center justify-between px-2 md:px-[80px] h-[80px] py-2'>
         <Link href={"/"}>
         <Image src={"/images/WDS LOGO WHITE.png"} className="w-24 object-cover h-full " width={1000} height={1000} alt='wds logo'/>
         </Link>
@@ -58,10 +58,10 @@ const HamburgerMenu = ()=>{
     const path=usePathname();
   return(
     <Popover>
-      <PopoverTrigger className='w-max mx-auto grid place-items-center h-max p-1.5 lg:hidden bg-primary-0 text-white rounded-md'>
+      <PopoverTrigger className='w-max mx-auto relative z-[9999] grid place-items-center h-max p-1.5 lg:hidden bg-primary-0 text-white rounded-md'>
         <MenuIcon className='w-5 h-5 '/>
       </PopoverTrigger>
-      <PopoverContent className='flex flex-col items-start gap-y-4 p-4 bg-neutral-900 border-primary-0 text-white rounded-lg'>
+      <PopoverContent className='flex flex-col z-[9999] items-start gap-y-4 p-4 bg-neutral-900 border-primary-0 text-white rounded-lg'>
       
             <Link href={"/projects"} className={path=== "/projects"?"text-neutral-500":""}>
             Projects</Link>
