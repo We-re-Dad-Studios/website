@@ -335,7 +335,7 @@ export default function AboutUs() {
                     {/* Character Visual */}
                     <div className="relative">
                       <motion.div 
-                        className="relative aspect-square rounded-2xl overflow-hidden"
+                        className="relative aspect-square md:w-full w-[70%] mx-auto rounded-2xl overflow-hidden"
                         animate={{ 
                           boxShadow: `0 0 80px ${currentMember.color}80` 
                         }}
@@ -372,14 +372,14 @@ export default function AboutUs() {
                       </motion.div>
 
                       {/* Stats Cards */}
-                      <div className="grid grid-cols-3 gap-4 mt-6">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
                         {Object.entries(currentMember.stats).map(([key, value]) => (
                           <motion.div
                             key={key}
                             className="bg-black/40 backdrop-blur-sm border border-white/10 rounded-lg p-3 text-center"
                             whileHover={{ scale: 1.05, borderColor: currentMember.color }}
                           >
-                            <div className="text-2xl font-bold" style={{ color: currentMember.color }}>
+                            <div className="text-lg lg:text-2xl font-bold" style={{ color: currentMember.color }}>
                               {value}
                             </div>
                             <div className="text-xs text-gray-400 capitalize">{key}</div>
@@ -399,8 +399,8 @@ export default function AboutUs() {
                           <div className="text-sm font-bold mb-2" style={{ color: currentMember.color }}>
                             {currentMember.tagline.toUpperCase()}
                           </div>
-                          <h3 className="text-5xl font-bold mb-2">{currentMember.name}</h3>
-                          <div className="text-2xl text-gray-400 mb-4">{currentMember.role}</div>
+                          <h3 className="text-2xl lg:text-5xl font-bold mb-2">{currentMember.name}</h3>
+                          <div className="text-[18px] lg:text-2xl text-gray-400 mb-4">{currentMember.role}</div>
                           <div className="h-1 w-24 rounded-full mb-6" style={{ backgroundColor: currentMember.color }} />
                         </motion.div>
 
