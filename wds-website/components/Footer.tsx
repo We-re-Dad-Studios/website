@@ -2,6 +2,7 @@
 import { useSessionStorage } from "@/hooks/useSessionStorage";
 import { InstagramIcon, TwitterIcon, YoutubeIcon } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -32,9 +33,9 @@ export const Footer = () => {
         height={1000}
       />
       <div className=" w-full text-[14px] text-center bg-neutral_900/90 py-4 border-t-2 border-b-2 border-t-neutral-600 border-b-neutral-600 flex items-center justify-center gap-x-[5%]">
-        <p>Home</p>
-        <p>Projects</p>
-        <p>About Us</p>
+        <Link href={"/"}>Home</Link>
+        <Link href={"/projects"}>Projects</Link>
+        <Link href={"/about-us"}>About Us</Link>
       </div>
       <p className="mt-6 text-center text-[20px]">Follow Us</p>
       <div className="flex w-full items-center mt-4 justify-center gap-x-[5%]">

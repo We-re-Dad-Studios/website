@@ -37,7 +37,7 @@ export const Navbar = () => {
             Projects</Link>
             <Link href={"/blog"} className={path=== "/projects"?"text-neutral-500":""}>
             Blog</Link>
-            <Link href={"/"}>
+            <Link href={"/about-us"}>
             About Us</Link>
         </div>
     
@@ -67,7 +67,7 @@ const HamburgerMenu = ()=>{
             Projects</Link>
             <Link href={"/blog"} className={path=== "/projects"?"text-neutral-500":""}>
             Blog</Link>
-            <Link href={"/"}>
+            <Link href={"/about-us"}>
             About Us</Link>
       </PopoverContent>
     </Popover>
