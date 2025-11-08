@@ -86,33 +86,33 @@ const teamMembers = [
   },
   {
     id: 6,
-    name: "David Chen",
-    role: "Technical Lead",
-    tagline: "System Engineer",
-    bio: "Architecting the technical foundation that powers our creative visions.",
-    image: "/images/WDS LOGO WHITE.png",
-    color: "#39185A",
+    name: "Tired Gremlin",
+    role: "Writing Lead",
+    tagline: "Story Alchemist",
+    bio: "Visionary storyteller with 7+ years of experience building immersive worlds across short stories, novels and animation.",
+    image: "/images/tg.png",
+    color: "#caffbf",
     gradient: "from-indigo-600 to-purple-900",
     stats: {
-      projects: 35,
-      experience: 14,
-      specialty: "Infrastructure"
+      projects: 1,
+      experience: 7,
+      specialty: "Creative Writing"
     },
     social: { twitter: "#", instagram: "#", linkedin: "#" }
   },
   {
     id: 7,
-    name: "David Chen",
-    role: "Technical Lead",
-    tagline: "System Engineer",
-    bio: "Architecting the technical foundation that powers our creative visions.",
+    name: "Omoboriowo Juwon",
+    role: "Artist",
+    tagline: "Painter of impossible worlds.",
+    bio: "a concept, comic book and character illustrator with 7+ years of experience in concept art, character designs and comic book illustrations. ",
     image: "/images/WDS LOGO WHITE.png",
-    color: "#39185A",
+    color: "#f7b801",
     gradient: "from-indigo-600 to-purple-900",
     stats: {
-      projects: 35,
-      experience: 14,
-      specialty: "Infrastructure"
+      projects: 2,
+      experience: 7,
+      specialty: "Character Art"
     },
     social: { twitter: "#", instagram: "#", linkedin: "#" }
   }

@@ -58,7 +58,7 @@ const HamburgerMenu = ()=>{
     const path=usePathname();
   return(
     <Popover>
-      <PopoverTrigger className='w-max mx-auto relative z-[9999] grid place-items-center h-max p-1.5 lg:hidden bg-primary-0 text-white rounded-md'>
+      <PopoverTrigger className='w-max mx-auto relative z-[9999] grid place-items-center h-max p-1.5 md:hidden bg-primary-0 text-white rounded-md'>
         <MenuIcon className='w-5 h-5 '/>
       </PopoverTrigger>
       <PopoverContent className='flex flex-col z-[9999] items-start gap-y-4 p-4 bg-neutral-900 border-primary-0 text-white rounded-lg'>

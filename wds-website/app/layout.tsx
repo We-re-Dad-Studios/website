@@ -1,4 +1,4 @@
-import Script from "next/script";
+
 import type { Metadata } from "next";
 import "./globals.css";
 // import { Bebas_Neue } from "next/font/google"
@@ -9,6 +9,7 @@ import { Footer } from "@/components/Footer";
 import { PostHogProvider } from "@/components/PostHogProvider";
 import dynamic from "next/dynamic";
 import { Toaster } from "@/components/ui/sonner";
+import KoFiWidget from "@/components/KofiWidget";
 
 export const metadata: Metadata = {
   title: "WDS",
@@ -53,19 +54,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <Head>
-        <script
-          async
-          src="https://scripts.simpleanalyticscdn.com/latest.js"
-        ></script>
-        <Script strategy="beforeInteractive" src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></Script>
-<Script strategy="beforeInteractive">{
-  `kofiWidgetOverlay.draw('weredadstudios', {
-    'type': 'floating-chat',
-    'floating-chat.donateButton.text': 'Support Us',
-    'floating-chat.donateButton.background-color': '#794bc4',
-    'floating-chat.donateButton.text-color': '#fff'
-  });`}
-</Script>
+        
         <link rel="icon" type="image/x-icon" href="/images/favicon.ico"></link>
         <link
           rel="apple-touch-icon"
@@ -95,8 +84,10 @@ export default function RootLayout({
           <PageView />
           <Navbar />
           {children}
+          <KoFiWidget/>
           <Newsletter />
           <Toaster/>
+
           <Footer />
         </body>
       </PostHogProvider>
