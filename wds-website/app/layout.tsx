@@ -1,5 +1,5 @@
+import Script from "next/script";
 import type { Metadata } from "next";
-
 import "./globals.css";
 // import { Bebas_Neue } from "next/font/google"
 import Head from "next/head";
@@ -57,6 +57,15 @@ export default function RootLayout({
           async
           src="https://scripts.simpleanalyticscdn.com/latest.js"
         ></script>
+        <Script strategy="beforeInteractive" src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></Script>
+<Script strategy="beforeInteractive">{
+  `kofiWidgetOverlay.draw('weredadstudios', {
+    'type': 'floating-chat',
+    'floating-chat.donateButton.text': 'Support Us',
+    'floating-chat.donateButton.background-color': '#794bc4',
+    'floating-chat.donateButton.text-color': '#fff'
+  });`}
+</Script>
         <link rel="icon" type="image/x-icon" href="/images/favicon.ico"></link>
         <link
           rel="apple-touch-icon"
