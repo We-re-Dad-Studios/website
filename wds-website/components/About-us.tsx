@@ -6,7 +6,7 @@ import { Twitter, Instagram, Linkedin, Sparkles, Zap, Users } from 'lucide-react
 const teamMembers = [
   {
     id: 1,
-    name: "Aruegbe Frankln",
+    name: "Frankln",
     role: "Co-founder,Lead",
     tagline: "World Builder",
     bio: "Visionary storyteller with 10+ years of experience crafting immersive worlds across games, novels, and animation.",
@@ -22,7 +22,7 @@ const teamMembers = [
   },
   {
     id: 2,
-    name: "Abdulmalik Umar",
+    name: "Ehiosu",
     role: "Co-founder,Lead",
     tagline: "The 'what if we try...' guy.",
     bio: "I’m the “what if we try…” guy,the one jumping between stories, games, and animations to make sure every idea hits its spark. If I’m not the one who started it, I’m definitely the one poking it until it shines.",
@@ -38,7 +38,7 @@ const teamMembers = [
   },
   {
     id: 3,
-    name: "Philips Praise",
+    name: "Praise",
     role: "Co-founder",
     tagline: "Visual Storyteller",
     bio: "Master of visual storytelling, creating stunning artwork that brings characters and worlds to life.",
@@ -54,7 +54,7 @@ const teamMembers = [
   },
   {
     id: 4,
-    name: "Animashaun Adamns",
+    name: "Adamns",
     role: "Co-founder",
     tagline: "Idea validator",
     bio: "Crafting compelling narratives that resonate with audiences across all mediums.",
@@ -102,7 +102,7 @@ const teamMembers = [
   },
   {
     id: 7,
-    name: "Omoboriowo Juwon",
+    name: "Juwon",
     role: "Artist",
     tagline: "Painter of impossible worlds.",
     bio: "a concept, comic book and character illustrator with 7+ years of experience in concept art, character designs and comic book illustrations. ",
