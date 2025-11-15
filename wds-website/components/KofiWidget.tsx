@@ -18,7 +18,7 @@ export default function KoFiWidget() {
   //   document.body.appendChild(script);
   // }, []);
 
-  return <div className="overflow-visible">
-     <KofiFloatingButton username="weredadstudios" background="#4F1787" text="Keep us Going!"/>
+  return <div className="overflow-visible hover:overflow-visible">
+     <KofiFloatingButton  username="weredadstudios" background="#4F1787" text="Keep us Going!"/>
   </div>;
 }

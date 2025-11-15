@@ -12,7 +12,7 @@ import { Toaster } from "@/components/ui/sonner";
 import KoFiWidget from "@/components/KofiWidget";
 
 export const metadata: Metadata = {
-  title: "WDS",
+  title: "We're Dad Studios",
   description:
     "WDS is a creative studio specializing in game development, animation, manhwa, manga, and novel creation. We build immersive worlds and craft compelling stories that captivate audiences across different mediums.",
   keywords:
