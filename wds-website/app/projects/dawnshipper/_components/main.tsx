@@ -1,11 +1,12 @@
 "use client"
 import { withFadeIn } from "@/utils/withFadeIn";
 import { Entry, EntrySkeletonType } from "contentful";
-import { InstagramIcon, TwitterIcon } from "lucide-react";
+// import { InstagramIcon, TwitterIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { chapter } from "../page";
 import { ChapterListComponent } from "../../components/chapter-list-component";
+import { FaTiktok } from "react-icons/fa6";
 
   function NotMain({ relatedPosts, chapters }: { 
   relatedPosts: Entry<EntrySkeletonType, undefined, string>[], 
@@ -84,20 +85,16 @@ As tensions rise and circumstances change across the continent, Devvyn finds him
               Follow Us
             </p>
             <div className="flex items-center justify-evenly mt-6">
-              <a 
-                href="#" 
-                className="w-[30px] h-[30px] hover:scale-110 transition-transform"
-                aria-label="Twitter"
-              >
-                <TwitterIcon className="w-6 h-6 hover:text-primary-0 transition-colors" />
-              </a>
-              <a 
+               <a href=" https://www.tiktok.com/@weredadstudios?is_from_webapp=1&sender_device=pc" target="_blank" className="">
+                        <FaTiktok  className="w-6 h-6 shrink" />
+                      </a>
+              {/* <a 
                 href="#" 
                 className="w-[30px] h-[30px] hover:scale-110 transition-transform"
                 aria-label="Instagram"
               >
                 <InstagramIcon className="w-6 h-6 hover:text-primary-0 transition-colors" />
-              </a>
+              </a> */}
             </div>
           </div>
         </div>

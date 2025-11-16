@@ -1,11 +1,11 @@
 "use client";
 import { useSessionStorage } from "@/hooks/useSessionStorage";
-import { InstagramIcon, TwitterIcon, YoutubeIcon } from "lucide-react";
+// import { TwitterIcon, YoutubeIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-
+import { FaTiktok } from "react-icons/fa6";
 export const Footer = () => {
   const [isClient, setIsClient] = useState<boolean>(false);
   const path = usePathname();
@@ -39,15 +39,16 @@ export const Footer = () => {
       </div>
       <p className="mt-6 text-center text-[20px]">Follow Us</p>
       <div className="flex w-full items-center mt-4 justify-center gap-x-[5%]">
-        <a href="" className="">
-          <InstagramIcon className="w-6 h-6 shrink" />
+       
+        <a href=" https://www.tiktok.com/@weredadstudios?is_from_webapp=1&sender_device=pc" target="_blank" className="">
+          <FaTiktok  className="w-6 h-6 shrink" />
         </a>
-        <a href="">
+        {/* <a href="">
           <TwitterIcon className="w-6 h-6 shrink" />
-        </a>
-        <a href="">
+        </a> */}
+        {/* <a href="">
           <YoutubeIcon className="w-6 h-6 shrink" />
-        </a>
+        </a> */}
       </div>
     </footer>
   );
