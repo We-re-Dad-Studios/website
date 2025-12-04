@@ -3,7 +3,9 @@ module.exports = {
   siteUrl: "https://weredadstudios.com",
   generateRobotsTxt: true,
 
-  // DO NOT SET sourceDir — let next-sitemap auto-detect the custom distDir
+  // REQUIRED when using distDir: "build"
+  sourceDir: "build", // <---
+
   outDir: "./public",
 
   changefreq: "weekly",
