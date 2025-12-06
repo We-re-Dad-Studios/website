@@ -36,7 +36,7 @@ function OsirisContent({
           {/* COVER */}
           <div className="rounded-xl overflow-hidden bg-white/5 backdrop-blur-sm shadow-xl">
             <Image
-              src="/images/osiris-main.jpg"
+              src="https://res.cloudinary.com/duorxojmh/image/upload/v1765045758/IMG_1239_ha8hk3.jpg"
               alt="Project Osiris Cover"
               width={600}
               height={400}

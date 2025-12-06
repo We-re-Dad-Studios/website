@@ -203,6 +203,7 @@ const ProjectCard = ({
 
           <Link
             href={to}
+            prefetch={true}
             className="mt-3 w-full py-2 border-2 border-white rounded-lg font-medium hover:bg-white hover:text-neutral_1000 transition-all duration-300 text-center block text-white"
           >
             Explore

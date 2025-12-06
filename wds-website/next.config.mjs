@@ -36,6 +36,7 @@ const nextConfig = {
  reactStrictMode: true,
  swcMinify: true,
   poweredByHeader: false,
+   productionBrowserSourceMaps: false,
   distDir: "build",
   async headers() {
     return [

@@ -21,14 +21,17 @@ export const Newsletter = () => {
    
   }, []);
   const [show, setShow] = useState<boolean>(false);
-  useEffect(() => {
-    if (isClient) {
-      const state = getItem("state");
-      if (Boolean(JSON.parse(state || "{}").hasVisited) || path !== "/") {
-        setShow(true);
-      }
-    }
-  });
+ useEffect(() => {
+  if (!isClient) return;
+
+  const state = getItem("state");
+  const hasVisited = Boolean(JSON.parse(state || "{}").hasVisited);
+
+  if (hasVisited || path !== "/") {
+    setShow(true);
+  }
+}, [isClient, getItem, path]);
+
   if (!show) return <></>;
   return (
     <div className="w-full xl:w-[80vw] mx-auto rounded-lg flex mb-12 overflow-hidden px-2">
