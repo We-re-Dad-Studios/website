@@ -12,7 +12,7 @@ interface ProjectsProps {
 }
 
 const Projects: React.FC<ProjectsProps> = ({ initialProjects, tags }) => {
-  console.log({initialProjects,tags})
+  // console.log({initialProjects,tags})
   const [currentTagId, setCurrentTagId] = useState<string | null>(null);
   const [currentTagName, setCurrentTagName] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -20,9 +20,11 @@ const Projects: React.FC<ProjectsProps> = ({ initialProjects, tags }) => {
   const filteredProjects = useMemo(
     () =>initialProjects?
       initialProjects.filter((project) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const fields = project.fields as any;
         const name = (fields.name as string) ?? "";
         const description = (fields.description as string) ?? "";
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const projectTags = (fields.tags as any[]) ?? [];
 
         const matchesTag = currentTagId
@@ -108,6 +110,7 @@ const Projects: React.FC<ProjectsProps> = ({ initialProjects, tags }) => {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 3xl:grid-cols-5 gap-6">
           {filteredProjects.map((project) => {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const fields = project.fields as any;
 
             const to = fields.useInternalRoute

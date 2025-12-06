@@ -33,8 +33,8 @@ const Projects =  () => {
     useEffect(()=>{
         getProjects().then((resp)=>{
         setProjects(resp);
-        }).catch((err)=>{
-            console.log(err)
+        }).catch(()=>{
+            // console.log(err)
         })
     },[currentTag])
     useEffect(()=>{

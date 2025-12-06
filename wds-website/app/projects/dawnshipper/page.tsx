@@ -15,6 +15,7 @@ export interface Chapter {
   releaseDate: string;
   isFree: boolean;
   previewText: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   content: any;
 }
 

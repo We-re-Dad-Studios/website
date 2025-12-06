@@ -77,6 +77,7 @@ export interface CFAsset {
     description?: string;
     file: {
       url: string;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       details?: any;
       fileName?: string;
       contentType?: string;
@@ -98,6 +99,7 @@ export interface CFBlogPost {
   fields: {
     title: string;
     description: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     content: any; // rich text JSON
     tags?: CFTag[];
     cover?: CFAsset;

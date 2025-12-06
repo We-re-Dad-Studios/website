@@ -13,6 +13,7 @@ export interface BlogPostPageParams {
 export interface BlogPostData {
   title: string;
   description?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   content: any; // rich text JSON
   cover?: CFAsset;
 }

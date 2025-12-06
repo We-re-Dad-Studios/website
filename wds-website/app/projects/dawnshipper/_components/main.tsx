@@ -36,7 +36,7 @@ function MainContent({
           {/* Cover Image */}
           <div className="rounded-xl overflow-hidden group shadow-xl">
             <Image
-              src="https://res.cloudinary.com/dpxuxtdbh/image/upload/v1741439432/ds-main_lsc6ec.png"
+              src="https://res.cloudinary.com/duorxojmh/image/upload/v1765045757/IMG_1190_1_hkbii6.jpg"
               width={800}
               height={500}
               alt="Dawnshipper cover"

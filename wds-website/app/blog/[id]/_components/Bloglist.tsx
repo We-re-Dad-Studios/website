@@ -1,3 +1,4 @@
+"use client";
 export interface BlogListProps {
   posts: CFBlogPost[];
   tags: CFTag[];
@@ -7,7 +8,6 @@ export interface BlogFilterState {
   selectedTag: string | null;
   search: string;
 }
-"use client";
 
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";

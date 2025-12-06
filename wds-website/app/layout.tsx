@@ -7,8 +7,6 @@ import { PostHogProvider } from "@/components/PostHogProvider";
 import dynamic from "next/dynamic";
 import { Toaster } from "@/components/ui/sonner";
 import KoFiWidget from "@/components/KofiWidget";
-
-import { EchoTransition } from "@/components/page-transition";
 import { GlitchTransition } from "@/components/glitch-transition";
 
 export const metadata: Metadata = {

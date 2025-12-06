@@ -31,7 +31,7 @@ export default async function ProjectsPage() {
     undefined,
     string
   >[];
-  console.log({projects,tags})
+  // console.log({projects,tags})
 
   return (
     <section className="w-full min-h-screen flex flex-col">

@@ -22,8 +22,8 @@ export const SendEmail = () => {
           router.refresh();
           return "Subscribed to newsletter successfully!";
         },
-        error:(error)=>{
-          console.log({error});
+        error:()=>{
+          // console.log({error});
           return "Failed to subscribe to newsletter!";
         } ,
       })

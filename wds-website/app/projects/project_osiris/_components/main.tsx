@@ -13,6 +13,7 @@ function OsirisContent({
   relatedPosts,
   chapters,
 }: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   relatedPosts: Entry<any>[];
   chapters: chapter[];
 }) {

@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
@@ -11,7 +11,6 @@ import { FaTiktok, FaInstagram } from "react-icons/fa6";
 
 export const Navbar = () => {
   const pathname = usePathname();
-  const router = useRouter();
 
   // Page-transition-aware highlight
   const [active, setActive] = useState(pathname);
@@ -225,6 +224,7 @@ const SocialIcon = ({
   Icon,
 }: {
   href: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Icon: any;
 }) => (
   <a href={href} target="_blank" className="hover:scale-110 transition">
