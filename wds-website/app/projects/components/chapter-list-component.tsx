@@ -1,5 +1,7 @@
 import Link from "next/link"
-import { chapter } from "../dawnshipper/page"
+type chapter={
+  id:string,slug:string,title:string,chapterNumber:number|string,isFree:boolean,releaseDate:string
+}
 
 export const ChapterListComponent= ({chapters,projectSlug}:{chapters:chapter[],projectSlug:string})=>{
     return(

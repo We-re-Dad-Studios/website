@@ -1,38 +1,42 @@
-
+// app/blog/page.tsx
+import { createClient } from "contentful";
 import { Home } from "./[id]/_components/Home";
-export default function Page() {
-  
+import { CFAsset, CFBlogPost, CFTag } from "@/lib/contentful";
 
-  return (
-    <Home/>
-  );
+export const dynamic = "force-dynamic";
+export interface BlogPostPageParams {
+  params: {
+    id: string;
+  };
 }
 
-export async function generateMetadata() {
-    return {
-      title: "WDS Blog | Latest Updates & Insights",
-      description: "Stay updated with the latest news, insights, and developments from WDS. Explore in-depth articles, project updates, and industry trends.",
-      openGraph: {
-        type: "website",
-        locale: "en_US",
-        url: "https://weredadstudios.netlify.app/blog",
-        title: "WDS Blog | Latest Updates & Insights",
-        description: "Stay updated with the latest news, insights, and developments from WDS. Explore in-depth articles, project updates, and industry trends.",
-        siteName: "WDS",
-        images: [
-          {
-            url: "https://weredadstudios.netlify.app/images/WDS%20LOGO%20BLACK_.png",
-            width: 1200,
-            height: 630,
-            alt: "WDS Blog",
-          },
-        ],
-      },
-      twitter: {
-        card: "summary_large_image",
-        site: "@wds",
-        creator: "@wds",
-      },
-    };
-  }
-   
+export interface BlogPostData {
+  title: string;
+  description?: string;
+  content: any; // rich text JSON
+  cover?: CFAsset;
+}
+
+export default async function Page() {
+  const client = createClient({
+    space: process.env.CONTENTFUL_SPACE_ID!,
+    accessToken: process.env.CONTENTFUL_CDAPI!,
+  });
+
+ const response = await client.getEntries({
+  content_type: process.env.BLOGS_ID!,
+  limit: 1000,
+});
+
+const posts = response.items as unknown as CFBlogPost[];
+
+
+  const tags = (
+    await client.getEntries({
+      content_type: process.env.POST_TAGS_ID!,
+      limit: 1000,
+    })
+  ).items as unknown as CFTag[];
+
+  return <Home initialPosts={posts} initialTags={tags} />;
+}

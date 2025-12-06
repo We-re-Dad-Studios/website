@@ -1,4 +1,7 @@
+import { EchoParticles } from '@/components/echo-particles';
 import { Footer } from '@/components/Footer';
+import { EchoTransition } from '@/components/page-transition';
+
 import React from 'react'
 
 export default  function Layout({
@@ -8,7 +11,8 @@ export default  function Layout({
   }>){
   return (
     <div className='flex flex-col'>
-       {children}
+       <EchoParticles />
+        <EchoTransition>{children}</EchoTransition>
        <Footer/> 
     </div>
   )

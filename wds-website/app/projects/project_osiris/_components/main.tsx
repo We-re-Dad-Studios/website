@@ -1,124 +1,181 @@
-"use client"
+"use client";
+
 import { withFadeIn } from "@/utils/withFadeIn";
-import { Entry, EntrySkeletonType } from "contentful";
-// import { InstagramIcon, TwitterIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { chapter } from "../../dawnshipper/page";
+import { Entry } from "contentful";
 import { ChapterListComponent } from "../../components/chapter-list-component";
-import { FaTiktok } from "react-icons/fa6";
+import { FaInstagram, FaTiktok } from "react-icons/fa6";
+type chapter={
+  id:string,slug:string,title:string,chapterNumber:number|string,isFree:boolean,releaseDate:string
+}
+function OsirisContent({
+  relatedPosts,
+  chapters,
+}: {
+  relatedPosts: Entry<any>[];
+  chapters: chapter[];
+}) {
+  return (
+    <div className="container mx-auto px-4 lg:px-8 py-10">
 
-  function NotMain({relatedPosts,chapters}:{relatedPosts:Entry<EntrySkeletonType,undefined,string>[],chapters:chapter[]}) {
-    return (
-        <div>
-          <div className="flex lg:flex-row flex-col w-full h-full pb-10">
-             <div className="flex flex-col  lg:w-[50%]">
-          <div className="flex h-[45px]  mb-2">
-          <p className="text-white text-heading mt-auto leading-none">Project Osiris</p>
-          <span className="block w-max px-2 py-1 ml-auto mt-auto h-max text-sm bg-[#F94C10] text-white rounded">
-             Novel
-          </span>
+      <div className="flex flex-col lg:flex-row gap-12">
+
+        {/* LEFT COLUMN */}
+        <div className="flex-1 max-w-3xl">
+
+          {/* TITLE */}
+          <div className="flex items-center mb-4">
+            <h1 className="text-heading text-white">Project Osiris</h1>
+            <span className="ml-auto px-3 py-1 text-sm rounded bg-[#F94C10] text-white">
+              Novel
+            </span>
           </div>
-                <div className="w-full flex justify-center items-center bg-white/10 p-1 h-[450px]  rounded-md">
-                    <Image width={300} height={200} alt="Project Osiris cover" draggable={false} className="w-full h-full object-cover" src="/images/osiris-main.jpg" />
-                </div>
- 
-                <p className="text-sm font-semibold mt-4 mb-2">
-                 Genre
-                </p>
-                <div className="flex items-center gap-3 font-semibold text-xs">
-                <span className="bg-white/10 rounded text-white w-max block p-2">
-                 Science Fantasy
-                </span>
-                <span className="bg-white/10 rounded text-white w-max block p-2">
-                 Supernatural Thriller
-                </span>
-                <span className="bg-white/10 rounded text-white w-max block p-2">
-                 Dystopian
-                </span>
-                </div>
- 
-                <p className="text-subheading tracking-wider text-neutral_400 font-semibold mt-4">
-                 Description
-                </p>
-                <p className="text-xl  tracking-wider mb-8 mt-3 text-justify text-neutral-200 bg-white/10 p-3 ">
-                In the near future, death has become negotiable—but only for the rich.
-Thanks to Osiris Inc., the world&apos;s first and only soul-retrieval company, anyone with enough money can be brought back from the dead—so long as their Time of Death hasn&apos;t exceeded 48 hours. 
-Operating within a dangerous liminal realm known as the Light, elite operatives called Walkers are trained to extract souls before they cross into Purgatory, the point of no return.
-But something in the Light is shifting. Missions are failing, entire Walker teams are vanishing without a trace. 
-<br  className="my-3"/>
 
-When seventeen-year-old Vania Illia&apos;s whole team is wiped out during a simple retrieval mission, leaving her as the sole survivor, she&apos;s quietly reassigned to Team Zero, a squad of seasoned Walkers sidelined for one reason or the other. 
-No one believes her story, they think she&apos;s crazy. But as Vania begins to uncover the truth behind her survival, and the mysterious disappearances happening in the Light, She realizes the truth is far more ominous than she could have ever imagined.
-                </p>
-             </div>
-             <div className="flex flex-col items-center w-full lg:w-[30%] ml-auto">
-             <p className="text-subheading font-semibold mb-2 h-[45px]">
-                 Ready to dive in?
-             </p>
-            <ChapterListComponent chapters={chapters} projectSlug="project_osiris"/>
- 
-             <div className="mt-[50px] bg-white/10 py-4 px-8 rounded text-center" >
-                 <p className=" font-semibold">
-                     Follow Us
-                 </p>
-                 <div className="flex items-center justify-evenly mt-6">
-                  <a href=" https://www.tiktok.com/@weredadstudios?is_from_webapp=1&sender_device=pc" target="_blank" className="">
-                           <FaTiktok  className="w-6 h-6 shrink" />
-                         </a>
-                
+          {/* COVER */}
+          <div className="rounded-xl overflow-hidden bg-white/5 backdrop-blur-sm shadow-xl">
+            <Image
+              src="/images/osiris-main.jpg"
+              alt="Project Osiris Cover"
+              width={600}
+              height={400}
+              className="w-full h-[420px] object-cover"
+            />
+          </div>
+
+          {/* GENRES */}
+          <p className="text-subheading text-neutral_400 mt-6 mb-2">Genres</p>
+          <div className="flex gap-2 flex-wrap">
+            {["Science Fantasy", "Supernatural Thriller", "Dystopian"].map(
+              (g) => (
+                <span
+                  key={g}
+                  className="px-3 py-1 text-xs font-semibold bg-white/10 text-white rounded-full"
+                >
+                  {g}
+                </span>
+              )
+            )}
+          </div>
+
+          {/* DESCRIPTION */}
+          <h2 className="text-subheading text-neutral_400 mt-8">Description</h2>
+          <p className="text-lg leading-relaxed text-neutral_300 mt-3 bg-white/5 p-4 rounded-xl backdrop-blur-sm">
+            In the near future, death has become negotiable—but only for the
+            wealthy. Thanks to Osiris Inc., the world’s first soul-retrieval
+            company, anyone can be brought back—as long as their Time of Death
+            hasn’t exceeded 48 hours.
+            <br /><br />
+            Walkers, elite operatives trained to extract souls within a dangerous
+            liminal realm called the Light, maintain this impossible industry.
+            But missions are failing. Teams are disappearing.
+            <br /><br />
+            When seventeen-year-old Vania Illia becomes the sole survivor of a
+            catastrophic retrieval mission, she is reassigned to Team Zero—an
+            outcast squad no one expects to succeed. But Vania knows what she saw
+            in the Light… and it is getting stronger.
+          </p>
+        </div>
+
+        {/* RIGHT SIDEBAR */}
+       <aside className="w-full lg:w-[400px] ml-auto lg:max-w-max max-w-screen-sm flex flex-col gap-10">
+       
+                 {/* Chapters */}
+                 <div className="bg-white/5 border  border-white/10 rounded-xl p-6 backdrop-blur-sm shadow-lg">
+                   <h3 className="text-subheading text-white mb-4">Read the Chapters</h3>
+                   <ChapterListComponent chapters={chapters} projectSlug="dawnshipper" />
                  </div>
-             </div>
-             </div>
- 
-         </div>
-         <p className="text-center text-subheading font-semibold mb-4">
-             Related Posts
-         </p>
- 
-         <div className="mt-4 mb-8 flex mx-auto justify-center lg:items-start gap-4 flex-wrap">
-             {
-                 relatedPosts.map((post)=>
-                 <ProjectCard key={post.sys.id} name={post.fields.title as string} description={post.fields.description as string} to={`/blog/${post.sys.id}`}/>
-                 )
-             }
-         </div>
+       
+                 {/* Social */}
+                 <div className="bg-white/5 border border-white/10 rounded-xl p-6 text-center backdrop-blur-sm">
+                   <p className="font-semibold text-white">Follow Us</p>
+                   <div className="flex justify-center mt-4 gap-2">
+                     <a
+                       href="https://www.tiktok.com/@weredadstudios?is_from_webapp=1&sender_device=pc"
+                       target="_blank"
+                       className="hover:scale-110 transition"
+                     >
+                       <FaTiktok className="w-7 h-7 text-white" />
+                     </a>
+                     <a
+                       href="https://www.instagram.com/weredadstudios?igsh=ZnQ5MDQzMW8zcWl6&utm_source=qr"
+                       target="_blank"
+                       className="hover:scale-110 transition"
+                     >
+                       <FaInstagram className="w-7 h-7 text-white" />
+                     </a>
+                   </div>
+                 </div>
+               </aside>
+      </div>
+
+      {/* RELATED POSTS */}
+      <div className="mt-16">
+        <h2 className="text-subheading text-center text-neutral_300 mb-6">
+          Related Posts
+        </h2>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+         
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    {relatedPosts.map((post) => (
+      <RelatedCard
+        key={post.sys.id}
+        title={post.fields.title as unknown as string}
+        description={post.fields.description as unknown as string}
+        to={`/blog/${post.sys.id}`}
+      />
+    ))}
+  </div>
+{relatedPosts.length === 0 && (
+  <div className="w-max px-20 mx-auto py-10 bg-white/5 border border-white/10 rounded-xl backdrop-blur-sm text-center">
+    <p className="text-neutral_300 text-lg font-medium">
+      No related posts yet.
+    </p>
+    <p className="text-neutral_500 text-sm mt-1">
+      More updates are coming soon.
+    </p>
+  </div>
+) }
+
         </div>
-    )
+      </div>
+
+    </div>
+  );
 }
 
+function RelatedCard({
+  title,
+  description,
+  to,
+}: {
+  title: string;
+  description: string;
+  to: string;
+}) {
+  return (
+    <Link
+      href={to}
+      className="group bg-white/5 border border-white/10 rounded-xl backdrop-blur-sm overflow-hidden hover:bg-white/10 transition shadow-lg"
+    >
+      <div className="aspect-video relative">
+        <Image
+          src="/images/WDS LOGO WHITE.png"
+          alt={title}
+          fill
+          className="object-contain p-6 opacity-70"
+        />
+      </div>
 
-export const ProjectCard = ({  name, description, to }: {  name: string, description: string, to:string }) => {
-    return (
-        <div className='flex-shrink-0 w-[300px]  h-[950px] md:h-[450px] max-h-[43vh]  relative rounded-tr-xl group border border-neutral-50/30 overflow-hidden '>
-           
-                    <Image src={"/images/WDS LOGO WHITE.png"} alt={name + " image"} width={100} height={100} className='w-full h-full' />
-               
-            
-            <div className="absolute z-[2] w-full h-full top-0 left-0  group items-center flex flex-col justify-end  hover:gap-x-[100%] [&>div>Button]:hover:[&>.description]:line-clamp-none  [&>div>Button]:hover:relative [&>div>Button]:hover:opacity-100 [&>div]:hover:h-[100%] [&>div]:bg-opacity-10 [&>div]:hover:bg-opacity-20 [&>div]:hover:backdrop-blur-sm cursor-pointer">
-                <div className='flex flex-col h-[40%] p-2  transition-all  duration-500 justify-between bg-primary-0 bg-opacity-0 bounce'>
-                    <div>
-                        <div className="flex items-center justify-between">
-                            <p className='mt-auto text-[28px] font-agdasima  line-clamp-2   '>{name}</p>
-                            
-                        </div>
-                        <div className='opacity-50  text-[10px]  transition-opacity group-hover:line-clamp-[10] line-clamp-4 w-full'>
-                            <p className='description'>{description}</p>
-
-                        </div>
-                    </div>
-                   
-                   <button className='w-full py-2 my-3 border border-white rounded-md font-agdasima text-[18px] hover:text-primary-0 hover:bg-white hover:font-[700] z-[6]  opacity-0 transition-all duration-700'><Link className='block' prefetch href={to}>See More</Link></button>
-                  
-                </div>
-
-
-            </div>
-
-        </div>
-    )
+      <div className="p-4">
+        <h3 className="text-lg font-semibold text-white group-hover:text-primary-0 transition line-clamp-2">
+          {title}
+        </h3>
+        <p className="text-sm text-neutral_400 mt-2 line-clamp-3">{description}</p>
+      </div>
+    </Link>
+  );
 }
 
-export const Main = withFadeIn(({ relatedPosts,chapters }: { relatedPosts: Entry<EntrySkeletonType, undefined, string>[],chapters:chapter[] }) => (
-    <NotMain relatedPosts={relatedPosts}  chapters={chapters} />
-));
+export const Main = withFadeIn(OsirisContent);

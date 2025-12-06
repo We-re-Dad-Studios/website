@@ -1,20 +1,20 @@
 [{
     "name":"Dawnshipper",
     "description":"In the enchanting realm of Sinia, where magic weaves through the air like a mystical tapestry, our protagonist, Devvyn Dawnshipper, emerges from the shadows of disgrace to weave his own destiny. Born into the shattered remnants of the once-proud Dawnshipper family, Devvyn carries the weight of public shame and personal vendettas on his broad shoulders. The haunting whispers of his family's disgrace follow him like spectral echoes through the hallowed halls of the Sinian Academy of Magic and Scientific Development.",
-    "image":null,
+    "image":"https://res.cloudinary.com/duorxojmh/image/upload/v1765045757/IMG_1190_1_hkbii6.jpg",
     "type":"Novel",
     "to":"/projects/dawnshipper"
 },
 {
-    "name":"Codename: Magic FPS",
-    "description":"Magic FPS is an arcade MOBA where players are free to explore/dictate their style of play with the provision of a multitude of artifacts with varying effects and abilities with varying number of paths.",
+    "name":"Spell Swap",
+    "description":"Spell Swap is a fast-paced, chaotic 4-player co-op action roguelite where every player’s entire spell loadout reshuffles every 10 seconds. Designed for constant adaptation, unpredictable encounters, and hilarious team moments, the game challenges players to navigate procedurally generated dungeons, complete dynamic objectives, and survive escalating waves of magical chaos.",
     "image":null,
     "type":"Game"
 },
 {
     "name":"Project Osiris",
 "description":"In the near future, death has become negotiable—but only for the rich. Thanks to Osiris Inc., the world’s first and only soul-retrieval company, anyone with deep pockets can be pulled back from the afterlife—provided their Time of Death (TOD) hasn’t exceeded 48 hours.\nOperating in a dangerous liminal space between life and death known as The Light, elite field agents called Walkers are trained to locate and extract souls before they cross into Purgatory, the final no-return zone patrolled by divine enforcers: Angels.",
-    "image":null,
+    "image":"https://res.cloudinary.com/duorxojmh/image/upload/v1765045758/IMG_1239_ha8hk3.jpg",
     "type":"Novel",
     "to":"/projects/project_osiris"
 }

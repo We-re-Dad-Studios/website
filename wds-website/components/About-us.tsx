@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Twitter, Instagram, Linkedin, Sparkles, Zap, Users } from 'lucide-react';
+import {  Users } from 'lucide-react';
 
 const teamMembers = [
   {
@@ -14,8 +14,7 @@ const teamMembers = [
     color: "#8800CC",
     gradient: "from-purple-600 to-indigo-900",
     stats: {
-      projects: 5,
-      experience: 3,
+    
       specialty: "Gameplay Mechanics"
     },
     social: { twitter: "#", instagram: "#", linkedin: "#" }
@@ -30,8 +29,6 @@ const teamMembers = [
     color: "#F94C10",
     gradient: "from-orange-600 to-red-900",
     stats: {
-      projects: 5,
-      experience: 3,
       specialty: "Gameplay Mechanics"
     },
     social: { twitter: "#", instagram: "#", linkedin: "#" }
@@ -46,9 +43,7 @@ const teamMembers = [
     color: "#1897F2",
     gradient: "from-pink-600 to-purple-900",
     stats: {
-      projects: 5,
-      experience: 4,
-      specialty: ""
+      specialty: "Ego"
     },
     social: { twitter: "#", instagram: "#", linkedin: "#" }
   },
@@ -62,8 +57,6 @@ const teamMembers = [
     color: "#18F24B",
     gradient: "from-violet-600 to-purple-900",
     stats: {
-      projects: 5,
-      experience: 2,
       specialty: "Systems"
     },
     social: { twitter: "#", instagram: "#", linkedin: "#" }
@@ -78,8 +71,6 @@ const teamMembers = [
     color: "#F2181C",
     gradient: "from-indigo-600 to-purple-900",
     stats: {
-      projects: 3,
-      experience: "-",
       specialty: "Builder and Destroyer of worlds."
     },
     social: { twitter: "#", instagram: "#", linkedin: "#" }
@@ -94,8 +85,6 @@ const teamMembers = [
     color: "#caffbf",
     gradient: "from-indigo-600 to-purple-900",
     stats: {
-      projects: 1,
-      experience: 7,
       specialty: "Creative Writing"
     },
     social: { twitter: "#", instagram: "#", linkedin: "#" }
@@ -110,8 +99,6 @@ const teamMembers = [
     color: "#f7b801",
     gradient: "from-indigo-600 to-purple-900",
     stats: {
-      projects: 2,
-      experience: 7,
       specialty: "Character Art"
     },
     social: { twitter: "#", instagram: "#", linkedin: "#" }
@@ -255,11 +242,10 @@ export default function AboutUs() {
       {/* Quick Stats */}
       <section className="relative py-20 px-4">
         <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="flex justify-center">
             {[
               { icon: Users, label: "Team Members", value: teamMembers.length, color: "purple" },
-              { icon: Sparkles, label: "Projects Completed", value: "50+", color: "pink" },
-              { icon: Zap, label: "Years Experience", value: "10+", color: "orange" }
+        
             ].map((stat, i) => (
               <motion.div
                 key={i}
@@ -267,7 +253,7 @@ export default function AboutUs() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="relative group"
+                className="relative group col-span-1"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-pink-600/20 rounded-lg blur-xl group-hover:blur-2xl transition-all" />
                 <div className="relative bg-black/40 backdrop-blur-sm border border-white/10 rounded-lg p-8 text-center hover:border-purple-500/50 transition-all">
@@ -435,24 +421,7 @@ export default function AboutUs() {
                         </div>
                       </div>
 
-                      {/* Social Links */}
-                      <div className="flex gap-4">
-                        {[
-                          { icon: Twitter, link: currentMember.social.twitter },
-                          { icon: Instagram, link: currentMember.social.instagram },
-                          { icon: Linkedin, link: currentMember.social.linkedin }
-                        ].map(({ icon: Icon, link }, i) => (
-                          <motion.a
-                            key={i}
-                            href={link}
-                            className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:border-white/30 transition-all"
-                            whileHover={{ scale: 1.1, backgroundColor: `${currentMember.color}20` }}
-                            whileTap={{ scale: 0.95 }}
-                          >
-                            <Icon className="w-5 h-5" />
-                          </motion.a>
-                        ))}
-                      </div>
+                  
                     </div>
                   </div>
                 </div>

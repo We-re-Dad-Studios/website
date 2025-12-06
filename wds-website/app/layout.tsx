@@ -8,6 +8,9 @@ import dynamic from "next/dynamic";
 import { Toaster } from "@/components/ui/sonner";
 import KoFiWidget from "@/components/KofiWidget";
 
+import { EchoTransition } from "@/components/page-transition";
+import { GlitchTransition } from "@/components/glitch-transition";
+
 export const metadata: Metadata = {
   title: "We're Dad Studios",
   description:
@@ -64,7 +67,12 @@ export default function RootLayout({
         <body className="antialiased bg-base_black font-agdasima setfont text-[#FAFAFA]">
           <PageView />
           <Navbar />
-          {children}
+
+                 {/* <EchoTransition>{children}</EchoTransition>
+                  */}
+                  <GlitchTransition>
+                    {children}
+                  </GlitchTransition>
           <KoFiWidget />
           <Newsletter />
           <Toaster />

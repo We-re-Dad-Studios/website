@@ -133,3 +133,85 @@ border-radius: 40px;
     @apply text-[20px]
   }
 }
+ .grid-pattern {
+          width: 100%;
+          height: 100%;
+          background-image: 
+            linear-gradient(rgba(168, 85, 247, 0.1) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(168, 85, 247, 0.1) 1px, transparent 1px);
+          background-size: 50px 50px;
+          animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+          0% { transform: translate(0, 0); }
+          100% { transform: translate(50px, 50px); }
+        }
+
+        @keyframes spin-slow {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+
+        @keyframes spin-reverse {
+          from { transform: rotate(360deg); }
+          to { transform: rotate(0deg); }
+        }
+
+        .animate-spin-slow {
+          animation: spin-slow 3s linear infinite;
+        }
+
+        .animate-spin-reverse {
+          animation: spin-reverse 2s linear infinite;
+        }
+
+        @keyframes progress {
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(100%); }
+        }
+
+        .animate-progress {
+          animation: progress 1.5s ease-in-out infinite;
+        }
+
+        @keyframes scan {
+          0%, 100% { 
+            transform: translateY(0);
+            opacity: 0;
+          }
+          50% { 
+            opacity: 1;
+          }
+        }
+
+        .animate-scan {
+          animation: scan 2s ease-in-out infinite;
+        }
+
+        .glitch-text {
+          animation: textGlitch 3s ease-in-out infinite;
+        }
+
+        @keyframes textGlitch {
+          0%, 90%, 100% { 
+            transform: translate(0);
+            text-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+          }
+          92% {
+            transform: translate(-2px, 2px);
+            text-shadow: 2px -2px 0 rgba(168, 85, 247, 0.7), -2px 2px 0 rgba(236, 72, 153, 0.7);
+          }
+          94% {
+            transform: translate(2px, -2px);
+            text-shadow: -2px 2px 0 rgba(168, 85, 247, 0.7), 2px -2px 0 rgba(236, 72, 153, 0.7);
+          }
+          96% {
+            transform: translate(-1px, 1px);
+            text-shadow: 1px -1px 0 rgba(168, 85, 247, 0.7), -1px 1px 0 rgba(236, 72, 153, 0.7);
+          }
+        }
+
+        .delay-700 {
+          animation-delay: 700ms;
+        }
