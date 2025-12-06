@@ -84,7 +84,7 @@ function OsirisContent({
                  {/* Chapters */}
                  <div className="bg-white/5 border  border-white/10 rounded-xl p-6 backdrop-blur-sm shadow-lg">
                    <h3 className="text-subheading text-white mb-4">Read the Chapters</h3>
-                   <ChapterListComponent chapters={chapters} projectSlug="dawnshipper" />
+                   <ChapterListComponent chapters={chapters} projectSlug="project_osiris" />
                  </div>
        
                  {/* Social */}
