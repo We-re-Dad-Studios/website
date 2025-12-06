@@ -33,8 +33,10 @@ const securityHeaders = [
 ];
 
 const nextConfig = {
+ reactStrictMode: true,
+ swcMinify: true,
+  poweredByHeader: false,
   distDir: "build",
-
   async headers() {
     return [
       {
