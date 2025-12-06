@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { MenuIcon, ChevronDown } from "lucide-react";
 import { Popover, PopoverTrigger, PopoverContent } from "./ui/popover";
-import { FaTiktok, FaInstagram } from "react-icons/fa6";
+import { FaTiktok, FaInstagram, FaDiscord } from "react-icons/fa6";
 
 export const Navbar = () => {
   const pathname = usePathname();
@@ -168,6 +168,7 @@ export const Navbar = () => {
       <div className="hidden md:flex items-center gap-6">
         <SocialIcon href="https://www.tiktok.com/@weredadstudios" Icon={FaTiktok} />
         <SocialIcon href="https://www.instagram.com/weredadstudios" Icon={FaInstagram} />
+        <SocialIcon href="https://discord.gg/Vjjw2f42" Icon={FaDiscord} />
       </div>
 
       {/* MOBILE MENU */}
