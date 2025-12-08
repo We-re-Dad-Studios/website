@@ -14,6 +14,7 @@ import { MegaMenu } from "./MegaMenu";
 import { FaTiktok, FaInstagram, FaDiscord } from "react-icons/fa6";
 import { NavLink } from "./nav-link";
 import { IconType } from "react-icons/lib";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 
 export const Navbar = () => {
   return (
@@ -152,9 +153,32 @@ const SocialIcon = ({ href, Icon }: { href: string; Icon: IconType }) => (
 );
 
 const MobileMenu = () => {
+  const path = usePathname();
   return (
-    <button className="md:hidden p-2 rounded-md bg-purple-500 text-black">
+    <Popover>
+     <PopoverTrigger asChild>
+       <button className="md:hidden p-2 rounded-md bg-purple-500 text-black">
       <MenuIcon className="w-6 h-6" />
     </button>
+     </PopoverTrigger>
+    <PopoverContent
+        side="bottom"
+        className="
+          md:hidden flex flex-col gap-4 p-6 
+          bg-black/70 backdrop-blur-xl border border-white/10
+          rounded-xl shadow-xl text-white
+        "
+      >
+        <NavLink href="/" label="Home" active={path} />
+        <NavLink href="/projects" label="Projects" active={path} />
+        <NavLink href="/blog" label="Blog" active={path} />
+        <NavLink href="/about-us" label="About Us" active={path} />
+
+        <div className="flex gap-4 pt-2">
+          <SocialIcon href="https://www.tiktok.com/@weredadstudios" Icon={FaTiktok} />
+          <SocialIcon href="https://www.instagram.com/weredadstudios" Icon={FaInstagram} />
+        </div>
+      </PopoverContent>
+    </Popover>
   );
 };
