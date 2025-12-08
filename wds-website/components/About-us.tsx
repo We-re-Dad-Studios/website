@@ -49,7 +49,7 @@ const teamMembers = [
   },
   {
     id: 4,
-    name: "Adamns",
+    name: "Adams",
     role: "Co-founder",
     tagline: "Idea validator",
     bio: "Crafting compelling narratives that resonate with audiences across all mediums.",
