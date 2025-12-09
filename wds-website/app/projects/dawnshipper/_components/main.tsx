@@ -22,8 +22,7 @@ function MainContent({
   chapters: Chapter[];
 }) {
   return (
-   <div className="container mx-auto px-4 lg:px-8 py-10">
-
+    <div className="container mx-auto px-4 lg:px-8 py-10">
       {/* -------------- MOBILE STICKY CTA -------------- */}
       <Link
         href="#chapters"
@@ -33,7 +32,6 @@ function MainContent({
       </Link>
 
       <div className="flex flex-col lg:flex-row gap-12">
-
         {/* -------------- RIGHT SIDEBAR FIRST ON MOBILE -------------- */}
         <aside
           id="chapters"
@@ -52,7 +50,10 @@ function MainContent({
             </h3>
 
             <div className="space-y-2">
-              <ChapterListComponent chapters={chapters} projectSlug="dawnshipper" />
+              <ChapterListComponent
+                chapters={chapters}
+                projectSlug="dawnshipper"
+              />
             </div>
           </motion.div>
 
@@ -86,14 +87,28 @@ function MainContent({
 
         {/* -------------- LEFT COLUMN (Content second on mobile) -------------- */}
         <div className="flex-1 max-w-3xl order-2 lg:order-1">
-
           {/* Title Row */}
-          <motion.div variants={fadeUp} initial="hidden" animate="show" className="flex items-center mb-4">
-            <h1 className="text-heading text-white hover:text-primary-0 transition">Dawnshipper</h1>
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            animate="show"
+            className="flex items-center mb-4"
+          >
+            <h1 className="text-heading text-white hover:text-primary-0 transition">
+              Dawnshipper
+            </h1>
+
             <span className="ml-auto px-3 py-1 text-sm rounded bg-[#F94C10] text-white">
               Novel
             </span>
           </motion.div>
+          <Link
+            href={`/novels/dawnshipper/chapters/${chapters[0].slug}`}
+            className="block w-max px-4 bg-primary-0 text-white font-bold text-center py-4 rounded-xl 
+             hover:scale-[1.02] transition shadow-lg mb-6"
+          >
+            📖 Start Chapter 1 It&apos;s Free
+          </Link>
 
           {/* Cover Image */}
           <motion.div
@@ -123,14 +138,16 @@ function MainContent({
             <p className="text-subheading text-neutral_400 mb-2">Genres</p>
 
             <div className="flex gap-2 flex-wrap">
-              {["Dark Epic Fantasy", "Fantasy Tech", "Academy Fantasy"].map((g) => (
-                <span
-                  key={g}
-                  className="px-3 py-1 text-xs font-semibold bg-white/10 text-white rounded-full hover:bg-primary-0 hover:text-black transition"
-                >
-                  {g}
-                </span>
-              ))}
+              {["Dark Epic Fantasy", "Fantasy Tech", "Academy Fantasy"].map(
+                (g) => (
+                  <span
+                    key={g}
+                    className="px-3 py-1 text-xs font-semibold bg-white/10 text-white rounded-full hover:bg-primary-0 hover:text-black transition"
+                  >
+                    {g}
+                  </span>
+                )
+              )}
             </div>
           </motion.div>
 
@@ -142,7 +159,9 @@ function MainContent({
             viewport={{ once: true }}
             className="mt-8"
           >
-            <h2 className="text-subheading text-neutral_400 mb-1">Description</h2>
+            <h2 className="text-subheading text-neutral_400 mb-1">
+              Description
+            </h2>
 
             {/* Mobile collapsible */}
             <details className="lg:hidden text-neutral_300 mt-3">
@@ -150,17 +169,70 @@ function MainContent({
                 Tap to read
               </summary>
               <p className="mt-3 text-lg leading-loose text-neutral_300">
-               In the world of Thaloria, power is everything. Humans wield elemental magic by forming connections with Echoes—semi-sentient conduits of energy. The alliance between the powers teeters on collapse, as political tensions edge toward civil war. <br /> <br /> Devvyn, a stubborn lowborn troublemaker, forms an impossible bond with Flux—the Echo of Chaos—granting him magic that breaks the rules of the world. As new threats move across the continent, Devvyn must uncover the truth behind his family&apos;s legacy... or become the spark that ignites Thaloria&apos;s downfall.
+                In the world of Thaloria, power is everything. Humans wield
+                elemental magic by forming connections with Echoes—semi-sentient
+                conduits of energy. The alliance between the powers teeters on
+                collapse, as political tensions edge toward civil war. <br />{" "}
+                <br /> Devvyn, a stubborn lowborn troublemaker, forms an
+                impossible bond with Flux—the Echo of Chaos—granting him magic
+                that breaks the rules of the world. As new threats move across
+                the continent, Devvyn must uncover the truth behind his
+                family&apos;s legacy... or become the spark that ignites
+                Thaloria&apos;s downfall.
               </p>
             </details>
 
             {/* Desktop full text */}
             <p className="hidden lg:block text-lg leading-loose text-neutral_300 mt-3">
-             In the world of Thaloria, power is everything. Humans wield elemental magic by forming connections with Echoes—semi-sentient conduits of energy. The alliance between the powers teeters on collapse, as political tensions edge toward civil war. <br /> <br /> Devvyn, a stubborn lowborn troublemaker, forms an impossible bond with Flux—the Echo of Chaos—granting him magic that breaks the rules of the world. As new threats move across the continent, Devvyn must uncover the truth behind his family&apos;s legacy... or become the spark that ignites Thaloria&apos;s downfall.
+              In the world of Thaloria, power is everything. Humans wield
+                elemental magic by forming connections with Echoes—semi-sentient
+                conduits of energy. The alliance between the powers teeters on
+                collapse, as political tensions edge toward civil war. <br />{" "}
+                <br /> Devvyn, a stubborn lowborn troublemaker, forms an
+                impossible bond with Flux—the Echo of Chaos—granting him magic
+                that breaks the rules of the world. As new threats move across
+                the continent, Devvyn must uncover the truth behind his
+                family&apos;s legacy... or become the spark that ignites
+                Thaloria&apos;s downfall.
             </p>
+            <div className="mt-6 bg-white/5 border border-white/10 rounded-xl p-5">
+              <h3 className="text-white font-semibold mb-2">
+                Chapter 1 Preview
+              </h3>
+              <p className="text-neutral_300 leading-relaxed">
+                {chapters[0].previewText}
+              </p>
+            </div>
           </motion.div>
         </div>
       </div>
+      {/* Why You'll Love Dawnshipper */}
+      <motion.div
+        variants={fadeUp}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true }}
+        className="mt-12 bg-white/5 w-max border border-white/10 rounded-xl p-6 backdrop-blur-sm"
+      >
+        <h2 className="text-subheading text-white mb-4">
+          Why Readers Love Dawnshipper
+        </h2>
+
+        <ul className="space-y-3 text-neutral_300 text-lg leading-relaxed">
+          <li>
+            A grounded yet powerful magic system shaped by elemental Echoes
+          </li>
+          <li>
+             An academy arc filled with ambition, rivalry, and brutal trials
+          </li>
+          <li>A continent on the edge of civil war</li>
+          <li>Antagonists with real motives — not filler villains</li>
+          <li>
+             A story that rewards careful reading, theory-crafting, and
+            immersion
+          </li>
+        </ul>
+      </motion.div>
 
       {/* -------------- RELATED POSTS -------------- */}
       <motion.div
@@ -211,7 +283,7 @@ function RelatedCard({
   to: string;
 }) {
   return (
-     <Link
+    <Link
       href={to}
       className="group border border-white/10 rounded-xl overflow-hidden bg-white/5 backdrop-blur-sm hover:bg-white/10 transition shadow-lg"
     >

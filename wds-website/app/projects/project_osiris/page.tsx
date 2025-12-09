@@ -1,7 +1,8 @@
 // app/projects/project_osiris/page.tsx
 import { createClient } from "contentful";
-import { Main } from "./_components/main";
+// import { Main } from "./_components/main";
 import { getChapterList } from "@/lib/contentful";
+import { Main } from "@/components/osiris-restructured";
 type chapter={
   id:string,slug:string,title:string,chapterNumber:number|string,isFree:boolean,releaseDate:string
 }

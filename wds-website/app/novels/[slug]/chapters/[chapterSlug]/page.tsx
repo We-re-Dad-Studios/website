@@ -16,6 +16,7 @@ export default async function Page(props:{params:Promise<{chapterSlug:string,slu
         <div className="relative">
            
 <Content previousChapter={prevChapter? (prevChapter as unknown as Chapter).slug:undefined} nextChapter={nextChapter? (nextChapter as unknown as Chapter).slug:undefined} content={chapterContent.content as unknown as Document} chapter={chapterContent as unknown as Chapter}/>
+
         </div>
     );
 }

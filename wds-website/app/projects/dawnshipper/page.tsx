@@ -1,8 +1,9 @@
 // app/projects/dawnshipper/page.tsx
 import { Metadata } from "next";
 import { getChapterList } from "@/lib/contentful";
-import { Main } from "./_components/main";
+// import { Main } from "./_components/main";
 import { createClient } from "contentful";
+import { Main } from "@/components/dawnshipper-restructured";
 
 export const dynamic = "force-dynamic";
 

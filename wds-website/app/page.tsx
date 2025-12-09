@@ -3,13 +3,10 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-
 import { AnimatedArrow } from "@/components/AnimatedArrow";
 import { SplashImage } from "@/components/SplashImage";
-import { ProjectsSection } from "@/components/ProjectsSection";
 import { useSessionStorage } from "@/hooks/useSessionStorage";
-import Image from "next/image";
-
+import { HeroSection } from "@/components/Hero-section";
 const fadeInOutVariants = {
   hidden: { opacity: 0 },
   visible: { opacity: 1 },
@@ -42,7 +39,7 @@ export default function Home() {
   };
 
   return (
-    <AnimatePresence mode="wait">
+   <AnimatePresence mode="wait">
       {!hasVisited ? (
         <motion.section
           key="welcome-section"
@@ -71,14 +68,11 @@ export default function Home() {
           variants={fadeInOutVariants}
           transition={{ duration: 0.5 }}
         >
-          <div className="w-full lg:h-[95vh] bg-neutral_1000 grid place-items-center relative overflow-hidden">
-            <Image className="w-full h-full  object-cover " height={1200} width={1900} alt="WDS cover image" src={"https://downloads.ctfassets.net/3gg0xih7foqh/3rxvtQJQc3xmwVWRZzm5fS/c773572af2f7a1a49a886aa04135c5ef/Final_Withlogo.jpg"}/>
-            <div className="absolute left-1/2 top-1/2 w-max h-max  hidden  -translate-y-1/2 lg:flex flex-col items-center justify-center gap-4">
-              <Image src={"/images/WDS LOGO WHITE.png"} className=" w-80 aspect-square -translate-x-1/2 opacity-60" alt="wds logo" draggable={false} width={200} height={200}/>
-            </div>
-          
-          </div>
-          <ProjectsSection />
+          {/* New Hero Section - Sells the books */}
+          <HeroSection />
+
+          {/* Projects Grid */}
+          {/* <ProjectsSection /> */}
         </motion.section>
       )}
     </AnimatePresence>
