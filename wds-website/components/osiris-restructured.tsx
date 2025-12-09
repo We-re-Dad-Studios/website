@@ -73,9 +73,9 @@ function OsirisContent({
 
             {/* Hook - THE MOST IMPORTANT PART */}
             <p className="text-xl md:text-2xl text-white/90 leading-relaxed max-w-2xl mb-6">
-              Death is <span className="text-cyan-400 font-semibold">negotiable</span>—but 
-              only for the wealthy. When retrieval missions start failing and teams 
-              disappear into the Light, one survivor knows what&apos;s hunting them.
+            Death is now <span className="text-cyan-400 font-semibold">negotiable</span>- resurrection has become commercialized.
+Professional Walkers brave the light to snatch souls back from the death gods themselves.
+But humanity soon learns, the price of defying death isuch more steep than they can pay.
             </p>
 
             {/* Stats */}
@@ -129,10 +129,9 @@ function OsirisContent({
               <h2 className="text-2xl font-bold text-white mb-4">The Story</h2>
               <div className="text-lg leading-relaxed text-neutral_300 space-y-4">
                 <p>
-                  In the near future, death has become negotiable—but only for the
-                  wealthy. Thanks to Osiris Inc., the world&apos;s first soul-retrieval
-                  company, anyone can be brought back—as long as their Time of Death
-                  hasn&apos;t exceeded 48 hours.
+           In the near future, death has become negotiable—but only for the wealthy. Thanks to Osiris Inc., the world&apos;s first soul-retrieval company, anyone can be brought back—as long as their Time of Death hasn&apos;t exceeded 48 hours.
+Walkers, elite operatives trained to extract souls within a dangerous liminal realm called the Light, maintain this impossible industry. But missions are failing. Teams are disappearing.
+When seventeen-year-old Sami Illia becomes the sole survivor of a catastrophic retrieval mission, He is reassigned to Team Zero—an outcast squad no one expects to succeed. But Sami knows what he saw in the Light… and it is getting stronger.
                 </p>
                 <p>
                   Walkers, elite operatives trained to extract souls within a dangerous
