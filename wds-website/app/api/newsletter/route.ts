@@ -7,7 +7,7 @@ export  async function POST(req:Request) {
     firstName: string;
     lastName: string;
   };
-  console.log({email, firstName, lastName});
+  // console.log({email, firstName, lastName});
   if (!email) {
     return new Response(JSON.stringify({ error: "Invalid email" }), {
       status: 400,
@@ -38,7 +38,7 @@ export  async function POST(req:Request) {
       react: WelcomeEmail({ subscriberName: firstName }),
     });
     if (error) {
-        console.log({error});
+        // console.log({error});
       return new Response(
         JSON.stringify({
           error: "Failed to send email",

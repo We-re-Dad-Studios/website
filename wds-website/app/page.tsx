@@ -26,8 +26,8 @@ export default function Home() {
         if (parsed?.hasVisited) {
           setHasVisited(true);
         }
-      } catch (e) {
-        console.error("Failed to parse session storage state:", e);
+      } catch  {
+        // console.error("Failed to parse session storage state:", e);
       }
     }
   }, []);

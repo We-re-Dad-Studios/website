@@ -18,7 +18,7 @@ export const ScrollContext = createContext<ScrollContextType>({
 export const useScrollProgress = () => useContext(ScrollContext);
 export default function ScrollProgressBar() {
 const { progress: scrollYProgress } = useScrollProgress();
-console.log("ScrollYProgress:", scrollYProgress);
+// console.log("ScrollYProgress:", scrollYProgress);
   const pathName = usePathname();
   if(!pathName.includes("/novels/")) {
     return null;
