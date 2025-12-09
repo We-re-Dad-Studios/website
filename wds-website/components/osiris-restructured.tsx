@@ -75,7 +75,7 @@ function OsirisContent({
             <p className="text-xl md:text-2xl text-white/90 leading-relaxed max-w-2xl mb-6">
             Death is now <span className="text-cyan-400 font-semibold">negotiable</span>- resurrection has become commercialized.
 Professional Walkers brave the light to snatch souls back from the death gods themselves.
-But humanity soon learns, the price of defying death isuch more steep than they can pay.
+But humanity soon learns, the price of defying death is much more steep than they can pay.
             </p>
 
             {/* Stats */}
