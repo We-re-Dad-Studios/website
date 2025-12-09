@@ -62,7 +62,9 @@ export function StartOsirisClient() {
             transition={{ delay: 0.35, duration: 0.6 }}
           >
             <p className="text-xl md:text-2xl text-white/90 leading-relaxed">
-              Death is <span className="text-cyan-400 font-semibold">reversible</span>—for a price.
+            Death is now <span className="text-cyan-400 font-semibold">reversible</span>- resurrection has become commercialized.
+Professional Walkers brave the light to snatch souls back from the death gods themselves.
+But humanity soon learns, the price of defying death isuch more steep than they can pay.
             </p>
             <p className="text-xl md:text-2xl text-white/90 leading-relaxed">
               She knows what&apos;s hunting them in the Light.

@@ -8,6 +8,7 @@ import dynamic from "next/dynamic";
 import { Toaster } from "@/components/ui/sonner";
 import KoFiWidget from "@/components/KofiWidget";
 import { GlitchTransition } from "@/components/glitch-transition";
+import ScrollProgressBar, { ScrollProgressBarProvider } from "@/components/scroll-progress-bar";
 
 export const metadata: Metadata = {
   title: "We're Dad Studios",
@@ -65,12 +66,15 @@ export default function RootLayout({
         <body className="antialiased bg-base_black font-agdasima setfont text-[#FAFAFA]">
           <PageView />
           <Navbar />
+          <ScrollProgressBarProvider>
+            <ScrollProgressBar/>
 
                  {/* <EchoTransition>{children}</EchoTransition>
                   */}
                   <GlitchTransition>
                     {children}
                   </GlitchTransition>
+          </ScrollProgressBarProvider>
           <KoFiWidget />
           <Newsletter />
           <Toaster />

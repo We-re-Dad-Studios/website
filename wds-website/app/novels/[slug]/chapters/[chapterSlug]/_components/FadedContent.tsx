@@ -1,4 +1,5 @@
 "use client";
+
 import { withFadeIn } from "@/utils/withFadeIn";
 import {
   documentToReactComponents,
@@ -6,14 +7,16 @@ import {
 } from "@contentful/rich-text-react-renderer";
 import { BLOCKS, Document } from "@contentful/rich-text-types";
 import { useParams, useRouter } from "next/navigation";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode,  useEffect,  useRef,  useState } from "react";
 import { Comments } from "./Comments";
 import Link from "next/link";
 import { calculateReadingTime } from "@/lib/reading-time";
-import { useScrollProgress } from "@/hooks/useScrollProgress";
-import { motion } from "framer-motion";
 import { extractPlainText } from "@/lib/extract-doc-text";
 import { useTTS } from "@/hooks/useTTS";
+import { Volume2, VolumeX, ChevronLeft, ChevronRight, BookOpen } from "lucide-react";
+import { useScrollProgress } from "@/components/scroll-progress-bar";
+import { useScroll } from "framer-motion";
+
 const options: Options = {
   renderNode: {
     [BLOCKS.PARAGRAPH]: (node, children) => {
@@ -68,6 +71,7 @@ const options: Options = {
       }, []);
   },
 };
+
 export const Content = withFadeIn(
   ({
     content,
@@ -88,11 +92,10 @@ export const Content = withFadeIn(
     />
   )
 );
-interface extendedWindow extends Window {
-  scrollTimer: NodeJS.Timeout | number | null;
-}
+
 type FontSize = "sm" | "md" | "lg" | "xl";
 type Theme = "dark" | "sepia" | "light";
+
 export interface Chapter {
   id: string;
   title: string;
@@ -103,243 +106,315 @@ export interface Chapter {
   slug: string;
 }
 
-//   interface Novel {
-//     id: string;
-//     title: string;
-//     slug: string;
-//     totalChapters?: number;
-//   }
 interface ChapterReaderProps {
   chapter: Chapter;
   content: Document;
   nextChapter?: string | null;
   prevChapter?: string | null;
 }
+
+// Navbar height constant - adjust if your navbar height changes
+const NAVBAR_HEIGHT = 80; // matches h-[80px] in Navbar.tsx
+
 function ChapterReader({
   chapter,
   content,
   nextChapter,
   prevChapter,
 }: ChapterReaderProps) {
-const cleanedText = extractPlainText(chapter.content as Document).replace(/\s+/g, " ").trim();
-const readingTime = calculateReadingTime(cleanedText);
-const { speak, stop,isSpeaking } = useTTS(cleanedText);
+  const cleanedText = extractPlainText(chapter.content as Document)
+    .replace(/\s+/g, " ")
+    .trim();
+  const readingTime = calculateReadingTime(cleanedText);
+  const { speak, stop, isSpeaking } = useTTS(cleanedText);
 
-  const [fontSize, setFontSize] = useState<"sm" | "md" | "lg" | "xl">("md");
-  const [theme, setTheme] = useState("dark");
-  const [isScrolling, setIsScrolling] = useState(false);
+  const [fontSize, setFontSize] = useState<FontSize>("md");
+  const [theme, setTheme] = useState<Theme>("dark");
+  const [showControls, setShowControls] = useState(true);
   const { slug: Novel } = useParams();
   const router = useRouter();
-  const progress = useScrollProgress();
-  // Track reading progress
+
+  const { setProgress } = useScrollProgress();
+  // Auto-hide controls
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const handleScroll = () => {
-        setIsScrolling(true);
-        clearTimeout(
-          (window as unknown as extendedWindow).scrollTimer as unknown as number
-        );
-        (window as unknown as extendedWindow).scrollTimer = setTimeout(
-          () => setIsScrolling(false),
-          1000
-        );
+    let scrollTimer: NodeJS.Timeout;
 
-        // Calculate reading progress
-        // const progress = Math.round(
-        //   (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100
-        // );
-        // // You could save this to user's progress tracking
-      };
+    const showControlsTemporarily = () => {
+      setShowControls(true);
+      clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(() => setShowControls(false), 2500);
+    };
 
-      window.addEventListener("scroll", handleScroll);
-      return () => window.removeEventListener("scroll", handleScroll);
-    }
+    window.addEventListener("scroll", showControlsTemporarily, { passive: true });
+    window.addEventListener("mousemove", showControlsTemporarily, { passive: true });
+    window.addEventListener("touchstart", showControlsTemporarily, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", showControlsTemporarily);
+      window.removeEventListener("mousemove", showControlsTemporarily);
+      window.removeEventListener("touchstart", showControlsTemporarily);
+      clearTimeout(scrollTimer);
+    };
   }, []);
 
-  const fontSizes: Record<string, string> = {
+  const fontSizes: Record<FontSize, string> = {
     sm: "text-base",
     md: "text-lg",
     lg: "text-xl",
     xl: "text-2xl",
   };
 
-  const themes: Record<Theme, string> = {
-    dark: "bg-gray-900 text-gray-100",
-    sepia: "bg-amber-50 text-gray-800",
-    light: "bg-white text-gray-900",
+  const themes: Record<Theme, { bg: string; text: string; accent: string; headerBg: string }> = {
+    dark: {
+      bg: "bg-gray-900",
+      text: "text-gray-100",
+      accent: "text-amber-400",
+      headerBg: "bg-gray-900/95",
+    },
+    sepia: {
+      bg: "bg-amber-50",
+      text: "text-gray-800",
+      accent: "text-amber-700",
+      headerBg: "bg-amber-50/95",
+    },
+    light: {
+      bg: "bg-white",
+      text: "text-gray-900",
+      accent: "text-amber-600",
+      headerBg: "bg-white/95",
+    },
   };
 
-  //   const formatDate = (dateString: string): string => {
-  //     return new Date(dateString).toLocaleDateString('en-US', {
-  //       year: 'numeric',
-  //       month: 'long',
-  //       day: 'numeric'
-  //     });
-  //   };
+  const currentTheme = themes[theme];
+  const novelDisplayName = `${(Novel as string)[0].toUpperCase()}${(Novel as string).replace("_", " ").slice(1)}`;
+const contentRef = useRef<HTMLDivElement>(null);
+
+// Framer Motion scroll tracking relative to the article
+const { scrollYProgress } = useScroll({
+  target: contentRef,
+  offset: ["start start", "end end"],
+});
+
+useEffect(()=>{
+  setProgress(scrollYProgress);
+},[scrollYProgress])
 
   return (
-    <div
-      className={`min-h-screen  ${themes[theme as Theme]} transition-colors duration-300 mb-12`}
-    >
-      <motion.div
-  className="sticky top-4 left-0 h-[4px] bg-primary-0 z-[999]"
-  style={{ scaleX: progress, transformOrigin: "0%" }}
-/>
-      {/* Floating Header */}
+   
+<div className={`min-h-screen ${currentTheme.bg} ${currentTheme.text} transition-colors duration-300 relative`}>
+      
+     
+
+      {/* ============ READER CONTROLS - Fixed below progress bar ============ */}
       <header
-        className={`fixed top-0 left-0 right-0 z-10 bg-gradient-to-b from-black/90 to-transparent p-4 transition-opacity duration-300 ${isScrolling ? "opacity-100" : "opacity-0 hover:opacity-100"}`}
+        className={`
+          fixed left-0 right-0 z-[997]
+          transition-all duration-300
+          ${showControls ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4 pointer-events-none"}
+        `}
+        style={{ top: NAVBAR_HEIGHT/2 + 4 }} 
       >
-        <div className="container mx-auto flex justify-between items-center">
-          <button
-  onClick={() => (isSpeaking ? stop() : speak())}
-  className="px-4 py-2 mt-4 rounded-lg bg-primary-0 text-white font-semibold hover:scale-105 transition"
->
-  {isSpeaking ? "Stop Audio" : "🔊 Listen"}
-</button>
-
-          <button
-            onClick={() => router.push(`/projects/${Novel}`)}
-            className="flex items-center text-amber-400 hover:text-amber-300"
-          >
-            <svg
-              className="w-5 h-5 mr-1"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+        <div className={`${currentTheme.headerBg} backdrop-blur-md border-b border-white/10 mx-4 rounded-lg shadow-lg`}>
+          <div className="px-4 py-3 flex items-center justify-between">
+            {/* Back Button */}
+            <button
+              onClick={() => router.push(`/projects/${Novel}`)}
+              className={`flex items-center gap-2 ${currentTheme.accent} hover:opacity-80 transition-opacity`}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M10 19l-7-7m0 0l7-7m-7 7h18"
-              />
-            </svg>
-            Back to {Novel}
-          </button>
+              <ChevronLeft className="w-5 h-5" />
+              <span className="hidden sm:inline text-sm font-medium">Back to {novelDisplayName}</span>
+              <span className="sm:hidden text-sm">Back</span>
+            </button>
 
-          <div className="flex space-x-4">
-            <select
-              value={fontSize}
-              onChange={(e) => setFontSize(e.target.value as FontSize)}
-              className="bg-gray-800 text-amber-100 border border-gray-700 rounded px-2 py-1 text-sm"
-            >
-              <option value="sm">Small</option>
-              <option value="md">Medium</option>
-              <option value="lg">Large</option>
-              <option value="xl">Extra Large</option>
-            </select>
+            {/* Right Controls */}
+            <div className="flex items-center gap-2 sm:gap-3">
+              {/* Audio Button */}
+              <button
+                onClick={() => (isSpeaking ? stop() : speak())}
+                className={`
+                  flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg transition-all text-sm
+                  ${isSpeaking 
+                    ? "bg-primary-0 text-white" 
+                    : theme === "dark" ? "bg-white/10 hover:bg-white/20" : "bg-black/10 hover:bg-black/20"
+                  }
+                `}
+              >
+                {isSpeaking ? (
+                  <>
+                    <VolumeX className="w-4 h-4" />
+                    <span className="hidden sm:inline">Stop</span>
+                  </>
+                ) : (
+                  <>
+                    <Volume2 className="w-4 h-4" />
+                    <span className="hidden sm:inline">Listen</span>
+                  </>
+                )}
+              </button>
 
-            <div className="flex space-x-1 bg-gray-800 p-1 rounded">
-              {Object.keys(themes).map((t) => (
-                <button
-                  key={t}
-                  onClick={() => setTheme(t)}
-                  className={`w-6 h-6 rounded-full ${t === "dark" ? "bg-gray-700" : t === "sepia" ? "bg-amber-300" : "bg-white"} ${theme === t ? "ring-2 ring-amber-400" : ""}`}
-                  aria-label={`${t} theme`}
-                />
-              ))}
+              {/* Font Size */}
+              <select
+                value={fontSize}
+                onChange={(e) => setFontSize(e.target.value as FontSize)}
+                className={`
+                  ${theme === "dark" ? "bg-white/10 text-white" : "bg-black/10 text-gray-900"}
+                  border-0 rounded-lg px-2 py-1.5 text-sm cursor-pointer focus:ring-2 focus:ring-primary-0
+                `}
+              >
+                <option value="sm">A-</option>
+                <option value="md">A</option>
+                <option value="lg">A+</option>
+                <option value="xl">A++</option>
+              </select>
+
+              {/* Theme Switcher */}
+              <div className={`flex gap-1 p-1 rounded-lg ${theme === "dark" ? "bg-white/10" : "bg-black/10"}`}>
+                {(Object.keys(themes) as Theme[]).map((t) => (
+                  <button
+                    key={t}
+                    onClick={() => setTheme(t)}
+                    className={`
+                      w-5 h-5 sm:w-6 sm:h-6 rounded-full transition-all
+                      ${t === "dark" ? "bg-gray-700" : t === "sepia" ? "bg-amber-200" : "bg-white border border-gray-300"}
+                      ${theme === t ? "ring-2 ring-primary-0 scale-110" : "opacity-70 hover:opacity-100"}
+                    `}
+                    aria-label={`${t} theme`}
+                  />
+                ))}
+              </div>
             </div>
           </div>
         </div>
       </header>
 
-      {/* Chapter Content */}
-      <div className="container mx-auto px-4 pt-24 pb-20 max-w-4xl">
-        <div className="mb-12 text-center border-b border-gray-700 pb-8">
-          <h1 className="text-4xl font-bold text-amber-400 mb-2 font-mono">{`${Novel[0].toUpperCase()}${(Novel as string).replace("_", " ").slice(1, Novel.length)}`}</h1>
-          <h2 className="text-2xl text-gray-300 mb-4">
-            Chapter {chapter.chapterNumber}: {chapter.title}
+      {/* ============ CHAPTER CONTENT ============ */}
+      <main 
+        className="container mx-auto px-4 pb-32 max-w-3xl"
+        style={{ paddingTop: NAVBAR_HEIGHT + 20 }}
+      >
+        
+        {/* Chapter Header */}
+        <div className="mb-12 pt-8 text-center">
+          <div className={`flex items-center justify-center gap-2 ${currentTheme.accent} mb-4`}>
+            <BookOpen className="w-5 h-5" />
+            <span className="text-sm font-medium uppercase tracking-wider">
+              {novelDisplayName}
+            </span>
+          </div>
+          
+          <h1 className={`text-3xl md:text-4xl font-bold ${currentTheme.accent} mb-2`}>
+            Chapter {chapter.chapterNumber}
+          </h1>
+          
+          <h2 className={`text-xl md:text-2xl opacity-80 mb-6`}>
+            {chapter.title}
           </h2>
 
-          <p className="text-gray-400 text-sm">
-            Released:{" "}
-            {new Date(chapter.releaseDate).toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
-          </p>
-          <p className="text-neutral_400 text-sm mt-2">
-            ⏱️ Estimated reading time: {readingTime} min
-          </p>
+          <div className="flex items-center justify-center gap-4 text-sm opacity-60">
+            <span>
+              {new Date(chapter.releaseDate).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </span>
+            <span className="w-1 h-1 bg-current rounded-full" />
+            <span>⏱️ {readingTime} min read</span>
+          </div>
+          
+          <div className={`mt-8 h-px ${theme === "dark" ? "bg-gray-700" : "bg-gray-300"}`} />
         </div>
 
-        <div
-          className={`${fontSizes[fontSize]} leading-relaxed pb-12 text-justify prose prose-invert max-w-none prose-headings:text-amber-300 prose-a:text-amber-400 hover:prose-a:text-amber-300 prose-strong:text-gray-200`}
+        {/* Chapter Text */}
+        <article
+        ref={contentRef}
+          className={`
+            ${fontSizes[fontSize]} 
+            leading-relaxed 
+            text-justify 
+            prose max-w-none
+            ${theme === "dark" ? "prose-invert" : ""}
+            prose-headings:text-amber-400
+            prose-a:text-amber-400
+            prose-strong:font-semibold
+          `}
         >
           {documentToReactComponents(content, options)}
-        </div>
+        </article>
+
+        {/* Next Chapter CTA */}
         {nextChapter && (
-          <Link
-            href={`/novels/${Novel}/chapters/${nextChapter}`}
-            className="ml-auto mt-8 flex items-center justify-center 
-             bg-primary-0 text-white px-6 py-3 rounded-full shadow-xl 
-             font-semibold hover:scale-105 transition"
-          >
-            Continue to Chapter:{" "}
-            {nextChapter[0].toUpperCase() +
-              nextChapter.replace(/-/g, " ").slice(1)}
-          </Link>
-        )}
-      </div>
-
-      {/* Navigation Footer */}
-      <footer className="mb-12 bg-gradient-to-b from-black/90 to-transparent p-4">
-        <div className="container mx-auto flex justify-between items-center">
-          <button
-            disabled={!prevChapter}
-            onClick={() => {
-              router.push(`/novels/${Novel}/chapters/${prevChapter}`);
-            }}
-            className="px-4 py-2 bg-gray-800/80 hover:bg-gray-700/90 text-amber-400 rounded-lg border border-gray-700 flex items-center"
-          >
-            <svg
-              className="w-5 h-5 mr-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+          <div className="mt-16 pt-8 border-t border-white/10">
+            <p className="text-center text-sm opacity-60 mb-4">Continue reading</p>
+            <Link
+              href={`/novels/${Novel}/chapters/${nextChapter}`}
+              className="
+                flex items-center justify-center gap-3 
+                w-full py-4 px-6
+                bg-primary-0 hover:bg-primary-0/90 
+                text-white font-bold text-lg
+                rounded-xl transition-all hover:scale-[1.02]
+                hover:shadow-[0_0_30px_rgba(249,76,16,0.3)]
+              "
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-            Previous
-          </button>
-
-          <div className="text-sm text-gray-400">
-            {/* {chapter.chapterNumber} / {chapter.totalChapters} */}
+              Next: {nextChapter.replace(/-/g, " ").replace(/^\w/, c => c.toUpperCase())}
+              <ChevronRight className="w-5 h-5" />
+            </Link>
           </div>
+        )}
+      </main>
 
-          <button
-            disabled={!nextChapter}
-            onClick={() => {
-              router.push(`/novels/${Novel}/chapters/${nextChapter}`);
-            }}
-            className="px-4 py-2 bg-gray-800/80 hover:bg-gray-700/90 text-amber-400 rounded-lg border border-gray-700 flex items-center"
-          >
-            Next
-            <svg
-              className="w-5 h-5 ml-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+      {/* ============ FIXED BOTTOM NAV ============ */}
+      <nav
+        className={`
+          fixed bottom-0 left-0 right-0 z-[997]
+          transition-all duration-300
+          ${showControls ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"}
+        `}
+      >
+        <div className={`${currentTheme.headerBg} backdrop-blur-md border-t border-white/10 mx-4 mb-4 rounded-lg shadow-lg`}>
+          <div className="px-4 py-3 flex items-center justify-between">
+            {/* Previous */}
+            <button
+              disabled={!prevChapter}
+              onClick={() => router.push(`/novels/${Novel}/chapters/${prevChapter}`)}
+              className={`
+                flex items-center gap-2 px-3 py-2 rounded-lg transition-all
+                ${prevChapter 
+                  ? `${currentTheme.accent} hover:bg-white/10` 
+                  : "opacity-30 cursor-not-allowed"
+                }
+              `}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
-          </button>
+              <ChevronLeft className="w-5 h-5" />
+              <span className="hidden sm:inline text-sm">Previous</span>
+            </button>
+
+
+            {/* Next */}
+            <button
+              disabled={!nextChapter}
+              onClick={() => router.push(`/novels/${Novel}/chapters/${nextChapter}`)}
+              className={`
+                flex items-center gap-2 px-3 py-2 rounded-lg transition-all
+                ${nextChapter 
+                  ? `${currentTheme.accent} hover:bg-white/10` 
+                  : "opacity-30 cursor-not-allowed"
+                }
+              `}
+            >
+              <span className="hidden sm:inline text-sm">Next</span>
+              <ChevronRight className="w-5 h-5" />
+            </button>
+          </div>
         </div>
-      </footer>
-      <div className="w-full px-4 mb-32">
+      </nav>
+
+      {/* ============ COMMENTS ============ */}
+      <div className="container mx-auto px-4 pb-32 max-w-3xl">
         <Comments title={`${Novel}: chapter-${chapter.chapterNumber}`} />
       </div>
     </div>
+      
   );
 }
