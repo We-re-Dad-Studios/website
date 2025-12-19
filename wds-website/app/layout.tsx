@@ -6,7 +6,7 @@ import { Footer } from "@/components/Footer";
 import { PostHogProvider } from "@/components/PostHogProvider";
 import dynamic from "next/dynamic";
 import { Toaster } from "@/components/ui/sonner";
-import KoFiWidget from "@/components/KofiWidget";
+// import KoFiWidget from "@/components/KofiWidget";
 import { GlitchTransition } from "@/components/glitch-transition";
 import ScrollProgressBar, { ScrollProgressBarProvider } from "@/components/scroll-progress-bar";
 
@@ -75,7 +75,7 @@ export default function RootLayout({
                     {children}
                   </GlitchTransition>
           </ScrollProgressBarProvider>
-          <KoFiWidget />
+          {/* <KoFiWidget /> */}
           <Newsletter />
           <Toaster />
           <Footer />

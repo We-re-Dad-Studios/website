@@ -9,17 +9,16 @@ import { BLOCKS, Document } from "@contentful/rich-text-types";
 import { useParams, useRouter } from "next/navigation";
 import { ReactNode,  useEffect,  useRef,  useState } from "react";
 import { Comments } from "./Comments";
-import Link from "next/link";
 import { calculateReadingTime } from "@/lib/reading-time";
 import { extractPlainText } from "@/lib/extract-doc-text";
 import { useTTS } from "@/hooks/useTTS";
 import { Volume2, VolumeX, ChevronLeft, ChevronRight, BookOpen } from "lucide-react";
 import { useScrollProgress } from "@/components/scroll-progress-bar";
 import { useScroll } from "framer-motion";
-import { InlineNewsletterCTA } from "@/components/inlinenewslettercta";
+// import { InlineNewsletterCTA } from "@/components/inlinenewslettercta";
 import { ChapterEndCTA } from "@/components/chapterendcta";
 import { StickyNewsletterBar } from "@/components/stickynewsletterbar";
-import { NewsletterModal } from "@/components/newslettermodal";
+// import { NewsletterModal } from "@/components/newslettermodal";
 const options: Options = {
   renderNode: {
     [BLOCKS.PARAGRAPH]: (node, children) => {

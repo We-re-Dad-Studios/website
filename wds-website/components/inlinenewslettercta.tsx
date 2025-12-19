@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Mail, Sparkles, Check, X } from "lucide-react";
 
 interface InlineNewsletterCTAProps {
