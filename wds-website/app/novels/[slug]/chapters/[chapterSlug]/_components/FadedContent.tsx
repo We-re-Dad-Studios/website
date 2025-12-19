@@ -16,7 +16,10 @@ import { useTTS } from "@/hooks/useTTS";
 import { Volume2, VolumeX, ChevronLeft, ChevronRight, BookOpen } from "lucide-react";
 import { useScrollProgress } from "@/components/scroll-progress-bar";
 import { useScroll } from "framer-motion";
-
+import { InlineNewsletterCTA } from "@/components/inlinenewslettercta";
+import { ChapterEndCTA } from "@/components/chapterendcta";
+import { StickyNewsletterBar } from "@/components/stickynewsletterbar";
+import { NewsletterModal } from "@/components/newslettermodal";
 const options: Options = {
   renderNode: {
     [BLOCKS.PARAGRAPH]: (node, children) => {
@@ -201,9 +204,17 @@ useEffect(()=>{
 
   return (
    
+<>
+{/* <NewsletterModal
+  triggerAt={45}
+  delay={3000}
+  novelName={novelDisplayName}
+  exitIntent={true}
+/> */}
 <div className={`min-h-screen ${currentTheme.bg} ${currentTheme.text} transition-colors duration-300 relative`}>
       
      
+
 
       {/* ============ READER CONTROLS - Fixed below progress bar ============ */}
       <header
@@ -257,7 +268,7 @@ useEffect(()=>{
                 value={fontSize}
                 onChange={(e) => setFontSize(e.target.value as FontSize)}
                 className={`
-                  ${theme === "dark" ? "bg-white/10 text-white" : "bg-black/10 text-gray-900"}
+                  ${theme === "dark" ? "bg-white/30 text-black" : "bg-black/10 text-gray-900"}
                   border-0 rounded-lg px-2 py-1.5 text-sm cursor-pointer focus:ring-2 focus:ring-primary-0
                 `}
               >
@@ -341,9 +352,12 @@ useEffect(()=>{
         >
           {documentToReactComponents(content, options)}
         </article>
-
+<StickyNewsletterBar 
+  showAfter={30} 
+  novelName={novelDisplayName} 
+/>
         {/* Next Chapter CTA */}
-        {nextChapter && (
+        {/* {nextChapter && (
           <div className="mt-16 pt-8 border-t border-white/10">
             <p className="text-center text-sm opacity-60 mb-4">Continue reading</p>
             <Link
@@ -361,8 +375,17 @@ useEffect(()=>{
               <ChevronRight className="w-5 h-5" />
             </Link>
           </div>
-        )}
+        )} */}
+
+       
+<ChapterEndCTA
+  nextChapter={nextChapter}
+  novelSlug={Novel as string}
+  novelName={novelDisplayName}
+  chapterNumber={chapter.chapterNumber}
+/>
       </main>
+
 
       {/* ============ FIXED BOTTOM NAV ============ */}
       <nav
@@ -415,6 +438,6 @@ useEffect(()=>{
         <Comments title={`${Novel}: chapter-${chapter.chapterNumber}`} />
       </div>
     </div>
-      
+      </>
   );
 }
