@@ -123,7 +123,7 @@ export function NewsletterModal({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ type: "spring", duration: 0.5 }}
-            className="sticky inset-1 md:inset-auto md:top-[15%] md:left-[30%] md:-translate-x-1/2 md:-translate-y-1/2 md:max-w-lg md:w-full z-[10000] flex items-center justify-center"
+            className="sticky inset-1 md:inset-auto top-[10%] md:top-[15%] md:left-[30%] md:-translate-x-1/2 md:-translate-y-1/2 md:max-w-lg md:w-full z-[10000] flex items-center justify-center"
           >
             <div className="relative w-full bg-gradient-to-br from-gray-900 via-gray-900 to-purple-900/50 rounded-3xl border border-white/10 overflow-hidden shadow-2xl">
               {/* Close button */}
