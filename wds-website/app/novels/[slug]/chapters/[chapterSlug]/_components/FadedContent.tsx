@@ -18,6 +18,7 @@ import { useScroll } from "framer-motion";
 // import { InlineNewsletterCTA } from "@/components/inlinenewslettercta";
 import { ChapterEndCTA } from "@/components/chapterendcta";
 import { StickyNewsletterBar } from "@/components/stickynewsletterbar";
+import Link from "next/link";
 // import { NewsletterModal } from "@/components/newslettermodal";
 const options: Options = {
   renderNode: {
@@ -122,7 +123,7 @@ function ChapterReader({
   chapter,
   content,
   nextChapter,
-  prevChapter,
+  
 }: ChapterReaderProps) {
   const cleanedText = extractPlainText(chapter.content as Document)
     .replace(/\s+/g, " ")
@@ -356,7 +357,7 @@ useEffect(()=>{
   novelName={novelDisplayName} 
 />
         {/* Next Chapter CTA */}
-        {/* {nextChapter && (
+        {nextChapter && (
           <div className="mt-16 pt-8 border-t border-white/10">
             <p className="text-center text-sm opacity-60 mb-4">Continue reading</p>
             <Link
@@ -374,7 +375,7 @@ useEffect(()=>{
               <ChevronRight className="w-5 h-5" />
             </Link>
           </div>
-        )} */}
+        )}
 
        
 <ChapterEndCTA
@@ -387,50 +388,7 @@ useEffect(()=>{
 
 
       {/* ============ FIXED BOTTOM NAV ============ */}
-      <nav
-        className={`
-          fixed bottom-0 left-0 right-0 z-[997]
-          transition-all duration-300
-          ${showControls ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"}
-        `}
-      >
-        <div className={`${currentTheme.headerBg} backdrop-blur-md border-t border-white/10 mx-4 mb-4 rounded-lg shadow-lg`}>
-          <div className="px-4 py-3 flex items-center justify-between">
-            {/* Previous */}
-            <button
-              disabled={!prevChapter}
-              onClick={() => router.push(`/novels/${Novel}/chapters/${prevChapter}`)}
-              className={`
-                flex items-center gap-2 px-3 py-2 rounded-lg transition-all
-                ${prevChapter 
-                  ? `${currentTheme.accent} hover:bg-white/10` 
-                  : "opacity-30 cursor-not-allowed"
-                }
-              `}
-            >
-              <ChevronLeft className="w-5 h-5" />
-              <span className="hidden sm:inline text-sm">Previous</span>
-            </button>
-
-
-            {/* Next */}
-            <button
-              disabled={!nextChapter}
-              onClick={() => router.push(`/novels/${Novel}/chapters/${nextChapter}`)}
-              className={`
-                flex items-center gap-2 px-3 py-2 rounded-lg transition-all
-                ${nextChapter 
-                  ? `${currentTheme.accent} hover:bg-white/10` 
-                  : "opacity-30 cursor-not-allowed"
-                }
-              `}
-            >
-              <span className="hidden sm:inline text-sm">Next</span>
-              <ChevronRight className="w-5 h-5" />
-            </button>
-          </div>
-        </div>
-      </nav>
+    
 
       {/* ============ COMMENTS ============ */}
       <div className="container mx-auto px-4 pb-32 max-w-3xl">
@@ -440,3 +398,52 @@ useEffect(()=>{
       </>
   );
 }
+// const OldNav = ({showControls,currentTheme,Novel,prevChapter,nextChapter}:{showControls:boolean,currentTheme:{headerBg:string,accent:string},Novel:string,prevChapter:string,nextChapter:string})=>{
+//   const router = useRouter();
+//   return(
+//       <nav
+//         className={`
+//           fixed bottom-0 left-0 right-0 z-[997]
+//           transition-all duration-300
+//           ${showControls ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"}
+//         `}
+//       >
+//         <div className={`${currentTheme.headerBg} backdrop-blur-md border-t border-white/10 mx-4 mb-4 rounded-lg shadow-lg`}>
+//           <div className="px-4 py-3 flex items-center justify-between">
+//             {/* Previous */}
+//             <button
+//               disabled={!prevChapter}
+//               onClick={() => router.push(`/novels/${Novel}/chapters/${prevChapter}`)}
+//               className={`
+//                 flex items-center gap-2 px-3 py-2 rounded-lg transition-all
+//                 ${prevChapter 
+//                   ? `${currentTheme.accent} hover:bg-white/10` 
+//                   : "opacity-30 cursor-not-allowed"
+//                 }
+//               `}
+//             >
+//               <ChevronLeft className="w-5 h-5" />
+//               <span className="hidden sm:inline text-sm">Previous</span>
+//             </button>
+
+
+//             {/* Next */}
+//             <button
+//               disabled={!nextChapter}
+//               onClick={() => router.push(`/novels/${Novel}/chapters/${nextChapter}`)}
+//               className={`
+//                 flex items-center gap-2 px-3 py-2 rounded-lg transition-all
+//                 ${nextChapter 
+//                   ? `${currentTheme.accent} hover:bg-white/10` 
+//                   : "opacity-30 cursor-not-allowed"
+//                 }
+//               `}
+//             >
+//               <span className="hidden sm:inline text-sm">Next</span>
+//               <ChevronRight className="w-5 h-5" />
+//             </button>
+//           </div>
+//         </div>
+//       </nav>
+//   )
+// }
