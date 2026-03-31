@@ -5,9 +5,9 @@ import { CFAsset, CFBlogPost, CFTag } from "@/lib/contentful";
 
 export const dynamic = "force-dynamic";
 export interface BlogPostPageParams {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export interface BlogPostData {

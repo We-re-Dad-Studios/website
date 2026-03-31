@@ -7,8 +7,10 @@ import { Metadata } from "next";
 export default async function Page(props:{params:Promise<{chapterSlug:string,slug:string}>}) {
     const {chapterSlug,slug}= await props.params;
     const chapterContent = await getChapterBySlug(chapterSlug);
-    const nextChapter = await getChapterByNumber(chapterContent?.chapterNumber as number + 1,slug);
-    const prevChapter = await getChapterByNumber(chapterContent?.chapterNumber as number - 1,slug);
+    const [nextChapter, prevChapter] = await Promise.all([
+        getChapterByNumber(chapterContent?.chapterNumber as number + 1, slug),
+        getChapterByNumber(chapterContent?.chapterNumber as number - 1, slug),
+    ]);
     if (!chapterContent) {
        redirect("/projects")
     }

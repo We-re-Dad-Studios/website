@@ -13,7 +13,7 @@ export const HeroSection = () => {
         {/* Background Image with Overlay */}
         <div className="absolute inset-0">
           <Image
-            src="https://downloads.ctfassets.net/3gg0xih7foqh/3rxvtQJQc3xmwVWRZzm5fS/c773572af2f7a1a49a886aa04135c5ef/Final_Withlogo.jpg"
+            src="/images/Final_Withlogo.webp"
             alt="WDS Universe"
             fill
             className="object-cover"

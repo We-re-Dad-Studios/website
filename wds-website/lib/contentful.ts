@@ -33,6 +33,10 @@ export async function getChapterList(novelId: string) {
   }));
 }
 
+export async function getBlogPost(id: string) {
+  return client.getEntry(id);
+}
+
 export async function getChapterContent(chapterId: string) {
   const entry = await client.getEntry(chapterId);
   return entry.fields.content;

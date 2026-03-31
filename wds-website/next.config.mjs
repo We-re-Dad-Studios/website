@@ -1,4 +1,8 @@
+import { fileURLToPath } from "node:url";
+
 /** @type {import('next').NextConfig} */
+const projectRoot = fileURLToPath(new URL("./", import.meta.url));
+
 const securityHeaders = [
   { key: "X-Frame-Options", value: "DENY" },
   { key: "X-Content-Type-Options", value: "nosniff" },
@@ -34,10 +38,10 @@ const securityHeaders = [
 
 const nextConfig = {
  reactStrictMode: true,
- swcMinify: true,
   poweredByHeader: false,
    productionBrowserSourceMaps: false,
   distDir: "build",
+  outputFileTracingRoot: projectRoot,
   async headers() {
     return [
       {

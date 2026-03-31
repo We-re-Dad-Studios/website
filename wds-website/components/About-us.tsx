@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {  Users } from 'lucide-react';
+import Image from "next/image";
 
 const teamMembers = [
   {
@@ -330,12 +331,14 @@ export default function AboutUs() {
                         <div 
                           className={`absolute inset-0 bg-gradient-to-br ${currentMember.gradient} opacity-30`}
                         />
-                        <div className='w-full h-full rounded overflow-hidden'>
-                            <img 
-                          src={currentMember.image}
-                          alt={currentMember.name}
-                          className="relative w-full h-full object-contain object-top   drop-shadow-2xl"
-                        />
+                        <div className='relative w-full h-full rounded overflow-hidden'>
+                          <Image
+                            src={currentMember.image}
+                            alt={currentMember.name}
+                            fill
+                            sizes="(max-width: 768px) 70vw, 50vw"
+                            className="relative w-full h-full object-contain object-top drop-shadow-2xl"
+                          />
                         </div>
                         
                         {/* Corner Decorations */}
@@ -461,9 +464,11 @@ export default function AboutUs() {
                       }}
                     >
                       <div className={`absolute inset-0 bg-gradient-to-br ${member.gradient} opacity-40`} />
-                      <img 
+                      <Image
                         src={member.image}
                         alt={member.name}
+                        fill
+                        sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 20vw"
                         className="relative w-full h-full object-cover object-top"
                       />
                       

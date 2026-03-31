@@ -1,23 +1,20 @@
 // app/blog/[id]/page.tsx
-import { Asset, Entry, EntrySkeletonType, createClient } from "contentful";
+import { Asset, Entry, EntrySkeletonType } from "contentful";
 import Image from "next/image";
 import { FadedContent } from "./_components/Content";
 import { Metadata } from "next";
 import { BlogPostPageParams } from "../page";
-
+import { getBlogPost } from "@/lib/contentful";
 
 export const dynamic = "force-dynamic";
 
-export default async function Page({ params }:BlogPostPageParams) {
-  const client = createClient({
-    space: process.env.CONTENTFUL_SPACE_ID!,
-    accessToken: process.env.CONTENTFUL_CDAPI!,
-  });
-
-  const post = (await client.getEntry(params.id)).fields;
+export default async function Page({ params }: BlogPostPageParams) {
+  const { id } = await params;
+  const entry = await getBlogPost(id);
+  const post = entry.fields;
 
   const cover = post.cover as Entry<EntrySkeletonType> | Asset | undefined;
-  const file = cover?.fields.file as unknown as {url:string}
+  const file = cover?.fields.file as unknown as { url: string };
   const url =
     cover && "fields" in cover && "file" in cover.fields
       ? "https:" + file?.url
@@ -53,15 +50,12 @@ export default async function Page({ params }:BlogPostPageParams) {
 export async function generateMetadata(
   { params }: BlogPostPageParams
 ): Promise<Metadata> {
-       const client = createClient({
-    space: process.env.CONTENTFUL_SPACE_ID!,
-    accessToken: process.env.CONTENTFUL_CDAPI!,
-  });
-  const post = (await client.getEntry(params.id)).fields;
+  const { id } = await params;
+  const entry = await getBlogPost(id);
+  const post = entry.fields;
 
   const cover = post.cover as Entry<EntrySkeletonType> | Asset | undefined;
-    const file = cover?.fields.file as unknown as {url:string}
-
+  const file = cover?.fields.file as unknown as { url: string };
   const url =
     cover && "fields" in cover && "file" in cover.fields
       ? "https:" + file?.url

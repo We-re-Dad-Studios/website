@@ -4,7 +4,7 @@ import { Navbar } from "@/components/Navbar";
 import { Newsletter } from "@/components/Newsletter";
 import { Footer } from "@/components/Footer";
 import { PostHogProvider } from "@/components/PostHogProvider";
-import dynamic from "next/dynamic";
+import PageView from "@/components/PhPageView";
 import { Toaster } from "@/components/ui/sonner";
 // import KoFiWidget from "@/components/KofiWidget";
 import { GlitchTransition } from "@/components/glitch-transition";
@@ -50,10 +50,6 @@ export const metadata: Metadata = {
     type: "website",
   },
 };
-
-const PageView = dynamic(() => import("@/components/PhPageView"), {
-  ssr: false,
-});
 
 export default function RootLayout({
   children,

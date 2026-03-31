@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-head-element, @next/next/no-img-element */
 import React from 'react';
 
 interface WelcomeEmailProps {

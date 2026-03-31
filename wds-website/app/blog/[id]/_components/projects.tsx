@@ -13,36 +13,27 @@ const Projects =  () => {
     const [isFilterOpen, setIsFilterOpen] = useState(false);
    
     const client= useContentfulClient();
-    const getProjects = async()=>{
-      
-        if(client){
-           
-            if(!currentTag){
-              const projects = (await client.getEntries({content_type:process.env.NEXT_PUBLIC_BLOGS_ID!})).items;
-              return projects
-           }
-           else{
-              const projects = (await (client.getEntries({content_type:process.env.NEXT_PUBLIC_BLOGS_ID!,'fields.tags.sys.id':currentTag.id}))).items;
-              return projects;
-           }
-        }
-        return [];
-        
-    }
     const [projects,setProjects]= useState<Entry<EntrySkeletonType,undefined,string>[]>();
     useEffect(()=>{
+        const getProjects = async()=>{
+            if(!currentTag){
+                return (await client.getEntries({content_type:process.env.NEXT_PUBLIC_BLOGS_ID!})).items;
+            } else {
+                return (await client.getEntries({content_type:process.env.NEXT_PUBLIC_BLOGS_ID!,'fields.tags.sys.id':currentTag.id})).items;
+            }
+        }
         getProjects().then((resp)=>{
-        setProjects(resp);
+            setProjects(resp);
         }).catch(()=>{
             // console.log(err)
         })
-    },[currentTag])
+    },[currentTag, client])
     useEffect(()=>{
          client.getEntries({content_type:process.env.NEXT_PUBLIC_POST_TAG_ID!}).then((resp)=>{
             setTags(resp.items);
          });
     
-    },[])
+    },[client])
   return (
     <div className="w-full">
       {/* Filter Controls */}

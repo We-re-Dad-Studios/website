@@ -1,34 +1,55 @@
-import React from 'react'
-import {motion} from "framer-motion"
-export const AnimatedArrow = () => {
-  return (
-    <div className='relative'>
-      <motion.svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="white"  // Set stroke to white
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className="lucide lucide-arrow-big-right h-10 w-10 relative ml-2 mt-[calc(25%)]"
-        initial={{ strokeDashoffset: 100, strokeDasharray: 100 }}  // Start fully hidden
-        animate={{ strokeDashoffset: 0 }}  // Animate to fully visible
-        transition={{
-          duration: 2,  // Duration of 2 seconds for the fill animation
-          ease: "easeInOut",
-          repeat: Infinity,
-        }}
-        width="18" height="14" id="arrow"
-      >
-        <g fill="none" fillRule="evenodd" stroke="white" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2">
-          <path d="M1 7h16M11 1l6 6-6 6"></path>
-        </g>
-      </motion.svg>
-    </div>
-  )
-}
-<svg >
- 
-</svg>
+"use client";
 
+import { createElement } from "react";
+import { motion } from "framer-motion";
+
+type AnimatedArrowProps = {
+  className?: string;
+};
+
+const strokeTransition = {
+  duration: 1.2,
+  ease: "easeInOut" as const,
+  repeat: Infinity,
+  repeatType: "reverse" as const,
+};
+
+export const AnimatedArrow = ({ className = "" }: AnimatedArrowProps) => {
+  return createElement(
+    "span",
+    {
+      "aria-hidden": true,
+      className: `inline-flex items-center ${className}`.trim(),
+    },
+    createElement(
+      motion.svg,
+      {
+        xmlns: "http://www.w3.org/2000/svg",
+        viewBox: "0 0 18 14",
+        fill: "none",
+        className: "h-[14px] w-[18px]",
+        animate: { x: [0, 4, 0] },
+        transition: { duration: 1.4, ease: "easeInOut", repeat: Infinity },
+      },
+      createElement(motion.path, {
+        d: "M1 7h16",
+        stroke: "currentColor",
+        strokeWidth: "2",
+        strokeLinecap: "round",
+        initial: { pathLength: 0.2, opacity: 0.5 },
+        animate: { pathLength: 1, opacity: 1 },
+        transition: strokeTransition,
+      }),
+      createElement(motion.path, {
+        d: "M11 1l6 6-6 6",
+        stroke: "currentColor",
+        strokeWidth: "2",
+        strokeLinecap: "round",
+        strokeLinejoin: "round",
+        initial: { pathLength: 0.2, opacity: 0.5 },
+        animate: { pathLength: 1, opacity: 1 },
+        transition: { ...strokeTransition, delay: 0.1 },
+      })
+    )
+  );
+};

@@ -17,7 +17,6 @@ import {
   Volume2,
   VolumeX,
   ChevronLeft,
-  ChevronRight,
   BookOpen,
   Settings2,
   X,
@@ -30,7 +29,6 @@ import { useScrollProgress } from "@/components/scroll-progress-bar";
 import { useScroll, motion, AnimatePresence } from "framer-motion";
 import { ChapterEndCTA } from "@/components/chapterendcta";
 import { StickyNewsletterBar } from "@/components/stickynewsletterbar";
-import Link from "next/link";
 
 // ============ TYPOGRAPHY OPTIONS ============
 const createOptions = (isFirstParagraph: boolean, showDropCap: boolean): Options => ({
