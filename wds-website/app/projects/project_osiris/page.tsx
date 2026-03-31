@@ -1,7 +1,6 @@
 // app/projects/project_osiris/page.tsx
-import { createClient } from "contentful";
 // import { Main } from "./_components/main";
-import { getChapterList } from "@/lib/contentful";
+import { createContentfulClient, getBlogContentTypeId, getChapterList } from "@/lib/contentful";
 import { Main } from "@/components/osiris-restructured";
 type chapter={
   id:string,slug:string,title:string,chapterNumber:number|string,isFree:boolean,releaseDate:string
@@ -9,14 +8,11 @@ type chapter={
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
-  const client = createClient({
-    space: process.env.CONTENTFUL_SPACE_ID!,
-    accessToken: process.env.CONTENTFUL_CDAPI!,
-  });
+  const client = createContentfulClient();
 
   const relatedPosts = (
     await client.getEntries({
-      content_type: process.env.BLOGS_ID!,
+      content_type: getBlogContentTypeId(),
       limit: 7,
       "fields.tags.sys.id": "3vpLAavSzdhisJZebqZrtu",
     })

@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
+import { Suspense } from "react";
 import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 import { Newsletter } from "@/components/Newsletter";
@@ -16,9 +17,7 @@ export const metadata: Metadata = {
     "WDS is a creative studio specializing in game development, animation, manhwa, manga, and novel creation.",
   keywords:
     "game development, animation, manhwa, manga, novel creation, creative studio, WDS, webnovel, webtoon, indie games, storytelling,fantasy novel,african game studio,nigerian game studio,nigerian storytellers,african stories",
-  viewport: "width=device-width, initial-scale=1",
-
-  
+  metadataBase: new URL("https://weredadstudios.com"),
   alternates: {
     canonical: "https://weredadstudios.com",
   },
@@ -51,6 +50,11 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
 export default function RootLayout({
   children,
 }: {
@@ -60,7 +64,9 @@ export default function RootLayout({
     <html lang="en">
       <PostHogProvider>
         <body className="antialiased bg-base_black font-agdasima setfont text-[#FAFAFA]">
-          <PageView />
+          <Suspense fallback={null}>
+            <PageView />
+          </Suspense>
           <Navbar />
           <ScrollProgressBarProvider>
             <ScrollProgressBar/>

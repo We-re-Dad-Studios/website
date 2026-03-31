@@ -1,8 +1,7 @@
 // app/projects/dawnshipper/page.tsx
 import { Metadata } from "next";
-import { getChapterList } from "@/lib/contentful";
+import { createContentfulClient, getBlogContentTypeId, getChapterList } from "@/lib/contentful";
 // import { Main } from "./_components/main";
-import { createClient } from "contentful";
 import { Main } from "@/components/dawnshipper-restructured";
 
 export const dynamic = "force-dynamic";
@@ -23,15 +22,11 @@ export interface Chapter {
 async function Page() {
   const chapters = (await getChapterList("4HGkx2kqLJVyRRbFU3QUkB")) as Chapter[];
 
-  // secure client (server-only)
-  const client = createClient({
-    space: process.env.CONTENTFUL_SPACE_ID!,
-    accessToken: process.env.CONTENTFUL_CDAPI!,
-  });
+  const client = createContentfulClient();
 
   const relatedPosts = (
     await client.getEntries({
-      content_type: process.env.BLOGS_ID!,
+      content_type: getBlogContentTypeId(),
       limit: 7,
       "fields.tags.sys.id": "43UEsDhn9X19AvFj1jxqos",
     })

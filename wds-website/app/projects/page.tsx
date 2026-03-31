@@ -1,22 +1,24 @@
 // app/projects/page.tsx
-import { createClient, Entry, EntrySkeletonType } from "contentful";
+import { Entry, EntrySkeletonType } from "contentful";
 import { ProjectPageinator } from "./components/ProjectPageinator";
+import {
+  createContentfulClient,
+  getProjectContentTypeId,
+  getTagContentTypeId,
+} from "@/lib/contentful";
 
 export const dynamic = "force-dynamic";
 
 export default async function ProjectsPage() {
-  const client = createClient({
-    space: process.env.CONTENTFUL_SPACE_ID!,
-    accessToken: process.env.CONTENTFUL_CDAPI!,
-  });
+  const client = createContentfulClient();
 
   const [projectsResponse, tagsResponse] = await Promise.all([
     client.getEntries({
-      content_type: process.env.PROJECTS_ID!,
+      content_type: getProjectContentTypeId(),
       limit: 1000,
     }),
     client.getEntries({
-      content_type: process.env.TAGS_ID!,
+      content_type: getTagContentTypeId(),
       limit: 1000,
     }),
   ]);
