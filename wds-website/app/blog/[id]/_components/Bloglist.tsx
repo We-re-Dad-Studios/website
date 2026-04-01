@@ -21,8 +21,8 @@ const BlogList = ({ posts, tags }:BlogListProps) => {
 
   const filtered = useMemo(() => {
     return posts.filter((post) => {
-      const title = post.fields.title?.toLowerCase() || "";
-      const desc = post.fields.description?.toLowerCase() || "";
+      const title = post.fields?.title?.toLowerCase() || "";
+      const desc = post.fields?.description?.toLowerCase() || "";
 
       const matchesSearch =
         search.trim() === "" ||
@@ -31,7 +31,7 @@ const BlogList = ({ posts, tags }:BlogListProps) => {
 
       const matchesTag =
         !selectedTag ||
-        (post.fields.tags || []).some((t) => t.sys.id === selectedTag);
+        (post.fields?.tags || []).some((t) => t?.sys?.id === selectedTag);
 
       return matchesSearch && matchesTag;
     });
@@ -42,7 +42,7 @@ const BlogList = ({ posts, tags }:BlogListProps) => {
 
       {/* TAG FILTER */}
       <div className="flex gap-3 flex-wrap mb-10">
-        {tags.filter(tag=>tag.fields.name).map((tag) => (
+        {tags.filter((tag) => tag.fields?.name).map((tag) => (
           <button
             key={tag.sys.id}
             onClick={() =>
@@ -92,7 +92,7 @@ const BlogList = ({ posts, tags }:BlogListProps) => {
               <div className="relative h-[220px] bg-black">
                 <Image
                   src="/images/WDS LOGO WHITE.png"
-                  alt={post.fields.title}
+                  alt={post.fields?.title || "Blog post cover"}
                   fill
                   className="object-contain opacity-60"
                 />
@@ -100,10 +100,10 @@ const BlogList = ({ posts, tags }:BlogListProps) => {
 
               <div className="p-5">
                 <h3 className="text-xl text-white mb-2 line-clamp-2">
-                  {post.fields.title}
+                  {post.fields?.title || "Untitled post"}
                 </h3>
                 <p className="text-white/60 text-sm line-clamp-3">
-                  {post.fields.description}
+                  {post.fields?.description || "No description available yet."}
                 </p>
               </div>
             </Link>

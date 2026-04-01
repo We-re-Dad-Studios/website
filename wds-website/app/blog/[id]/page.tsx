@@ -3,15 +3,31 @@ import { Asset, Entry, EntrySkeletonType } from "contentful";
 import Image from "next/image";
 import { FadedContent } from "./_components/Content";
 import { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { BlogPostPageParams } from "../page";
 import { getBlogPost } from "@/lib/contentful";
 
 export const dynamic = "force-dynamic";
 
+async function getBlogEntryOrNull(id: string) {
+  try {
+    return await getBlogPost(id);
+  } catch (error) {
+    console.error(`Failed to load blog post ${id}`, error);
+    return null;
+  }
+}
+
 export default async function Page({ params }: BlogPostPageParams) {
   const { id } = await params;
-  const entry = await getBlogPost(id);
+  const entry = await getBlogEntryOrNull(id);
+  if (!entry) {
+    notFound();
+  }
+
   const post = entry.fields;
+  const title = typeof post.title === "string" ? post.title : "Blog post";
+  const content = post.content;
 
   const cover = post.cover as Entry<EntrySkeletonType> | Asset | undefined;
   const file = cover?.fields.file as unknown as { url: string };
@@ -26,7 +42,7 @@ export default async function Page({ params }: BlogPostPageParams) {
         {url ? (
           <Image
             src={url}
-            alt={post.title as unknown as string}
+            alt={title}
             width={1000}
             height={600}
             className="w-full h-full object-cover"
@@ -34,7 +50,7 @@ export default async function Page({ params }: BlogPostPageParams) {
         ) : (
           <Image
             src="/images/WDS LOGO WHITE.png"
-            alt={post.title as unknown as string}
+            alt={title}
             width={200}
             height={200}
             className="opacity-50"
@@ -42,7 +58,7 @@ export default async function Page({ params }: BlogPostPageParams) {
         )}
       </div>
 
-      <FadedContent title={post.title as unknown as string} content={post.content as unknown as string} />
+      <FadedContent title={title} content={content as unknown as string} />
     </section>
   );
 }
@@ -51,8 +67,20 @@ export async function generateMetadata(
   { params }: BlogPostPageParams
 ): Promise<Metadata> {
   const { id } = await params;
-  const entry = await getBlogPost(id);
+  const entry = await getBlogEntryOrNull(id);
+  if (!entry) {
+    return {
+      title: "Blog post not found",
+      description: "The requested blog post could not be loaded.",
+    };
+  }
+
   const post = entry.fields;
+  const title = typeof post.title === "string" ? post.title : "Blog post";
+  const description =
+    typeof post.description === "string"
+      ? post.description
+      : "Read the latest updates from We're Dad Studios.";
 
   const cover = post.cover as Entry<EntrySkeletonType> | Asset | undefined;
   const file = cover?.fields.file as unknown as { url: string };
@@ -62,11 +90,11 @@ export async function generateMetadata(
       : "/images/default-cover.jpg";
 
   return {
-    title: post.title as unknown as string,
-    description: post.description as unknown as string,
+    title,
+    description,
     openGraph: {
-      title: post.title as unknown as string,
-      description: post.description as unknown as string,
+      title,
+      description,
       images: [url],
     },
   };

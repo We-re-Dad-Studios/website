@@ -22,22 +22,25 @@ export interface BlogPostData {
 }
 
 export default async function Page() {
-  const client = createContentfulClient();
+  try {
+    const client = createContentfulClient();
+    const [postsResponse, tagsResponse] = await Promise.all([
+      client.getEntries({
+        content_type: getBlogContentTypeId(),
+        limit: 1000,
+      }),
+      client.getEntries({
+        content_type: getPostTagContentTypeId(),
+        limit: 1000,
+      }),
+    ]);
 
- const response = await client.getEntries({
-  content_type: getBlogContentTypeId(),
-  limit: 1000,
-});
+    const posts = postsResponse.items as unknown as CFBlogPost[];
+    const tags = tagsResponse.items as unknown as CFTag[];
 
-const posts = response.items as unknown as CFBlogPost[];
-
-
-  const tags = (
-    await client.getEntries({
-      content_type: getPostTagContentTypeId(),
-      limit: 1000,
-    })
-  ).items as unknown as CFTag[];
-
-  return <Home initialPosts={posts} initialTags={tags} />;
+    return <Home initialPosts={posts} initialTags={tags} />;
+  } catch (error) {
+    console.error("Failed to load blog index", error);
+    return <Home initialPosts={[]} initialTags={[]} />;
+  }
 }
