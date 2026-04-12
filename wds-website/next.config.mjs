@@ -21,6 +21,8 @@ const securityHeaders = [
       "img-src 'self' data: https: https://images.ctfassets.net https://*.disquscdn.com;",
       "connect-src 'self' https://cdn.contentful.com https://preview.contentful.com https://storage.ko-fi.com https://*.disqus.com;",
       "frame-src https://ko-fi.com https://storage.ko-fi.com https://disqus.com https://*.disqus.com;",
+      "worker-src 'self';",
+      "manifest-src 'self';",
       "frame-ancestors 'none';",
       "base-uri 'self';",
       "form-action 'self';",
@@ -47,6 +49,14 @@ const nextConfig = {
       {
         source: "/(.*)",
         headers: securityHeaders,
+      },
+      {
+        // Service worker must always be fresh so SW updates propagate.
+        source: "/sw.js",
+        headers: [
+          { key: "Cache-Control", value: "no-cache, no-store, must-revalidate" },
+          { key: "Service-Worker-Allowed", value: "/" },
+        ],
       },
     ];
   },

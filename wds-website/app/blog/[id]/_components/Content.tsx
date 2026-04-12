@@ -28,13 +28,13 @@ const options: Options = {
     },
     [BLOCKS.QUOTE]: (_node, children) => {
       return (
-        <blockquote className="border-l-4 border-amber-500 pl-4 my-6 italic text-gray-300">
+        <blockquote className="border-l-4 border-amber-500 pl-4 my-6 italic text-foreground/70">
           {children}
         </blockquote>
       );
     },
     [BLOCKS.HR]: () => {
-      return <hr className="my-8 border-gray-700" />;
+      return <hr className="my-8 border-border" />;
     },
   },
   renderText: (text) => {
@@ -45,7 +45,7 @@ const options: Options = {
 };
 const Content = ({content,title}:{content:string,title:string}) => {
   return (
-    <div className="my-8 w-full leading-[50px] lg:px-0   text-neutral-400   lg:w-[80%] mx-auto bg-white/10 backdrop-blur-sm p-2 px-4">
+    <div className="my-8 w-full leading-[50px] lg:px-0 text-foreground/80 lg:w-[80%] mx-auto bg-foreground/5 backdrop-blur-sm p-2 px-4">
      <div className="w-[90%] mx-auto"> <p className="text-3xl  mb-4 mt-2 font-bold tracking-wider text-center ">
         {title}
       </p>

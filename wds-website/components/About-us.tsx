@@ -128,7 +128,7 @@ export default function AboutUs() {
   const currentMember = teamMembers[selectedMember];
 
   return (
-    <div className="min-h-screen bg-[#0a0a0b] text-white overflow-hidden">
+    <div className="dark min-h-screen bg-[#0a0a0b] text-white overflow-hidden">
       {/* Animated Background */}
       <div className="fixed inset-0 opacity-30">
         <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-transparent to-pink-900/20" />

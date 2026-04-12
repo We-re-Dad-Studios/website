@@ -18,7 +18,7 @@ export const NavLink = ({
     className={`transition outline-none ${
       active === href
         ? "text-purple-500"
-        : "text-white hover:text-purple-500"
+        : "text-foreground hover:text-purple-500"
     }`}
   >
     {label}

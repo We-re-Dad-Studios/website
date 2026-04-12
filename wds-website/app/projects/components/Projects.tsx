@@ -59,7 +59,7 @@ const Projects: React.FC<ProjectsProps> = ({ initialProjects, tags }) => {
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
                     isActive
                       ? "bg-primary-0 text-black shadow-md"
-                      : "bg-white/10 text-gray-200 hover:bg-white/20"
+                      : "bg-foreground/10 text-foreground hover:bg-foreground/20"
                   }`}
                   onClick={() => {
                     if (isActive) {
@@ -79,17 +79,17 @@ const Projects: React.FC<ProjectsProps> = ({ initialProjects, tags }) => {
 
           {/* Search / Filter */}
           <div className="flex gap-3 w-full md:w-auto">
-            <div className="flex items-center bg-white/10 rounded-lg px-3 py-2 gap-2 focus-within:ring-2 focus-within:ring-primary-0 transition-all">
-              <Search className="w-4 h-4 text-gray-400" />
+            <div className="flex items-center bg-foreground/10 rounded-lg px-3 py-2 gap-2 focus-within:ring-2 focus-within:ring-primary-0 transition-all">
+              <Search className="w-4 h-4 text-muted-foreground" />
               <input
                 type="text"
                 placeholder="Search projects..."
-                className="bg-transparent outline-none text-sm w-full placeholder-gray-400 text-white"
+                className="bg-transparent outline-none text-sm w-full placeholder-muted-foreground text-foreground"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
-            <button className="flex items-center gap-2 bg-white/10 hover:bg-white/20 rounded-lg px-3 py-2 text-sm transition-all text-gray-200">
+            <button className="flex items-center gap-2 bg-foreground/10 hover:bg-foreground/20 rounded-lg px-3 py-2 text-sm transition-all text-foreground">
               <SlidersHorizontalIcon className="w-4 h-4" />
               <span>Filter</span>
             </button>
@@ -99,11 +99,11 @@ const Projects: React.FC<ProjectsProps> = ({ initialProjects, tags }) => {
 
       {/* GRID / EMPTY STATE */}
       {filteredProjects.length === 0 ? (
-        <div className="w-full py-16 bg-white/5 border border-white/10 rounded-xl backdrop-blur-sm text-center">
-          <p className="text-neutral_300 text-lg font-medium">
+        <div className="w-full py-16 bg-foreground/5 border border-border rounded-xl backdrop-blur-sm text-center">
+          <p className="text-foreground text-lg font-medium">
             No projects match your filters.
           </p>
-          <p className="text-neutral_500 text-sm mt-1">
+          <p className="text-muted-foreground text-sm mt-1">
             Try clearing your search or selecting a different tag.
           </p>
         </div>
@@ -132,13 +132,13 @@ const Projects: React.FC<ProjectsProps> = ({ initialProjects, tags }) => {
       )}
 
       {/* Pagination placeholder (still static) */}
-      <div className="flex gap-5 items-center text-xs cursor-pointer py-10 text-gray-400">
-        <div className="text-gray-600">Prev</div>
+      <div className="flex gap-5 items-center text-xs cursor-pointer py-10 text-muted-foreground">
+        <div className="text-muted-foreground/60">Prev</div>
         <div className="flex gap-3">
           {[1, 2, 3, 4, 5].map((num) => (
             <div
               key={num}
-              className="px-4 py-2 bg-white/10 rounded-md border border-gray-700 hover:bg-primary-0 hover:text-black transition-all"
+              className="px-4 py-2 bg-foreground/10 rounded-md border border-border hover:bg-primary-0 hover:text-black transition-all"
             >
               {num}
             </div>
@@ -164,9 +164,9 @@ const ProjectCard = ({
   to: string;
 }) => {
   return (
-    <div className="relative col-span-1 h-[420px] md:h-[480px] rounded-xl border-2 border-neutral-700 overflow-hidden group transition-all duration-300 hover:border-primary-0 hover:scale-[1.02]">
+    <div className="relative col-span-1 h-[420px] md:h-[480px] rounded-xl border-2 border-neutral-300 dark:border-neutral-700 overflow-hidden group transition-all duration-300 hover:border-primary-0 hover:scale-[1.02]">
       {/* Image Background */}
-      <div className="absolute inset-0 bg-neutral_900">
+      <div className="absolute inset-0 bg-neutral-200 dark:bg-neutral_900">
         {image ? (
           <Image
             src={image}

@@ -46,10 +46,10 @@ export const MegaMenuColumn = ({ items }: Props) => {
         >
           <Link
             href={item.href}
-            className="p-3 rounded-lg hover:bg-white/10 transition flex flex-col gap-1"
+            className="p-3 rounded-lg hover:bg-foreground/10 transition flex flex-col gap-1"
           >
             <p className="font-semibold">{item.title}</p>
-            <p className="text-xs text-neutral-300 leading-snug">
+            <p className="text-xs text-muted-foreground leading-snug">
               {item.desc}
             </p>
           </Link>

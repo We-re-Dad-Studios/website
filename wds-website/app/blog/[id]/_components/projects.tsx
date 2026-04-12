@@ -57,7 +57,7 @@ const Projects =  () => {
                     className={`px-4 py-2 rounded-lg transition-all duration-300 ${
                       tag.fields.name === currentTag?.name 
                         ? 'bg-primary-0 text-white shadow-lg' 
-                        : 'bg-white bg-opacity-10 hover:bg-opacity-20'
+                        : 'bg-foreground/10 hover:bg-foreground/20'
                     }`}
                     onClick={() => setCurrentTag({name:tag.fields.name as unknown as string,id:tag.sys.id})}
                     whileHover={{ scale: 1.05 }}
@@ -87,25 +87,25 @@ const Projects =  () => {
         
         <div className="flex gap-4">
           <motion.div 
-            className="flex items-center bg-white bg-opacity-10 rounded-lg px-4 py-2 transition-all hover:bg-opacity-20"
+            className="flex items-center bg-foreground/10 rounded-lg px-4 py-2 transition-all hover:bg-foreground/20"
             whileHover={{ scale: 1.02 }}
           >
-            <Search className="text-white/70" />
-            <input 
-              type="text" 
+            <Search className="text-muted-foreground" />
+            <input
+              type="text"
               placeholder="Search projects..."
-              className="bg-transparent focus:outline-none outline-none text-white placeholder-white/50 ml-2 w-32 md:w-auto"
+              className="bg-transparent focus:outline-none outline-none text-foreground placeholder-muted-foreground ml-2 w-32 md:w-auto"
               onChange={(e) => setSearch(e.target.value.trim())} 
             />
           </motion.div>
           
           <motion.button
-            className="flex items-center gap-2 bg-white bg-opacity-10 rounded-lg px-4 py-2 transition-all hover:bg-opacity-20"
+            className="flex items-center gap-2 bg-foreground/10 rounded-lg px-4 py-2 transition-all hover:bg-foreground/20"
             onClick={() => setIsFilterOpen(!isFilterOpen)}
             whileHover={{ scale: 1.02 }}
           >
-            <SlidersHorizontalIcon className="text-white/70" />
-            <p className="text-white">Filter</p>
+            <SlidersHorizontalIcon className="text-muted-foreground" />
+            <p className="text-foreground">Filter</p>
           </motion.button>
         </div>
       </motion.div>
@@ -143,18 +143,18 @@ const Projects =  () => {
         animate={{ opacity: 1 }}
         transition={{ delay: 1 }}
       >
-        <button className="px-4 py-2 text-white/70 hover:text-white transition-colors">
+        <button className="px-4 py-2 text-muted-foreground hover:text-foreground transition-colors">
           Prev
         </button>
-        
+
         <div className="flex gap-2">
           {[1, 2, 3, 4, 5].map((num) => (
             <motion.button
               key={num}
               className={`w-10 h-10 flex items-center justify-center rounded-lg transition-all ${
-                num === 1 
-                  ? 'bg-primary-0 text-white' 
-                  : 'bg-white bg-opacity-10 hover:bg-opacity-20 text-white'
+                num === 1
+                  ? 'bg-primary-0 text-white'
+                  : 'bg-foreground/10 hover:bg-foreground/20 text-foreground'
               }`}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
@@ -164,7 +164,7 @@ const Projects =  () => {
           ))}
         </div>
         
-        <button className="px-4 py-2 text-white/70 hover:text-white transition-colors">
+        <button className="px-4 py-2 text-muted-foreground hover:text-foreground transition-colors">
           Next
         </button>
       </motion.div>

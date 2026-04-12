@@ -55,7 +55,7 @@ const BlogList = ({ posts, tags }:BlogListProps) => {
               ${
                 selectedTag === tag.sys.id
                   ? "bg-primary-0 text-black"
-                  : "bg-white/10 text-white hover:bg-white/20"
+                  : "bg-foreground/10 text-foreground hover:bg-foreground/20"
               }
             `}
           >
@@ -71,8 +71,8 @@ const BlogList = ({ posts, tags }:BlogListProps) => {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="
-            w-full bg-white/10 border border-white/20 rounded-lg p-3
-            text-white placeholder-white/50
+            w-full bg-foreground/10 border border-foreground/20 rounded-lg p-3
+            text-foreground placeholder-foreground/50
             focus:outline-none focus:border-primary-0
           "
         />
@@ -86,10 +86,10 @@ const BlogList = ({ posts, tags }:BlogListProps) => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.05 }}
-            className="rounded-xl overflow-hidden border border-white/10 hover:border-primary-0 transition"
+            className="rounded-xl overflow-hidden border border-border hover:border-primary-0 transition bg-background"
           >
             <Link href={`/blog/${post.sys.id}`}>
-              <div className="relative h-[220px] bg-black">
+              <div className="relative h-[220px] bg-neutral-900 dark:bg-black">
                 <Image
                   src="/images/WDS LOGO WHITE.png"
                   alt={post.fields?.title || "Blog post cover"}
@@ -99,10 +99,10 @@ const BlogList = ({ posts, tags }:BlogListProps) => {
               </div>
 
               <div className="p-5">
-                <h3 className="text-xl text-white mb-2 line-clamp-2">
+                <h3 className="text-xl text-foreground mb-2 line-clamp-2">
                   {post.fields?.title || "Untitled post"}
                 </h3>
-                <p className="text-white/60 text-sm line-clamp-3">
+                <p className="text-muted-foreground text-sm line-clamp-3">
                   {post.fields?.description || "No description available yet."}
                 </p>
               </div>

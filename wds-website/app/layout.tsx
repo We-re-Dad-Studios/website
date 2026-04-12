@@ -10,6 +10,8 @@ import { Toaster } from "@/components/ui/sonner";
 // import KoFiWidget from "@/components/KofiWidget";
 import { GlitchTransition } from "@/components/glitch-transition";
 import ScrollProgressBar, { ScrollProgressBarProvider } from "@/components/scroll-progress-bar";
+import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 export const metadata: Metadata = {
   title: "We're Dad Studios",
@@ -29,7 +31,7 @@ export const metadata: Metadata = {
     apple: "/images/apple-touch-icon.png",
   },
 
-  manifest: "/favicons/site.webmanifest",
+  manifest: "/manifest.webmanifest",
 
   openGraph: {
     title: "WDS - Game Development & Creative Studio",
@@ -63,24 +65,23 @@ export default function RootLayout({
   return (
     <html lang="en">
       <PostHogProvider>
-        <body className="antialiased bg-base_black font-agdasima setfont text-[#FAFAFA]">
-          <Suspense fallback={null}>
-            <PageView />
-          </Suspense>
-          <Navbar />
-          <ScrollProgressBarProvider>
-            <ScrollProgressBar/>
-
-                 {/* <EchoTransition>{children}</EchoTransition>
-                  */}
-                  <GlitchTransition>
-                    {children}
-                  </GlitchTransition>
-          </ScrollProgressBarProvider>
-          {/* <KoFiWidget /> */}
-          <Newsletter />
-          <Toaster />
-          <Footer />
+        <body className="antialiased bg-background text-foreground font-agdasima setfont">
+          <ThemeProvider>
+            <ServiceWorkerRegister />
+            <Suspense fallback={null}>
+              <PageView />
+            </Suspense>
+            <Navbar />
+            <ScrollProgressBarProvider>
+              <ScrollProgressBar/>
+              <GlitchTransition>
+                {children}
+              </GlitchTransition>
+            </ScrollProgressBarProvider>
+            <Newsletter />
+            <Toaster />
+            <Footer />
+          </ThemeProvider>
         </body>
       </PostHogProvider>
     </html>

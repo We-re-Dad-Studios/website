@@ -5,7 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { ChevronDown, MenuIcon } from "lucide-react";
+import { ChevronDown, MenuIcon, Moon, Sun } from "lucide-react";
+import { useTheme } from "next-themes";
 
 import { MenuProvider, useMenu } from "./MenuContext";
 
@@ -54,7 +55,7 @@ const NavbarInner = () => {
     <nav
       className="
         sticky top-0 left-0 w-full h-[80px]
-        bg-black/40 backdrop-blur-xl border-b border-white/10
+        bg-wds-nav-bg/40 backdrop-blur-xl border-b border-wds-nav-border/10
         flex items-center justify-between px-4 md:px-16 z-[999]
       "
     >
@@ -65,7 +66,7 @@ const NavbarInner = () => {
           width={95}
           height={40}
           alt="WDS Logo"
-          className="w-[95px] h-auto"
+          className="w-[95px] h-auto dark:invert-0 invert"
         />
       </Link>
 
@@ -109,7 +110,7 @@ const NavbarInner = () => {
                 active={active}
                 onFocus={openMenu}
               />
-              <ChevronDown className="w-4 h-4 mt-1 text-white" />
+              <ChevronDown className="w-4 h-4 mt-1 text-foreground" />
             </div>
 
             <MegaMenu />
@@ -133,8 +134,9 @@ const NavbarInner = () => {
         </div>
       </div>
 
-      {/* Social */}
+      {/* Social + Theme Toggle */}
       <div className="hidden md:flex items-center gap-6">
+        <ThemeToggle />
         <SocialIcon href="https://www.tiktok.com/@weredadstudios" Icon={FaTiktok} />
         <SocialIcon href="https://www.instagram.com/weredadstudios" Icon={FaInstagram} />
         <SocialIcon href="https://discord.gg/Vjjw2f42" Icon={FaDiscord} />
@@ -146,39 +148,63 @@ const NavbarInner = () => {
   );
 };
 
+const ThemeToggle = () => {
+  const { resolvedTheme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return <div className="w-9 h-9" />;
+
+  return (
+    <button
+      onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
+      className="p-2 rounded-lg hover:bg-foreground/10 transition-colors"
+      aria-label="Toggle theme"
+    >
+      {resolvedTheme === "dark" ? (
+        <Sun className="w-5 h-5 text-foreground" />
+      ) : (
+        <Moon className="w-5 h-5 text-foreground" />
+      )}
+    </button>
+  );
+};
+
 const SocialIcon = ({ href, Icon }: { href: string; Icon: IconType }) => (
   <a href={href} target="_blank" className="hover:scale-110 transition">
-    <Icon className="w-6 h-6 text-white" />
+    <Icon className="w-6 h-6 text-foreground" />
   </a>
 );
 
 const MobileMenu = () => {
   const path = usePathname();
   return (
-    <Popover>
-     <PopoverTrigger asChild>
-       <button className="md:hidden p-2 rounded-md bg-purple-500 text-black">
-      <MenuIcon className="w-6 h-6" />
-    </button>
-     </PopoverTrigger>
-    <PopoverContent
-        side="bottom"
-        className="
-          md:hidden flex flex-col gap-4 p-6 
-          bg-black/70 backdrop-blur-xl border border-white/10
-          rounded-xl shadow-xl text-white
-        "
-      >
-        <NavLink href="/" label="Home" active={path} />
-        <NavLink href="/projects" label="Projects" active={path} />
-        <NavLink href="/blog" label="Blog" active={path} />
-        <NavLink href="/about-us" label="About Us" active={path} />
+    <div className="md:hidden flex items-center gap-2">
+      <ThemeToggle />
+      <Popover>
+        <PopoverTrigger asChild>
+          <button className="p-2 rounded-md bg-purple-500 text-black">
+            <MenuIcon className="w-6 h-6" />
+          </button>
+        </PopoverTrigger>
+        <PopoverContent
+          side="bottom"
+          className="
+            md:hidden flex flex-col gap-4 p-6
+            bg-background/90 backdrop-blur-xl border border-border
+            rounded-xl shadow-xl text-foreground
+          "
+        >
+          <NavLink href="/" label="Home" active={path} />
+          <NavLink href="/projects" label="Projects" active={path} />
+          <NavLink href="/blog" label="Blog" active={path} />
+          <NavLink href="/about-us" label="About Us" active={path} />
 
-        <div className="flex gap-4 pt-2">
-          <SocialIcon href="https://www.tiktok.com/@weredadstudios" Icon={FaTiktok} />
-          <SocialIcon href="https://www.instagram.com/weredadstudios" Icon={FaInstagram} />
-        </div>
-      </PopoverContent>
-    </Popover>
+          <div className="flex gap-4 pt-2">
+            <SocialIcon href="https://www.tiktok.com/@weredadstudios" Icon={FaTiktok} />
+            <SocialIcon href="https://www.instagram.com/weredadstudios" Icon={FaInstagram} />
+          </div>
+        </PopoverContent>
+      </Popover>
+    </div>
   );
 };

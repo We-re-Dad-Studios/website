@@ -32,16 +32,16 @@ export const Footer = () => {
         width={1000}
         height={1000}
       />
-      <div className=" w-full text-[14px] text-center bg-neutral_900/90 py-4 border-t-2 border-b-2 border-t-neutral-600 border-b-neutral-600 flex items-center justify-center gap-x-[5%]">
+      <div className="w-full text-[14px] text-white text-center bg-black/20 dark:bg-neutral_900/90 py-4 border-t-2 border-b-2 border-t-white/20 border-b-white/20 flex items-center justify-center gap-x-[5%]">
         <Link href={"/"}>Home</Link>
         <Link href={"/projects"}>Projects</Link>
         <Link href={"/about-us"}>About Us</Link>
       </div>
-      <p className="mt-6 text-center text-[20px]">Follow Us</p>
+      <p className="mt-6 text-white text-center text-[20px]">Follow Us</p>
       <div className="flex w-full items-center mt-4 justify-center gap-x-[5%]">
-       
+
         <a href=" https://www.tiktok.com/@weredadstudios?is_from_webapp=1&sender_device=pc" target="_blank" rel="noreferrer" className="">
-          <FaTiktok  className="w-6 h-6 shrink" />
+          <FaTiktok  className="w-6 h-6 shrink text-white" />
         </a>
         {/* <a href="">
           <TwitterIcon className="w-6 h-6 shrink" />

@@ -58,6 +58,13 @@ const config: Config = {
   			border: 'hsl(var(--border))',
   			input: 'hsl(var(--input))',
   			ring: 'hsl(var(--ring))',
+  			wds: {
+  			  'nav-bg': 'hsl(var(--wds-nav-bg))',
+  			  'nav-border': 'hsl(var(--wds-nav-border))',
+  			  surface: 'hsl(var(--wds-surface))',
+  			  'text-primary': 'hsl(var(--wds-text-primary))',
+  			  'text-secondary': 'hsl(var(--wds-text-secondary))',
+  			},
   			chart: {
   				'1': 'hsl(var(--chart-1))',
   				'2': 'hsl(var(--chart-2))',

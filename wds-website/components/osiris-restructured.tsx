@@ -12,6 +12,8 @@ import { FaInstagram, FaTiktok } from "react-icons/fa6";
 import { motion } from "framer-motion";
 import { ArrowRight, BookOpen, Clock, Zap } from "lucide-react";
 import { ChapterListComponent } from "@/app/projects/components/chapter-list-component";
+import { ContinueReadingCard } from "@/components/reader/ContinueReadingCard";
+import { ReaderStatsCard } from "@/components/reader/ReaderStatsCard";
 
 type Chapter = {
   id: string;
@@ -38,7 +40,7 @@ function OsirisContent({
   return (
     <div className="w-full">
       {/* ============ HERO SECTION - ALWAYS FIRST ============ */}
-      <section className="relative w-full min-h-[70vh] flex items-end pb-12 overflow-hidden">
+      <section className="relative w-full min-h-[55vh] sm:min-h-[65vh] md:min-h-[70vh] flex items-center sm:items-end pb-8 sm:pb-12 overflow-hidden">
         {/* Background */}
         <div className="absolute inset-0">
           <Image
@@ -48,62 +50,63 @@ function OsirisContent({
             className="object-cover"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-black/30" />
+          {/* Tighter gradient on mobile */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-black/40 sm:from-black sm:via-black/70 sm:to-black/30" />
           {/* Subtle cyan tint for sci-fi feel */}
           <div className="absolute inset-0 bg-cyan-950/20" />
         </div>
 
         {/* Hero Content */}
-        <div className="relative z-10 w-full max-w-4xl mx-auto px-6">
+        <div className="relative z-10 w-full max-w-4xl mx-auto px-5 sm:px-6 pb-safe">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
             {/* Genre Badge */}
-            <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-cyan-500/20 border border-cyan-500/40 rounded-full text-cyan-400 text-sm font-medium mb-4">
-              <Zap className="w-3.5 h-3.5" />
+            <span className="inline-flex items-center gap-2 px-2.5 py-1 sm:px-3 sm:py-1.5 bg-cyan-500/20 border border-cyan-500/40 rounded-full text-cyan-400 text-xs sm:text-sm font-medium mb-3 sm:mb-4">
+              <Zap className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
               Sci-Fi Thriller
             </span>
 
-            {/* Title */}
-            <h1 className="text-5xl md:text-7xl font-bold text-white mb-4">
+            {/* Title — smaller on mobile */}
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold text-white mb-3 sm:mb-4">
               Project Osiris
             </h1>
 
-            {/* Hook - THE MOST IMPORTANT PART */}
-            <p className="text-xl md:text-2xl text-white/90 leading-relaxed max-w-2xl mb-6">
-            Death is now <span className="text-cyan-400 font-semibold">negotiable</span>- resurrection has become commercialized.
-Professional Walkers brave the light to snatch souls back from the death gods themselves.
-But humanity soon learns, the price of defying death is much more steep than they can pay.
+            {/* Hook */}
+            <p className="text-base sm:text-xl md:text-2xl text-white/90 leading-relaxed max-w-2xl mb-5 sm:mb-6">
+              Death is now <span className="text-cyan-400 font-semibold">negotiable</span> — resurrection has become commercialized.
+              Professional Walkers brave the light to snatch souls back from the death gods themselves.
+              But humanity soon learns, the price of defying death is much more steep than they can pay.
             </p>
 
             {/* Stats */}
-            <div className="flex flex-wrap items-center gap-4 mb-8 text-sm text-white/60">
+            <div className="flex flex-wrap items-center gap-3 sm:gap-4 mb-6 sm:mb-8 text-xs sm:text-sm text-white/60">
               <span className="flex items-center gap-1.5">
-                <BookOpen className="w-4 h-4" />
+                <BookOpen className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 {chapters.length > 0 ? `${chapters.length} chapters` : "Coming soon"}
               </span>
               <span className="w-1 h-1 bg-white/30 rounded-full" />
               <span className="flex items-center gap-1.5">
-                <Clock className="w-4 h-4" />
+                <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 Updates regularly
               </span>
-              <span className="w-1 h-1 bg-white/30 rounded-full" />
-              <span>Free to start</span>
+              <span className="w-1 h-1 bg-white/30 rounded-full hidden sm:block" />
+              <span className="hidden sm:inline">Free to start</span>
             </div>
 
             {/* Primary CTA */}
             {chapters.length > 0 ? (
               <Link
                 href={`/novels/project_osiris/chapters/${chapters[0]?.slug || 'chapter-1'}`}
-                className="group inline-flex items-center gap-3 px-8 py-4 bg-cyan-500 hover:bg-cyan-400 text-black text-lg font-bold rounded-xl transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(6,182,212,0.4)]"
+                className="group inline-flex items-center gap-3 px-6 py-3 sm:px-8 sm:py-4 bg-cyan-500 hover:bg-cyan-400 text-black text-base sm:text-lg font-bold rounded-xl transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(6,182,212,0.4)]"
               >
                 Start Reading Chapter 1
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
             ) : (
-              <div className="inline-flex items-center gap-3 px-8 py-4 bg-white/10 border border-white/20 text-white/70 text-lg font-bold rounded-xl">
+              <div className="inline-flex items-center gap-3 px-6 py-3 sm:px-8 sm:py-4 bg-white/10 border border-white/20 text-white/70 text-base sm:text-lg font-bold rounded-xl">
                 Chapters Coming Soon
               </div>
             )}
@@ -208,6 +211,9 @@ When seventeen-year-old Sami Illia becomes the sole survivor of a catastrophic r
 
           {/* RIGHT SIDEBAR - Chapters (shows second on mobile) */}
           <aside className="w-full lg:w-[380px] order-2 flex flex-col gap-8">
+
+            <ContinueReadingCard novelSlug="project_osiris" />
+            <ReaderStatsCard />
 
             {/* Chapters Box */}
             <motion.div

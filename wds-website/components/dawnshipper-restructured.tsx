@@ -14,6 +14,8 @@ import { motion } from "framer-motion";
 import { ArrowRight, BookOpen, Clock, Flame } from "lucide-react";
 import { Chapter } from "@/app/projects/dawnshipper/page";
 import { ChapterListComponent } from "@/app/projects/components/chapter-list-component";
+import { ContinueReadingCard } from "@/components/reader/ContinueReadingCard";
+import { ReaderStatsCard } from "@/components/reader/ReaderStatsCard";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -31,7 +33,7 @@ function MainContent({
   return (
     <div className="w-full">
       {/* ============ HERO SECTION - ALWAYS FIRST ============ */}
-      <section className="relative w-full min-h-[70vh] flex items-end pb-12 overflow-hidden">
+      <section className="relative w-full min-h-[55vh] sm:min-h-[65vh] md:min-h-[70vh] flex items-center sm:items-end pb-8 sm:pb-12 overflow-hidden">
         {/* Background */}
         <div className="absolute inset-0">
           <Image
@@ -41,53 +43,54 @@ function MainContent({
             className="object-cover object-top"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-black/30" />
+          {/* Tighter gradient on mobile, wider on desktop */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-black/40 sm:from-black sm:via-black/70 sm:to-black/30" />
         </div>
 
         {/* Hero Content */}
-        <div className="relative z-10 w-full max-w-4xl mx-auto px-6">
+        <div className="relative z-10 w-full max-w-4xl mx-auto px-5 sm:px-6 pb-safe">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
             {/* Genre Badge */}
-            <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-primary-0/20 border border-primary-0/40 rounded-full text-primary-0 text-sm font-medium mb-4">
-              <Flame className="w-3.5 h-3.5" />
+            <span className="inline-flex items-center gap-2 px-2.5 py-1 sm:px-3 sm:py-1.5 bg-primary-0/20 border border-primary-0/40 rounded-full text-primary-0 text-xs sm:text-sm font-medium mb-3 sm:mb-4">
+              <Flame className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
               Dark Epic Fantasy
             </span>
 
-            {/* Title */}
-            <h1 className="text-5xl md:text-7xl font-bold text-white mb-4">
+            {/* Title — smaller on mobile */}
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold text-white mb-3 sm:mb-4">
               Dawnshipper
             </h1>
 
-            {/* Hook - THE MOST IMPORTANT PART */}
-            <p className="text-xl md:text-2xl text-white/90 leading-relaxed max-w-2xl mb-6">
-              He bonded with  <span className="text-primary-0 font-semibold">something he shouldn&apos;t have</span>—an 
-              impossible connection that breaks the rules of magic. Now hunted by those who&apos;d 
+            {/* Hook */}
+            <p className="text-base sm:text-xl md:text-2xl text-white/90 leading-relaxed max-w-2xl mb-5 sm:mb-6">
+              He bonded with <span className="text-primary-0 font-semibold">something he shouldn&apos;t have</span> — an
+              impossible connection that breaks the rules of magic. Now hunted by those who&apos;d
               weaponize him and feared by those who&apos;d destroy him.
             </p>
 
             {/* Stats */}
-            <div className="flex flex-wrap items-center gap-4 mb-8 text-sm text-white/60">
+            <div className="flex flex-wrap items-center gap-3 sm:gap-4 mb-6 sm:mb-8 text-xs sm:text-sm text-white/60">
               <span className="flex items-center gap-1.5">
-                <BookOpen className="w-4 h-4" />
+                <BookOpen className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 {chapters.length} chapters
               </span>
               <span className="w-1 h-1 bg-white/30 rounded-full" />
               <span className="flex items-center gap-1.5">
-                <Clock className="w-4 h-4" />
+                <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 Updates daily
               </span>
-              <span className="w-1 h-1 bg-white/30 rounded-full" />
-              <span>Free to start</span>
+              <span className="w-1 h-1 bg-white/30 rounded-full hidden sm:block" />
+              <span className="hidden sm:inline">Free to start</span>
             </div>
 
             {/* Primary CTA */}
             <Link
               href={`/novels/dawnshipper/chapters/${chapters[0]?.slug || 'echoes-and-embers'}`}
-              className="group inline-flex items-center gap-3 px-8 py-4 bg-primary-0 hover:bg-primary-0/90 text-white text-lg font-bold rounded-xl transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(249,76,16,0.4)]"
+              className="group inline-flex items-center gap-3 px-6 py-3 sm:px-8 sm:py-4 bg-primary-0 hover:bg-primary-0/90 text-white text-base sm:text-lg font-bold rounded-xl transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(249,76,16,0.4)]"
             >
               Start Reading Chapter 1
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -214,7 +217,10 @@ function MainContent({
 
           {/* RIGHT SIDEBAR - Chapters (shows second on mobile) */}
           <aside className="w-full lg:w-[380px] order-2 flex flex-col gap-8">
-            
+
+            <ContinueReadingCard novelSlug="dawnshipper" />
+            <ReaderStatsCard />
+
             {/* Chapters Box */}
             <motion.div
               variants={fadeUp}

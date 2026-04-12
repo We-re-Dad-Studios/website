@@ -35,7 +35,7 @@ export const Newsletter = () => {
   if (!show) return <></>;
   return (
     <div className="w-full xl:w-[80vw] mx-auto rounded-lg flex mb-12 overflow-hidden px-2">
-      <div className="flex-1  rounded-l-lg flex relative bg-black">
+      <div className="flex-1 rounded-l-lg flex relative bg-neutral-900 dark:bg-black">
         <div className=" place-items-center px-4 border-r-[2px] bg-primary-0  border-r-white news-1  absolute left-0 top-0 z-[10] h-full lg:grid hidden">
           <Image
             className="lg:w-40 md:w-32 w-24 aspect-square lg:h-40 my-auto"
@@ -76,18 +76,18 @@ export const Newsletter = () => {
           />
         </div>
       </div>
-      <div className="ml-auto min-h-[50vh] py-4 h-max bg-primary-100  lg:px-0 md:max-w-[70%] w-full lg:w-[35%] flex flex-col justify-center items-center rounded-r-lg">
-        <p className="bg-[#F21170] px-2 xl:px-4 py-2 rounded-lg border-[2px] border-black text-[16px]  lg:text-[18px]">
+      <div className="ml-auto min-h-[50vh] py-4 h-max bg-neutral-900 dark:bg-primary-100 lg:px-0 md:max-w-[70%] w-full lg:w-[35%] flex flex-col justify-center items-center rounded-r-lg">
+        <p className="bg-[#F21170] px-2 xl:px-4 py-2 rounded-lg border-[2px] border-black text-white text-[16px] lg:text-[18px]">
           JOIN THE ADVENTURE - SUBSCRIBE NOW!
         </p>
-        <p className="w-[90%] lg:w-[70%] text-center text-neutral_900 lg:text-[14px] text-[12px] my-4">
+        <p className="w-[90%] lg:w-[70%] text-center text-neutral-300 dark:text-neutral_900 lg:text-[14px] text-[12px] my-4">
           Be the first to know about our latest releases, exclusive content, and
           behind-the-scenes updates. just for you. Subscribe today and never
           miss out!
         </p>
         {"subscribed" in newSletterInfo && newSletterInfo.subscribed ? (
           <div className="flex flex-col gap-4">
-            <p className="text-[18px] text-neutral_900 w-full text-center">
+            <p className="text-[18px] text-neutral-300 dark:text-neutral_900 w-full text-center">
               You are already Subscribed!{" "}
             </p>
             <button

@@ -38,7 +38,7 @@ export default async function Page({ params }: BlogPostPageParams) {
 
   return (
     <section>
-      <div className="flex justify-center items-center h-[400px] bg-black">
+      <div className="flex justify-center items-center h-[400px] bg-neutral-100 dark:bg-black">
         {url ? (
           <Image
             src={url}
