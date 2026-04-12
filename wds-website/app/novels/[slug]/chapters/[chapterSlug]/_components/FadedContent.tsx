@@ -15,7 +15,6 @@ import { extractPlainText } from "@/lib/extract-doc-text";
 import { useElevenLabsTTS } from "@/hooks/useElevenLabsTTS";
 import {
   Volume2,
-  VolumeX,
   Loader2,
   Pause,
   ChevronLeft,
