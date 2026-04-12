@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Sparkles, Check, BookOpen } from "lucide-react";
 
@@ -28,6 +29,11 @@ export function NewsletterModal({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState("");
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Check if already subscribed or dismissed
   useEffect(() => {
@@ -70,6 +76,17 @@ export function NewsletterModal({
     return () => document.removeEventListener("mouseleave", handleMouseLeave);
   }, [exitIntent, hasTriggered]);
 
+  useEffect(() => {
+    if (!mounted || !isVisible) return;
+
+    const { overflow } = document.body.style;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = overflow;
+    };
+  }, [mounted, isVisible]);
+
   const handleDismiss = () => {
     setIsVisible(false);
     sessionStorage.setItem("newsletter-modal-dismissed", "true");
@@ -104,7 +121,9 @@ export function NewsletterModal({
     }
   };
 
-  return (
+  if (!mounted) return null;
+
+  return createPortal(
     <AnimatePresence>
       {isVisible && (
         <>
@@ -123,9 +142,9 @@ export function NewsletterModal({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ type: "spring", duration: 0.5 }}
-            className="fixed inset-0 z-[10000] flex items-center justify-center px-4"
+            className="fixed inset-0 z-[10000] flex items-center justify-center p-4"
           >
-            <div className="relative w-full max-w-lg bg-gradient-to-br from-gray-900 via-gray-900 to-purple-900/50 rounded-3xl border border-white/10 overflow-hidden shadow-2xl">
+            <div className="relative my-auto w-full max-w-lg bg-gradient-to-br from-gray-900 via-gray-900 to-purple-900/50 rounded-3xl border border-white/10 overflow-hidden shadow-2xl">
               {/* Close button */}
               <button
                 onClick={handleDismiss}
@@ -224,6 +243,7 @@ export function NewsletterModal({
           </motion.div>
         </>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 }
