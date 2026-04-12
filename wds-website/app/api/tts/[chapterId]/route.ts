@@ -9,6 +9,9 @@ const ELEVENLABS_VOICE_ID =
   process.env.ELEVENLABS_VOICE_ID ?? "21m00Tcm4TlvDq8ikWAM"; // default: Rachel
 const ELEVENLABS_MODEL_ID =
   process.env.ELEVENLABS_MODEL_ID ?? "eleven_multilingual_v2";
+const TTS_FORMAT_VERSION = "v2";
+const ELEVENLABS_MAX_TEXT_LENGTH = 5000;
+const ELEVENLABS_SAFE_TEXT_LENGTH = 4500;
 const BLOB_STRONG_CONSISTENCY = { consistency: "strong" as const };
 const LOCK_TIMEOUT_MS = 5 * 60 * 1000;
 const LOCK_POLL_INTERVAL_MS = 1000;
@@ -35,7 +38,15 @@ function sanitizeKeyPart(value: string) {
 
 function versionHash(chapterId: string, text: string) {
   return createHash("sha256")
-    .update([chapterId, ELEVENLABS_VOICE_ID, ELEVENLABS_MODEL_ID, text].join("::"))
+    .update(
+      [
+        TTS_FORMAT_VERSION,
+        chapterId,
+        ELEVENLABS_VOICE_ID,
+        ELEVENLABS_MODEL_ID,
+        text,
+      ].join("::")
+    )
     .digest("hex")
     .slice(0, 24);
 }
@@ -63,6 +74,135 @@ function audioHeaders(hash: string) {
 
 function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function splitLongSegment(segment: string, maxChars: number) {
+  const words = segment.trim().split(/\s+/).filter(Boolean);
+  const chunks: string[] = [];
+  let current = "";
+
+  for (const word of words) {
+    if (word.length > maxChars) {
+      if (current) {
+        chunks.push(current);
+        current = "";
+      }
+
+      for (let index = 0; index < word.length; index += maxChars) {
+        chunks.push(word.slice(index, index + maxChars));
+      }
+      continue;
+    }
+
+    const candidate = current ? `${current} ${word}` : word;
+    if (candidate.length <= maxChars) {
+      current = candidate;
+      continue;
+    }
+
+    if (current) {
+      chunks.push(current);
+    }
+    current = word;
+  }
+
+  if (current) {
+    chunks.push(current);
+  }
+
+  return chunks;
+}
+
+function splitTextForTTS(text: string, maxChars = ELEVENLABS_SAFE_TEXT_LENGTH) {
+  if (text.length <= maxChars) {
+    return [text];
+  }
+
+  const sentenceLikeParts = text
+    .split(/(?<=[.!?])\s+/)
+    .map((part) => part.trim())
+    .filter(Boolean);
+
+  if (sentenceLikeParts.length <= 1) {
+    return splitLongSegment(text, maxChars);
+  }
+
+  const chunks: string[] = [];
+  let current = "";
+
+  for (const part of sentenceLikeParts) {
+    if (part.length > maxChars) {
+      if (current) {
+        chunks.push(current);
+        current = "";
+      }
+      chunks.push(...splitLongSegment(part, maxChars));
+      continue;
+    }
+
+    const candidate = current ? `${current} ${part}` : part;
+    if (candidate.length <= maxChars) {
+      current = candidate;
+      continue;
+    }
+
+    if (current) {
+      chunks.push(current);
+    }
+    current = part;
+  }
+
+  if (current) {
+    chunks.push(current);
+  }
+
+  return chunks;
+}
+
+function getLeadingId3TagLength(bytes: Uint8Array) {
+  if (
+    bytes.length < 10 ||
+    bytes[0] !== 0x49 ||
+    bytes[1] !== 0x44 ||
+    bytes[2] !== 0x33
+  ) {
+    return 0;
+  }
+
+  const flags = bytes[5];
+  const size =
+    ((bytes[6] & 0x7f) << 21) |
+    ((bytes[7] & 0x7f) << 14) |
+    ((bytes[8] & 0x7f) << 7) |
+    (bytes[9] & 0x7f);
+
+  return 10 + size + (flags & 0x10 ? 10 : 0);
+}
+
+function concatMp3Buffers(buffers: ArrayBuffer[]) {
+  if (buffers.length === 1) {
+    return buffers[0];
+  }
+
+  const parts = buffers.map((buffer, index) => {
+    const bytes = new Uint8Array(buffer);
+    if (index === 0) {
+      return bytes;
+    }
+
+    return bytes.slice(getLeadingId3TagLength(bytes));
+  });
+
+  const totalLength = parts.reduce((sum, part) => sum + part.byteLength, 0);
+  const merged = new Uint8Array(totalLength);
+  let offset = 0;
+
+  for (const part of parts) {
+    merged.set(part, offset);
+    offset += part.byteLength;
+  }
+
+  return merged.buffer;
 }
 
 async function getCached(cacheKey: string): Promise<ArrayBuffer | null> {
@@ -182,6 +322,12 @@ async function waitForCachedAudio(cacheKey: string) {
 // ElevenLabs text-to-speech
 // ---------------------------------------------------------------------------
 async function generateSpeech(text: string): Promise<ArrayBuffer> {
+  if (text.length > ELEVENLABS_MAX_TEXT_LENGTH) {
+    throw new Error(
+      `TTS chunk exceeds ElevenLabs limit (${text.length}/${ELEVENLABS_MAX_TEXT_LENGTH})`
+    );
+  }
+
   const url = `https://api.elevenlabs.io/v1/text-to-speech/${ELEVENLABS_VOICE_ID}`;
 
   const res = await fetch(url, {
@@ -209,6 +355,17 @@ async function generateSpeech(text: string): Promise<ArrayBuffer> {
   }
 
   return res.arrayBuffer();
+}
+
+async function generateSpeechForChapter(text: string) {
+  const chunks = splitTextForTTS(text);
+  const audioParts: ArrayBuffer[] = [];
+
+  for (const chunk of chunks) {
+    audioParts.push(await generateSpeech(chunk));
+  }
+
+  return concatMp3Buffers(audioParts);
 }
 
 // ---------------------------------------------------------------------------
@@ -270,7 +427,7 @@ export async function GET(
 
   // 4. Generate audio via ElevenLabs
   try {
-    const audio = await generateSpeech(chapter.text);
+    const audio = await generateSpeechForChapter(chapter.text);
     await saveToCache(cacheKey, audio);
 
     return new NextResponse(audio, {
