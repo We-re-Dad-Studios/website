@@ -30,6 +30,19 @@ export const getProjectContentTypeId = () =>
 export const getTagContentTypeId = () =>
   getEnvValue("TAGS_ID", "NEXT_PUBLIC_TAGS_ID");
 
+export interface ChapterRecord {
+  id: string;
+  slug: string;
+  title: string;
+  chapterNumber: number;
+  releaseDate: string;
+  isFree?: boolean;
+  previewText?: string;
+  projectSlug?: string;
+  content?: unknown;
+  [key: string]: unknown;
+}
+
 export async function getNovelBySlug(slug: string) {
   const client = createContentfulClient();
   const response = await client.getEntries({
@@ -70,7 +83,7 @@ export async function getChapterContent(chapterId: string) {
   return entry.fields.content;
 }
 
-export async function getChapterBySlug(slug: string) {
+export async function getChapterBySlug(slug: string): Promise<ChapterRecord | null> {
   const client = createContentfulClient();
   const response = await client.getEntries({
     content_type: "chapter",
@@ -78,13 +91,29 @@ export async function getChapterBySlug(slug: string) {
     limit: 1,
   });
 
-  return response.items[0]?.fields ?? null;
+  const item = response.items[0];
+  if (!item) {
+    return null;
+  }
+
+  return {
+    id: item.sys.id,
+    ...(item.fields as Record<string, unknown>),
+    slug: item.fields.slug as string,
+    title: item.fields.title as string,
+    chapterNumber: item.fields.chapterNumber as number,
+    releaseDate: item.fields.releaseDate as string,
+    isFree: item.fields.isFree as boolean | undefined,
+    previewText: item.fields.previewText as string | undefined,
+    projectSlug: item.fields.projectSlug as string | undefined,
+    content: item.fields.content,
+  };
 }
 
 export async function getChapterByNumber(
   chapterNumber: number,
   projectSlug: string
-) {
+): Promise<ChapterRecord | null> {
   const client = createContentfulClient();
   const response = await client.getEntries({
     content_type: "chapter",
@@ -93,7 +122,23 @@ export async function getChapterByNumber(
     limit: 1,
   });
 
-  return response.items[0]?.fields ?? null;
+  const item = response.items[0];
+  if (!item) {
+    return null;
+  }
+
+  return {
+    id: item.sys.id,
+    ...(item.fields as Record<string, unknown>),
+    slug: item.fields.slug as string,
+    title: item.fields.title as string,
+    chapterNumber: item.fields.chapterNumber as number,
+    releaseDate: item.fields.releaseDate as string,
+    isFree: item.fields.isFree as boolean | undefined,
+    previewText: item.fields.previewText as string | undefined,
+    projectSlug: item.fields.projectSlug as string | undefined,
+    content: item.fields.content,
+  };
 }
 // Generic Contentful system fields
 export interface Sys {
