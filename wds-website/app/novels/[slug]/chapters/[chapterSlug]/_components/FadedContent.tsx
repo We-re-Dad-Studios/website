@@ -628,7 +628,10 @@ function ChapterReader({
     .replace(/\s+/g, " ")
     .trim();
   const readingTime = calculateReadingTime(cleanedText);
-  const { status: ttsStatus, toggle: ttsToggle } = useElevenLabsTTS(chapter.id);
+  const { status: ttsStatus, toggle: ttsToggle } = useElevenLabsTTS(
+    chapter.id,
+    cleanedText
+  );
 
   // Load settings from localStorage, with system-preference theme fallback
   const [settings, setSettings] = useState<ReaderSettings>(() => {

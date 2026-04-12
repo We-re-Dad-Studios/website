@@ -17,6 +17,18 @@ const LOCK_TIMEOUT_MS = 5 * 60 * 1000;
 const LOCK_POLL_INTERVAL_MS = 1000;
 const LOCK_WAIT_TIMEOUT_MS = 45 * 1000;
 
+class TTSProviderError extends Error {
+  status: number;
+  code?: string;
+
+  constructor(message: string, status: number, code?: string) {
+    super(message);
+    this.name = "TTSProviderError";
+    this.status = status;
+    this.code = code;
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Contentful client (server-side only)
 // ---------------------------------------------------------------------------
@@ -350,8 +362,21 @@ async function generateSpeech(text: string): Promise<ArrayBuffer> {
   });
 
   if (!res.ok) {
-    const err = await res.text();
-    throw new Error(`ElevenLabs API error (${res.status}): ${err}`);
+    const errorText = await res.text();
+    let code: string | undefined;
+    let message = `ElevenLabs API error (${res.status})`;
+
+    try {
+      const parsed = JSON.parse(errorText) as {
+        detail?: { message?: string; status?: string; code?: string };
+      };
+      code = parsed.detail?.status ?? parsed.detail?.code;
+      message = parsed.detail?.message ?? message;
+    } catch {
+      message = errorText || message;
+    }
+
+    throw new TTSProviderError(message, res.status, code);
   }
 
   return res.arrayBuffer();
@@ -435,6 +460,15 @@ export async function GET(
     });
   } catch (err) {
     console.error("TTS generation failed:", err);
+
+    if (err instanceof TTSProviderError) {
+      const status = err.code === "quota_exceeded" ? 402 : 502;
+      return NextResponse.json(
+        { error: err.message, code: err.code ?? "tts_provider_error" },
+        { status }
+      );
+    }
+
     return NextResponse.json(
       { error: "Failed to generate audio" },
       { status: 500 }
