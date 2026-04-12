@@ -12,6 +12,7 @@ import { GlitchTransition } from "@/components/glitch-transition";
 import ScrollProgressBar, { ScrollProgressBarProvider } from "@/components/scroll-progress-bar";
 import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { OfflineBanner } from "@/components/OfflineBanner";
 
 export const metadata: Metadata = {
   title: "We're Dad Studios",
@@ -28,7 +29,7 @@ export const metadata: Metadata = {
   icons: {
     icon: "/images/favicon.ico",
     shortcut: "/images/favicon-32x32.png",
-    apple: "/images/apple-touch-icon.png",
+    apple: "/images/apple-touch-icon-dark.png",
   },
 
   manifest: "/manifest.webmanifest",
@@ -80,6 +81,7 @@ export default function RootLayout({
             </ScrollProgressBarProvider>
             <Newsletter />
             <Toaster />
+            <OfflineBanner />
             <Footer />
           </ThemeProvider>
         </body>

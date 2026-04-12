@@ -12,10 +12,12 @@ import { createPortal } from "react-dom";
 import { Comments } from "./Comments";
 import { calculateReadingTime } from "@/lib/reading-time";
 import { extractPlainText } from "@/lib/extract-doc-text";
-import { useTTS } from "@/hooks/useTTS";
+import { useElevenLabsTTS } from "@/hooks/useElevenLabsTTS";
 import {
   Volume2,
   VolumeX,
+  Loader2,
+  Pause,
   ChevronLeft,
   BookOpen,
   Settings2,
@@ -627,7 +629,7 @@ function ChapterReader({
     .replace(/\s+/g, " ")
     .trim();
   const readingTime = calculateReadingTime(cleanedText);
-  const { speak, stop, isSpeaking } = useTTS(cleanedText);
+  const { status: ttsStatus, toggle: ttsToggle, stop: ttsStop } = useElevenLabsTTS(chapter.id);
 
   // Load settings from localStorage, with system-preference theme fallback
   const [settings, setSettings] = useState<ReaderSettings>(() => {
@@ -880,15 +882,19 @@ function ChapterReader({
   // ---------- Offline cache handler ----------
   const handleSaveOffline = useCallback(async () => {
     try {
-      // Touch the current URL so the SW's fetch handler caches it.
-      await fetch(window.location.href, { cache: "reload" }).catch(() => {});
+      // Cache the current chapter page + the project page so offline
+      // navigation from /offline → chapter works without internet.
+      await Promise.allSettled([
+        fetch(window.location.href, { cache: "reload" }),
+        fetch(`/projects/${Novel}`, { cache: "reload" }),
+      ]);
       markOffline(chapter.id);
       setIsOfflineCached(true);
       toast.success("Saved for offline reading");
     } catch {
       toast.error("Couldn't save offline");
     }
-  }, [chapter.id, markOffline]);
+  }, [chapter.id, Novel, markOffline]);
 
   const handleRemoveOffline = useCallback(() => {
     unmarkOffline(chapter.id);
@@ -936,21 +942,33 @@ function ChapterReader({
               <div className="flex items-center gap-2 sm:gap-3">
                 {/* Audio Button */}
                 <button
-                  onClick={() => (isSpeaking ? stop() : speak())}
+                  onClick={ttsToggle}
+                  disabled={ttsStatus === "loading"}
                   className={`
                     flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg transition-all text-sm
-                    ${isSpeaking
+                    ${ttsStatus === "playing" || ttsStatus === "loading"
                       ? "bg-amber-500 text-white"
                       : settings.theme === "dark" || settings.theme === "midnight"
                         ? "bg-white/10 hover:bg-white/20"
                         : "bg-black/10 hover:bg-black/20"
                     }
+                    ${ttsStatus === "loading" ? "opacity-70 cursor-wait" : ""}
                   `}
                 >
-                  {isSpeaking ? (
+                  {ttsStatus === "loading" ? (
                     <>
-                      <VolumeX className="w-4 h-4" />
-                      <span className="hidden sm:inline">Stop</span>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <span className="hidden sm:inline">Loading…</span>
+                    </>
+                  ) : ttsStatus === "playing" ? (
+                    <>
+                      <Pause className="w-4 h-4" />
+                      <span className="hidden sm:inline">Pause</span>
+                    </>
+                  ) : ttsStatus === "paused" ? (
+                    <>
+                      <Volume2 className="w-4 h-4" />
+                      <span className="hidden sm:inline">Resume</span>
                     </>
                   ) : (
                     <>

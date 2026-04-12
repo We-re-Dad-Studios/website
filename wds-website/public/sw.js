@@ -5,7 +5,7 @@
 //   3. Contentful images           → cache-first, 30-day TTL
 // Everything else is network-only.
 
-const VERSION = "wds-v1";
+const VERSION = "wds-v2";
 const SHELL_CACHE = `${VERSION}-shell`;
 const CHAPTER_CACHE = `${VERSION}-chapters`;
 const IMAGE_CACHE = `${VERSION}-images`;
@@ -16,6 +16,9 @@ const PRECACHE_URLS = [
   "/offline",
   "/manifest.webmanifest",
   "/images/WDS LOGO WHITE.png",
+  "/images/apple-touch-icon.png",
+  "/images/android-chrome-192x192.png",
+  "/images/wds-logo.svg",
 ];
 
 self.addEventListener("install", (event) => {
@@ -46,8 +49,20 @@ function isChapterUrl(url) {
   return /\/novels\/[^/]+\/chapters\/[^/]+/.test(url.pathname);
 }
 
+function isProjectUrl(url) {
+  return /\/projects\/[^/]+$/.test(url.pathname);
+}
+
 function isContentfulImage(url) {
   return url.hostname === "images.ctfassets.net";
+}
+
+function isLocalImage(url) {
+  return (
+    url.origin === self.location.origin &&
+    /^\/images\//.test(url.pathname) &&
+    /\.(?:png|jpg|jpeg|webp|svg|gif|ico)$/i.test(url.pathname)
+  );
 }
 
 function isStaticAsset(url) {
@@ -124,7 +139,20 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  if (isContentfulImage(url)) {
+  // Project pages — cache-first so offline users can browse to them.
+  if (isProjectUrl(url)) {
+    event.respondWith(
+      cacheFirst(SHELL_CACHE, request).then((resp) => {
+        if (!resp || resp.type === "error") {
+          return caches.match(OFFLINE_URL).then((m) => m || Response.error());
+        }
+        return resp;
+      })
+    );
+    return;
+  }
+
+  if (isContentfulImage(url) || isLocalImage(url)) {
     event.respondWith(cacheFirst(IMAGE_CACHE, request));
     return;
   }
