@@ -19,6 +19,7 @@ const securityHeaders = [
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://storage.ko-fi.com;",
       "font-src 'self' data: https://fonts.gstatic.com;",
       "img-src 'self' data: https: https://images.ctfassets.net https://*.disquscdn.com;",
+      "media-src 'self' blob:;",
       "connect-src 'self' https://cdn.contentful.com https://preview.contentful.com https://storage.ko-fi.com https://*.disqus.com;",
       "frame-src https://ko-fi.com https://storage.ko-fi.com https://disqus.com https://*.disqus.com;",
       "worker-src 'self';",

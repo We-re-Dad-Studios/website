@@ -12,7 +12,6 @@
   "dependencies": {
     "@contentful/rich-text-react-renderer": "^16.0.1",
     "@contentful/rich-text-types": "^17.0.0",
-    "@elevenlabs/elevenlabs-js": "^2.42.0",
     "@netlify/blobs": "^10.7.4",
     "@radix-ui/react-popover": "^1.1.14",
     "@radix-ui/react-select": "^2.1.6",
