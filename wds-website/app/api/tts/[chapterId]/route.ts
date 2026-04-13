@@ -9,8 +9,9 @@ const ELEVENLABS_VOICE_ID =
 const ELEVENLABS_MODEL_ID =
   process.env.ELEVENLABS_MODEL_ID ?? "eleven_multilingual_v2";
 
-// ElevenLabs accepts up to ~5000 chars per request
+// ElevenLabs limit per request — try full text first, chunk only if rejected
 const MAX_CHUNK_CHARS = 4500;
+const CONTEXT_CHARS = 500; // chars of previous/next text for voice consistency
 
 // ---------------------------------------------------------------------------
 // Contentful
@@ -47,7 +48,7 @@ async function saveToCache(chapterId: string, audio: ArrayBuffer) {
 }
 
 // ---------------------------------------------------------------------------
-// Text chunking — split on sentence boundaries
+// Text chunking — sentence-boundary split with context overlap
 // ---------------------------------------------------------------------------
 function chunkText(text: string): string[] {
   if (text.length <= MAX_CHUNK_CHARS) return [text];
@@ -59,7 +60,6 @@ function chunkText(text: string): string[] {
   for (const s of sentences) {
     if (s.length > MAX_CHUNK_CHARS) {
       if (current) { chunks.push(current); current = ""; }
-      // Force-split very long sentence by words
       const words = s.split(/\s+/);
       let buf = "";
       for (const w of words) {
@@ -88,9 +88,13 @@ function chunkText(text: string): string[] {
 }
 
 // ---------------------------------------------------------------------------
-// ElevenLabs — plain fetch, no SDK
+// ElevenLabs — plain fetch
 // ---------------------------------------------------------------------------
-async function ttsChunk(text: string): Promise<ArrayBuffer> {
+async function ttsRequest(
+  text: string,
+  previousText?: string,
+  nextText?: string
+): Promise<ArrayBuffer> {
   const res = await fetch(
     `https://api.elevenlabs.io/v1/text-to-speech/${ELEVENLABS_VOICE_ID}`,
     {
@@ -103,6 +107,10 @@ async function ttsChunk(text: string): Promise<ArrayBuffer> {
       body: JSON.stringify({
         text,
         model_id: ELEVENLABS_MODEL_ID,
+        // previous_text / next_text give ElevenLabs context so the voice
+        // tone stays consistent across chunks
+        ...(previousText ? { previous_text: previousText } : {}),
+        ...(nextText ? { next_text: nextText } : {}),
         voice_settings: {
           stability: 0.5,
           similarity_boost: 0.75,
@@ -122,20 +130,30 @@ async function ttsChunk(text: string): Promise<ArrayBuffer> {
   return res.arrayBuffer();
 }
 
-async function generateFullAudio(text: string): Promise<ArrayBuffer> {
+async function generateAudio(text: string): Promise<ArrayBuffer> {
+  // Try sending the full text as one request
+  if (text.length <= MAX_CHUNK_CHARS) {
+    return ttsRequest(text);
+  }
+
+  // Text is too long — chunk with context for voice consistency
   const chunks = chunkText(text);
-
-  if (chunks.length === 1) {
-    return ttsChunk(chunks[0]);
-  }
-
-  // Generate chunks sequentially to respect rate limits
   const parts: ArrayBuffer[] = [];
-  for (const chunk of chunks) {
-    parts.push(await ttsChunk(chunk));
+
+  for (let i = 0; i < chunks.length; i++) {
+    const prevText = i > 0
+      ? chunks[i - 1].slice(-CONTEXT_CHARS)
+      : undefined;
+    const nextTxt = i < chunks.length - 1
+      ? chunks[i + 1].slice(0, CONTEXT_CHARS)
+      : undefined;
+
+    parts.push(await ttsRequest(chunks[i], prevText, nextTxt));
   }
 
-  // Concatenate MP3 frames (strip ID3 headers from subsequent chunks)
+  // Concatenate MP3 frames (strip ID3 tags from subsequent parts)
+  if (parts.length === 1) return parts[0];
+
   let totalLen = 0;
   const slices = parts.map((buf, i) => {
     const bytes = new Uint8Array(buf);
@@ -202,9 +220,7 @@ export async function GET(
 
   // 3. Generate + cache + return
   try {
-    const audio = await generateFullAudio(text);
-
-    // Cache in background — don't block the response
+    const audio = await generateAudio(text);
     saveToCache(chapterId, audio);
 
     return new NextResponse(audio, {

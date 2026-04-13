@@ -7,6 +7,8 @@ type TTSStatus = "idle" | "loading" | "playing" | "paused" | "error";
 export function useElevenLabsTTS(chapterId: string) {
   const [status, setStatus] = useState<TTSStatus>("idle");
   const [progress, setProgress] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const blobUrlRef = useRef<string | null>(null);
@@ -26,46 +28,9 @@ export function useElevenLabsTTS(chapterId: string) {
     }
   }, []);
 
-  // Reset on chapter change or unmount
   useEffect(() => {
-    return () => {
-      cleanup();
-    };
+    return () => cleanup();
   }, [chapterId, cleanup]);
-
-  // Pre-fetch audio as soon as the chapter loads so it's ready on play
-  useEffect(() => {
-    const controller = new AbortController();
-    abortRef.current = controller;
-
-    fetch(`/api/tts/${chapterId}`, { signal: controller.signal })
-      .then((res) => {
-        if (!res.ok) return;
-        return res.blob();
-      })
-      .then((blob) => {
-        if (!blob || controller.signal.aborted) return;
-        const url = URL.createObjectURL(blob);
-        blobUrlRef.current = url;
-
-        const audio = new Audio(url);
-        audio.addEventListener("timeupdate", () => {
-          if (audio.duration) setProgress(audio.currentTime / audio.duration);
-        });
-        audio.addEventListener("ended", () => {
-          setStatus("idle");
-          setProgress(1);
-        });
-        audio.addEventListener("error", () => {
-          setStatus("error");
-          setError("Audio playback failed");
-        });
-        audioRef.current = audio;
-      })
-      .catch(() => {});
-
-    return () => controller.abort();
-  }, [chapterId]);
 
   const loadAudio = useCallback(async (): Promise<HTMLAudioElement> => {
     if (audioRef.current) return audioRef.current;
@@ -88,8 +53,14 @@ export function useElevenLabsTTS(chapterId: string) {
 
     const audio = new Audio(url);
 
+    audio.addEventListener("loadedmetadata", () => {
+      setDuration(audio.duration);
+    });
     audio.addEventListener("timeupdate", () => {
-      if (audio.duration) setProgress(audio.currentTime / audio.duration);
+      setCurrentTime(audio.currentTime);
+      if (audio.duration) {
+        setProgress(audio.currentTime / audio.duration);
+      }
     });
     audio.addEventListener("ended", () => {
       setStatus("idle");
@@ -129,8 +100,15 @@ export function useElevenLabsTTS(chapterId: string) {
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
-      setStatus("idle");
-      setProgress(0);
+    }
+    setStatus("idle");
+    setProgress(0);
+    setCurrentTime(0);
+  }, []);
+
+  const seek = useCallback((fraction: number) => {
+    if (audioRef.current && audioRef.current.duration) {
+      audioRef.current.currentTime = fraction * audioRef.current.duration;
     }
   }, []);
 
@@ -139,5 +117,16 @@ export function useElevenLabsTTS(chapterId: string) {
     else play();
   }, [status, play, pause]);
 
-  return { status, progress, error, play, pause, stop, toggle };
+  return {
+    status,
+    progress,
+    currentTime,
+    duration,
+    error,
+    play,
+    pause,
+    stop,
+    seek,
+    toggle,
+  };
 }
