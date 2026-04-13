@@ -113,6 +113,7 @@ export function useElevenLabsTTS(chapterId: string, text: string) {
   const ensureAudio = useCallback(async (): Promise<HTMLAudioElement> => {
     // Already loaded
     if (audioRef.current) {
+      cleanupSpeech();
       playbackModeRef.current = "audio";
       return audioRef.current;
     }
@@ -157,7 +158,7 @@ export function useElevenLabsTTS(chapterId: string, text: string) {
     audioRef.current = audio;
     playbackModeRef.current = "audio";
     return audio;
-  }, [chapterId]);
+  }, [chapterId, cleanupSpeech]);
 
   const play = useCallback(async () => {
     try {
@@ -179,8 +180,12 @@ export function useElevenLabsTTS(chapterId: string, text: string) {
       setError(null);
     } catch (err) {
       if (canUseBrowserSpeech()) {
-        startBrowserSpeech();
-        return;
+        try {
+          startBrowserSpeech();
+          return;
+        } catch {
+          // fall through to error state
+        }
       }
 
       setStatus("error");

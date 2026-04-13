@@ -3,12 +3,14 @@ import { createHash } from "node:crypto";
 import { createClient } from "contentful";
 import { extractPlainText } from "@/lib/extract-doc-text";
 import { getStore } from "@netlify/blobs";
+import { ElevenLabsClient, ElevenLabsError } from "@elevenlabs/elevenlabs-js";
 
 const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY!;
 const ELEVENLABS_VOICE_ID =
   process.env.ELEVENLABS_VOICE_ID ?? "21m00Tcm4TlvDq8ikWAM"; // default: Rachel
 const ELEVENLABS_MODEL_ID =
   process.env.ELEVENLABS_MODEL_ID ?? "eleven_multilingual_v2";
+const TTS_PREGENERATE_SECRET = process.env.TTS_PREGENERATE_SECRET;
 const TTS_FORMAT_VERSION = "v2";
 const ELEVENLABS_MAX_TEXT_LENGTH = 5000;
 const ELEVENLABS_SAFE_TEXT_LENGTH = 4500;
@@ -36,6 +38,54 @@ const client = createClient({
   space: process.env.CONTENTFUL_SPACE_ID!,
   accessToken: process.env.CONTENTFUL_CDAPI!,
 });
+
+// ---------------------------------------------------------------------------
+// ElevenLabs SDK client
+// ---------------------------------------------------------------------------
+let _elevenLabsClient: ElevenLabsClient | null = null;
+function getElevenLabsClient() {
+  if (!_elevenLabsClient) {
+    _elevenLabsClient = new ElevenLabsClient({ apiKey: ELEVENLABS_API_KEY });
+  }
+  return _elevenLabsClient;
+}
+
+async function readableStreamToArrayBuffer(
+  stream: ReadableStream<Uint8Array>
+): Promise<ArrayBuffer> {
+  const reader = stream.getReader();
+  const chunks: Uint8Array[] = [];
+  let totalLength = 0;
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    chunks.push(value);
+    totalLength += value.byteLength;
+  }
+
+  const merged = new Uint8Array(totalLength);
+  let offset = 0;
+  for (const chunk of chunks) {
+    merged.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+  return merged.buffer;
+}
+
+function elevenLabsErrorCode(err: ElevenLabsError): string | undefined {
+  const body = err.body as
+    | { detail?: { status?: string; code?: string } }
+    | undefined;
+  return body?.detail?.status ?? body?.detail?.code;
+}
+
+function elevenLabsErrorMessage(err: ElevenLabsError): string {
+  const body = err.body as
+    | { detail?: { message?: string } }
+    | undefined;
+  return body?.detail?.message ?? err.message ?? "ElevenLabs API error";
+}
 
 // ---------------------------------------------------------------------------
 // Netlify Blobs cache
@@ -81,6 +131,7 @@ function audioHeaders(hash: string) {
     "Netlify-CDN-Cache-Control": "public, s-maxage=31536000, stale-while-revalidate=86400, durable",
     ETag: `"${hash}"`,
     "X-TTS-Version": hash,
+    "X-TTS-Format-Version": TTS_FORMAT_VERSION,
   };
 }
 
@@ -263,6 +314,10 @@ async function fetchChapterText(chapterId: string) {
   }
 }
 
+type ChapterTextResult =
+  | { text: string }
+  | { error: string; status: 404 };
+
 async function acquireLock(cacheKey: string) {
   const store = ttsStore();
   const key = lockKey(cacheKey);
@@ -340,46 +395,32 @@ async function generateSpeech(text: string): Promise<ArrayBuffer> {
     );
   }
 
-  const url = `https://api.elevenlabs.io/v1/text-to-speech/${ELEVENLABS_VOICE_ID}`;
+  try {
+    const stream = await getElevenLabsClient().textToSpeech.convert(
+      ELEVENLABS_VOICE_ID,
+      {
+        text,
+        modelId: ELEVENLABS_MODEL_ID,
+        outputFormat: "mp3_44100_128",
+        voiceSettings: {
+          stability: 0.5,
+          similarityBoost: 0.75,
+          style: 0.55,
+          useSpeakerBoost: true,
+        },
+      }
+    );
 
-  const res = await fetch(url, {
-    method: "POST",
-    headers: {
-      "xi-api-key": ELEVENLABS_API_KEY,
-      "Content-Type": "application/json",
-      Accept: "audio/mpeg",
-    },
-    body: JSON.stringify({
-      text,
-      model_id: ELEVENLABS_MODEL_ID,
-      voice_settings: {
-        stability: 0.5,
-        similarity_boost: 0.75,
-        style: 0.4,
-        use_speaker_boost: true,
-      },
-    }),
-  });
-
-  if (!res.ok) {
-    const errorText = await res.text();
-    let code: string | undefined;
-    let message = `ElevenLabs API error (${res.status})`;
-
-    try {
-      const parsed = JSON.parse(errorText) as {
-        detail?: { message?: string; status?: string; code?: string };
-      };
-      code = parsed.detail?.status ?? parsed.detail?.code;
-      message = parsed.detail?.message ?? message;
-    } catch {
-      message = errorText || message;
+    return readableStreamToArrayBuffer(stream);
+  } catch (err) {
+    if (err instanceof ElevenLabsError) {
+      const code = elevenLabsErrorCode(err);
+      const message = elevenLabsErrorMessage(err);
+      console.error("ElevenLabs SDK error:", { status: err.statusCode, code, message, body: err.body });
+      throw new TTSProviderError(message, err.statusCode ?? 502, code);
     }
-
-    throw new TTSProviderError(message, res.status, code);
+    throw err;
   }
-
-  return res.arrayBuffer();
 }
 
 async function generateSpeechForChapter(text: string) {
@@ -391,6 +432,118 @@ async function generateSpeechForChapter(text: string) {
   }
 
   return concatMp3Buffers(audioParts);
+}
+
+function getPregenerateToken(req: NextRequest) {
+  const authHeader = req.headers.get("authorization");
+  if (authHeader?.startsWith("Bearer ")) {
+    return authHeader.slice("Bearer ".length).trim();
+  }
+
+  return req.headers.get("x-tts-secret")?.trim() ?? null;
+}
+
+function isPregenerateAuthorized(req: NextRequest) {
+  if (!TTS_PREGENERATE_SECRET) {
+    return false;
+  }
+
+  return getPregenerateToken(req) === TTS_PREGENERATE_SECRET;
+}
+
+type ChapterAudioResult = {
+  audio: ArrayBuffer;
+  cacheKey: string;
+  hash: string;
+  source: "cache" | "generated";
+};
+
+async function resolveChapterAudio(chapterId: string): Promise<ChapterAudioResult> {
+  const chapter = (await fetchChapterText(chapterId)) as ChapterTextResult;
+  if ("error" in chapter) {
+    throw new TTSProviderError(chapter.error, chapter.status, "chapter_lookup_failed");
+  }
+
+  const hash = versionHash(chapterId, chapter.text);
+  const cacheKey = blobKey(chapterId, hash);
+
+  const cached = await getCached(cacheKey);
+  if (cached) {
+    return {
+      audio: cached,
+      cacheKey,
+      hash,
+      source: "cache",
+    };
+  }
+
+  const hasLock = await acquireLock(cacheKey);
+  if (!hasLock) {
+    const pendingAudio = await waitForCachedAudio(cacheKey);
+    if (pendingAudio) {
+      return {
+        audio: pendingAudio,
+        cacheKey,
+        hash,
+        source: "cache",
+      };
+    }
+
+    throw new TTSProviderError(
+      "Audio generation is in progress. Please try again in a moment.",
+      503,
+      "generation_in_progress"
+    );
+  }
+
+  try {
+    const audio = await generateSpeechForChapter(chapter.text);
+    await saveToCache(cacheKey, audio);
+
+    return {
+      audio,
+      cacheKey,
+      hash,
+      source: "generated",
+    };
+  } finally {
+    await releaseLock(cacheKey);
+  }
+}
+
+function jsonErrorResponse(err: unknown) {
+  if (err instanceof TTSProviderError) {
+    if (err.code === "quota_exceeded") {
+      return NextResponse.json(
+        { error: err.message, code: err.code },
+        { status: 402 }
+      );
+    }
+
+    if (err.code === "generation_in_progress") {
+      return NextResponse.json(
+        { error: err.message, code: err.code },
+        { status: 503, headers: { "Retry-After": "5" } }
+      );
+    }
+
+    if (err.status === 404) {
+      return NextResponse.json(
+        { error: err.message, code: err.code ?? "chapter_lookup_failed" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json(
+      { error: err.message, code: err.code ?? "tts_provider_error" },
+      { status: err.status >= 400 && err.status < 600 ? err.status : 502 }
+    );
+  }
+
+  return NextResponse.json(
+    { error: "Failed to generate audio" },
+    { status: 500 }
+  );
 }
 
 // ---------------------------------------------------------------------------
@@ -408,72 +561,61 @@ export async function GET(
       { status: 500 }
     );
   }
-
-  // 1. Resolve the current chapter text so the cache key changes if
-  // the chapter text, voice, or model changes.
-  const chapter = await fetchChapterText(chapterId);
-  if ("error" in chapter) {
-    return NextResponse.json(
-      { error: chapter.error },
-      { status: chapter.status }
-    );
-  }
-
-  const hash = versionHash(chapterId, chapter.text);
-  const cacheKey = blobKey(chapterId, hash);
-
-  // 2. Check the shared blob cache first.
-  const cached = await getCached(cacheKey);
-  if (cached) {
-    return new NextResponse(cached, {
-      headers: audioHeaders(hash),
-    });
-  }
-
-  // 3. Acquire a generation lock so concurrent first hits don't all
-  // generate the same MP3 at once.
-  const hasLock = await acquireLock(cacheKey);
-  if (!hasLock) {
-    const pendingAudio = await waitForCachedAudio(cacheKey);
-    if (pendingAudio) {
-      return new NextResponse(pendingAudio, {
-        headers: audioHeaders(hash),
-      });
-    }
-
-    return NextResponse.json(
-      { error: "Audio generation is in progress. Please try again in a moment." },
-      {
-        status: 503,
-        headers: { "Retry-After": "5" },
-      }
-    );
-  }
-
-  // 4. Generate audio via ElevenLabs
   try {
-    const audio = await generateSpeechForChapter(chapter.text);
-    await saveToCache(cacheKey, audio);
+    const result = await resolveChapterAudio(chapterId);
+    const headers = {
+      ...audioHeaders(result.hash),
+      "X-TTS-Source": result.source,
+    };
 
-    return new NextResponse(audio, {
-      headers: audioHeaders(hash),
+    return new NextResponse(result.audio, {
+      headers,
     });
   } catch (err) {
     console.error("TTS generation failed:", err);
+    return jsonErrorResponse(err);
+  }
+}
 
-    if (err instanceof TTSProviderError) {
-      const status = err.code === "quota_exceeded" ? 402 : 502;
-      return NextResponse.json(
-        { error: err.message, code: err.code ?? "tts_provider_error" },
-        { status }
-      );
-    }
+export async function POST(
+  req: NextRequest,
+  { params }: { params: Promise<{ chapterId: string }> }
+) {
+  const { chapterId } = await params;
 
+  if (!ELEVENLABS_API_KEY) {
     return NextResponse.json(
-      { error: "Failed to generate audio" },
+      { error: "ElevenLabs API key not configured" },
       { status: 500 }
     );
-  } finally {
-    await releaseLock(cacheKey);
+  }
+
+  if (!TTS_PREGENERATE_SECRET) {
+    return NextResponse.json(
+      { error: "TTS pre-generation secret not configured" },
+      { status: 503 }
+    );
+  }
+
+  if (!isPregenerateAuthorized(req)) {
+    return NextResponse.json(
+      { error: "Unauthorized" },
+      { status: 401 }
+    );
+  }
+
+  try {
+    const result = await resolveChapterAudio(chapterId);
+
+    return NextResponse.json({
+      ok: true,
+      chapterId,
+      hash: result.hash,
+      cacheKey: result.cacheKey,
+      source: result.source,
+    });
+  } catch (err) {
+    console.error("TTS pre-generation failed:", err);
+    return jsonErrorResponse(err);
   }
 }
