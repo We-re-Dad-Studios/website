@@ -10,7 +10,6 @@ const ELEVENLABS_VOICE_ID =
   process.env.ELEVENLABS_VOICE_ID ?? "21m00Tcm4TlvDq8ikWAM"; // default: Rachel
 const ELEVENLABS_MODEL_ID =
   process.env.ELEVENLABS_MODEL_ID ?? "eleven_multilingual_v2";
-const TTS_PREGENERATE_SECRET = process.env.TTS_PREGENERATE_SECRET;
 const TTS_FORMAT_VERSION = "v2";
 const ELEVENLABS_MAX_TEXT_LENGTH = 5000;
 const ELEVENLABS_SAFE_TEXT_LENGTH = 4500;
@@ -434,22 +433,6 @@ async function generateSpeechForChapter(text: string) {
   return concatMp3Buffers(audioParts);
 }
 
-function getPregenerateToken(req: NextRequest) {
-  const authHeader = req.headers.get("authorization");
-  if (authHeader?.startsWith("Bearer ")) {
-    return authHeader.slice("Bearer ".length).trim();
-  }
-
-  return req.headers.get("x-tts-secret")?.trim() ?? null;
-}
-
-function isPregenerateAuthorized(req: NextRequest) {
-  if (!TTS_PREGENERATE_SECRET) {
-    return false;
-  }
-
-  return getPregenerateToken(req) === TTS_PREGENERATE_SECRET;
-}
 
 type ChapterAudioResult = {
   audio: ArrayBuffer;
@@ -466,6 +449,12 @@ async function resolveChapterAudio(chapterId: string): Promise<ChapterAudioResul
 
   const hash = versionHash(chapterId, chapter.text);
   const cacheKey = blobKey(chapterId, hash);
+
+  // In development, skip the blob store and deliver audio directly.
+  if (process.env.NODE_ENV === "development") {
+    const audio = await generateSpeechForChapter(chapter.text);
+    return { audio, cacheKey, hash, source: "generated" };
+  }
 
   const cached = await getCached(cacheKey);
   if (cached) {
@@ -578,7 +567,7 @@ export async function GET(
 }
 
 export async function POST(
-  req: NextRequest,
+  _req: NextRequest,
   { params }: { params: Promise<{ chapterId: string }> }
 ) {
   const { chapterId } = await params;
@@ -587,20 +576,6 @@ export async function POST(
     return NextResponse.json(
       { error: "ElevenLabs API key not configured" },
       { status: 500 }
-    );
-  }
-
-  if (!TTS_PREGENERATE_SECRET) {
-    return NextResponse.json(
-      { error: "TTS pre-generation secret not configured" },
-      { status: 503 }
-    );
-  }
-
-  if (!isPregenerateAuthorized(req)) {
-    return NextResponse.json(
-      { error: "Unauthorized" },
-      { status: 401 }
     );
   }
 
