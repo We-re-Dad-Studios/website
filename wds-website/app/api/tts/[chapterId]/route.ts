@@ -107,8 +107,7 @@ async function ttsRequest(
       body: JSON.stringify({
         text,
         model_id: ELEVENLABS_MODEL_ID,
-        // previous_text / next_text give ElevenLabs context so the voice
-        // tone stays consistent across chunks
+        // previous_text / next_text keep voice tone consistent across chunks
         ...(previousText ? { previous_text: previousText } : {}),
         ...(nextText ? { next_text: nextText } : {}),
         voice_settings: {
