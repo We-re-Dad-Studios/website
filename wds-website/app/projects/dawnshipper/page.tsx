@@ -4,7 +4,7 @@ import { createContentfulClient, getBlogContentTypeId, getChapterList } from "@/
 // import { Main } from "./_components/main";
 import { Main } from "@/components/dawnshipper-restructured";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 export interface Chapter {
   id: string;

@@ -12,11 +12,9 @@ import { createPortal } from "react-dom";
 import { Comments } from "./Comments";
 import { calculateReadingTime } from "@/lib/reading-time";
 import { extractPlainText } from "@/lib/extract-doc-text";
-import { useElevenLabsTTS } from "@/hooks/useElevenLabsTTS";
+// TTS disabled — import preserved for future re-enablement
+// import { useAudioPlayer } from "@/hooks/useElevenLabsTTS";
 import {
-  Volume2,
-  Loader2,
-  Pause,
   ChevronLeft,
   BookOpen,
   Settings2,
@@ -29,7 +27,6 @@ import {
   Trash2,
   Download,
   Check,
-  Square,
 } from "lucide-react";
 import { useScrollProgress } from "@/components/scroll-progress-bar";
 import { useScroll, motion, AnimatePresence, useMotionValueEvent } from "framer-motion";
@@ -40,12 +37,13 @@ import { useBookmarks, useOfflineChapters } from "@/hooks/useReaderStorage";
 import { applyHighlights, describeSelection } from "@/lib/highlight-dom";
 import { toast } from "sonner";
 
-function formatTime(seconds: number): string {
-  if (!seconds || !isFinite(seconds)) return "0:00";
-  const m = Math.floor(seconds / 60);
-  const s = Math.floor(seconds % 60);
-  return `${m}:${s.toString().padStart(2, "0")}`;
-}
+// TTS disabled — preserved for future re-enablement
+// function formatTime(seconds: number): string {
+//   if (!seconds || !isFinite(seconds)) return "0:00";
+//   const m = Math.floor(seconds / 60);
+//   const s = Math.floor(seconds % 60);
+//   return `${m}:${s.toString().padStart(2, "0")}`;
+// }
 
 // ============ TYPOGRAPHY OPTIONS ============
 const createOptions = (showDropCap: boolean): Options => {
@@ -150,6 +148,8 @@ export interface Chapter {
   content?: Document;
   isFree?: boolean;
   slug: string;
+  /** URL to a pre-generated audio narration (Contentful asset) */
+  audioUrl?: string;
 }
 
 interface ChapterReaderProps {
@@ -636,15 +636,17 @@ function ChapterReader({
     .replace(/\s+/g, " ")
     .trim();
   const readingTime = calculateReadingTime(cleanedText);
-  const {
-    status: ttsStatus,
-    toggle: ttsToggle,
-    stop: ttsStop,
-    seek: ttsSeek,
-    progress: ttsProgress,
-    currentTime: ttsCurrentTime,
-    duration: ttsDuration,
-  } = useElevenLabsTTS(chapter.id);
+  // TTS disabled — hook preserved for future re-enablement
+  // const {
+  //   status: ttsStatus,
+  //   toggle: ttsToggle,
+  //   stop: ttsStop,
+  //   seek: ttsSeek,
+  //   progress: ttsProgress,
+  //   currentTime: ttsCurrentTime,
+  //   duration: ttsDuration,
+  //   hasAudio,
+  // } = useAudioPlayer(chapter.audioUrl);
 
   // Load settings from localStorage, with system-preference theme fallback
   const [settings, setSettings] = useState<ReaderSettings>(() => {
@@ -955,44 +957,6 @@ function ChapterReader({
 
               {/* Right Controls */}
               <div className="flex items-center gap-2 sm:gap-3">
-                {/* Audio Button */}
-                <button
-                  onClick={ttsToggle}
-                  disabled={ttsStatus === "loading"}
-                  className={`
-                    flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg transition-all text-sm
-                    ${ttsStatus === "playing" || ttsStatus === "loading"
-                      ? "bg-amber-500 text-white"
-                      : settings.theme === "dark" || settings.theme === "midnight"
-                        ? "bg-white/10 hover:bg-white/20"
-                        : "bg-black/10 hover:bg-black/20"
-                    }
-                    ${ttsStatus === "loading" ? "opacity-70 cursor-wait" : ""}
-                  `}
-                >
-                  {ttsStatus === "loading" ? (
-                    <>
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                      <span className="hidden sm:inline">Loading…</span>
-                    </>
-                  ) : ttsStatus === "playing" ? (
-                    <>
-                      <Pause className="w-4 h-4" />
-                      <span className="hidden sm:inline">Pause</span>
-                    </>
-                  ) : ttsStatus === "paused" ? (
-                    <>
-                      <Volume2 className="w-4 h-4" />
-                      <span className="hidden sm:inline">Resume</span>
-                    </>
-                  ) : (
-                    <>
-                      <Volume2 className="w-4 h-4" />
-                      <span className="hidden sm:inline">Listen</span>
-                    </>
-                  )}
-                </button>
-
                 {/* Bookmarks Button */}
                 <button
                   onClick={() => setShowBookmarks(true)}
@@ -1065,61 +1029,6 @@ function ChapterReader({
               </div>
             </div>
 
-            {/* Audio Player Controls */}
-            <AnimatePresence>
-              {(ttsStatus === "playing" || ttsStatus === "paused" || ttsStatus === "loading") && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                  className={`overflow-hidden border-t ${currentTheme.border}`}
-                >
-                  <div className={`px-4 py-2 flex items-center gap-3 ${currentTheme.text}`}>
-                    {/* Stop button */}
-                    <button
-                      onClick={ttsStop}
-                      className={`p-1.5 rounded-lg transition-colors ${
-                        settings.theme === "dark" || settings.theme === "midnight"
-                          ? "hover:bg-white/10"
-                          : "hover:bg-black/10"
-                      }`}
-                      aria-label="Stop"
-                    >
-                      <Square className="w-3.5 h-3.5" />
-                    </button>
-
-                    {/* Current time */}
-                    <span className={`text-xs tabular-nums min-w-[3ch] ${currentTheme.mutedText}`}>
-                      {formatTime(ttsCurrentTime)}
-                    </span>
-
-                    {/* Progress bar */}
-                    <div
-                      className="flex-1 h-1.5 rounded-full bg-white/10 cursor-pointer relative group"
-                      onClick={(e) => {
-                        const rect = e.currentTarget.getBoundingClientRect();
-                        ttsSeek((e.clientX - rect.left) / rect.width);
-                      }}
-                    >
-                      <div
-                        className="h-full rounded-full bg-amber-500 transition-[width] duration-200"
-                        style={{ width: `${ttsProgress * 100}%` }}
-                      />
-                      <div
-                        className="absolute top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-amber-400 opacity-0 group-hover:opacity-100 transition-opacity"
-                        style={{ left: `calc(${ttsProgress * 100}% - 6px)` }}
-                      />
-                    </div>
-
-                    {/* Duration */}
-                    <span className={`text-xs tabular-nums min-w-[3ch] ${currentTheme.mutedText}`}>
-                      {formatTime(ttsDuration)}
-                    </span>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
           </div>
         </header>,
         document.body

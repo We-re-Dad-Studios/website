@@ -74,8 +74,8 @@ const config: Config = {
   			}
   		},
   		fontFamily: {
-			bebas: ['Bebas Neue', 'sans-serif'],
-			agdasima: ['Agdasima', 'sans-serif']
+			bebas: ['var(--font-bebas)', 'sans-serif'],
+			agdasima: ['var(--font-agdasima)', 'sans-serif']
 		  },		  
   		borderRadius: {
   			lg: 'var(--radius)',

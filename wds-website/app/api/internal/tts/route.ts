@@ -1,54 +1,28 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "contentful";
+import { createContentfulClient } from "@/lib/contentful";
 import { extractPlainText } from "@/lib/extract-doc-text";
-import { getStore } from "@netlify/blobs";
 
 const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY!;
 const ELEVENLABS_VOICE_ID =
   process.env.ELEVENLABS_VOICE_ID ?? "21m00Tcm4TlvDq8ikWAM";
 const ELEVENLABS_MODEL_ID =
   process.env.ELEVENLABS_MODEL_ID ?? "eleven_multilingual_v2";
+const INTERNAL_SECRET = process.env.INTERNAL_SECRET;
 
-// ElevenLabs limit per request — try full text first, chunk only if rejected
 const MAX_CHUNK_CHARS = 4500;
-const CONTEXT_CHARS = 500; // chars of previous/next text for voice consistency
+const CONTEXT_CHARS = 500;
 
 // ---------------------------------------------------------------------------
-// Contentful
+// Auth
 // ---------------------------------------------------------------------------
-const client = createClient({
-  space: process.env.CONTENTFUL_SPACE_ID!,
-  accessToken: process.env.CONTENTFUL_CDAPI!,
-});
-
-// ---------------------------------------------------------------------------
-// Netlify Blobs — simple cache
-// ---------------------------------------------------------------------------
-function blobKey(chapterId: string) {
-  return chapterId.replace(/[^a-zA-Z0-9_-]/g, "_") + ".mp3";
-}
-
-async function getCached(chapterId: string): Promise<ArrayBuffer | null> {
-  try {
-    const store = getStore("tts-audio");
-    const blob = await store.get(blobKey(chapterId), { type: "arrayBuffer" });
-    return blob ?? null;
-  } catch {
-    return null;
-  }
-}
-
-async function saveToCache(chapterId: string, audio: ArrayBuffer) {
-  try {
-    const store = getStore("tts-audio");
-    await store.set(blobKey(chapterId), audio);
-  } catch (err) {
-    console.error("Blob cache write failed:", err);
-  }
+function isAuthorized(req: NextRequest): boolean {
+  if (!INTERNAL_SECRET) return false;
+  const token = req.headers.get("x-internal-secret");
+  return token === INTERNAL_SECRET;
 }
 
 // ---------------------------------------------------------------------------
-// Text chunking — sentence-boundary split with context overlap
+// Text chunking
 // ---------------------------------------------------------------------------
 function chunkText(text: string): string[] {
   if (text.length <= MAX_CHUNK_CHARS) return [text];
@@ -74,7 +48,6 @@ function chunkText(text: string): string[] {
       if (buf) current = buf;
       continue;
     }
-
     const next = current ? `${current} ${s}` : s;
     if (next.length > MAX_CHUNK_CHARS) {
       if (current) chunks.push(current);
@@ -88,13 +61,15 @@ function chunkText(text: string): string[] {
 }
 
 // ---------------------------------------------------------------------------
-// ElevenLabs — plain fetch
+// ElevenLabs
 // ---------------------------------------------------------------------------
 async function ttsRequest(
   text: string,
   previousText?: string,
   nextText?: string
 ): Promise<ArrayBuffer> {
+  const supportsContext = !ELEVENLABS_MODEL_ID.startsWith("eleven_v3");
+
   const res = await fetch(
     `https://api.elevenlabs.io/v1/text-to-speech/${ELEVENLABS_VOICE_ID}`,
     {
@@ -107,9 +82,8 @@ async function ttsRequest(
       body: JSON.stringify({
         text,
         model_id: ELEVENLABS_MODEL_ID,
-        // previous_text / next_text keep voice tone consistent across chunks
-        ...(previousText ? { previous_text: previousText } : {}),
-        ...(nextText ? { next_text: nextText } : {}),
+        ...(supportsContext && previousText ? { previous_text: previousText } : {}),
+        ...(supportsContext && nextText ? { next_text: nextText } : {}),
         voice_settings: {
           stability: 0.5,
           similarity_boost: 0.75,
@@ -122,36 +96,35 @@ async function ttsRequest(
 
   if (!res.ok) {
     const body = await res.text().catch(() => "");
-    console.error(`ElevenLabs ${res.status}:`, body);
-    throw new Error(`ElevenLabs API error (${res.status})`);
+    throw new Error(`ElevenLabs ${res.status}: ${body}`);
   }
 
   return res.arrayBuffer();
 }
 
+function getID3Length(bytes: Uint8Array): number {
+  if (bytes.length < 10 || bytes[0] !== 0x49 || bytes[1] !== 0x44 || bytes[2] !== 0x33) return 0;
+  const size =
+    ((bytes[6] & 0x7f) << 21) |
+    ((bytes[7] & 0x7f) << 14) |
+    ((bytes[8] & 0x7f) << 7) |
+    (bytes[9] & 0x7f);
+  return 10 + size + (bytes[5] & 0x10 ? 10 : 0);
+}
+
 async function generateAudio(text: string): Promise<ArrayBuffer> {
-  // Try sending the full text as one request
-  if (text.length <= MAX_CHUNK_CHARS) {
-    return ttsRequest(text);
-  }
-
-  // Text is too long — chunk with context for voice consistency
   const chunks = chunkText(text);
-  const parts: ArrayBuffer[] = [];
 
-  for (let i = 0; i < chunks.length; i++) {
-    const prevText = i > 0
-      ? chunks[i - 1].slice(-CONTEXT_CHARS)
-      : undefined;
-    const nextTxt = i < chunks.length - 1
-      ? chunks[i + 1].slice(0, CONTEXT_CHARS)
-      : undefined;
-
-    parts.push(await ttsRequest(chunks[i], prevText, nextTxt));
+  if (chunks.length === 1) {
+    return ttsRequest(chunks[0]);
   }
 
-  // Concatenate MP3 frames (strip ID3 tags from subsequent parts)
-  if (parts.length === 1) return parts[0];
+  const parts: ArrayBuffer[] = [];
+  for (let i = 0; i < chunks.length; i++) {
+    const prev = i > 0 ? chunks[i - 1].slice(-CONTEXT_CHARS) : undefined;
+    const next = i < chunks.length - 1 ? chunks[i + 1].slice(0, CONTEXT_CHARS) : undefined;
+    parts.push(await ttsRequest(chunks[i], prev, next));
+  }
 
   let totalLen = 0;
   const slices = parts.map((buf, i) => {
@@ -170,42 +143,35 @@ async function generateAudio(text: string): Promise<ArrayBuffer> {
   return merged.buffer;
 }
 
-function getID3Length(bytes: Uint8Array): number {
-  if (bytes.length < 10 || bytes[0] !== 0x49 || bytes[1] !== 0x44 || bytes[2] !== 0x33) return 0;
-  const size = ((bytes[6] & 0x7f) << 21) | ((bytes[7] & 0x7f) << 14) | ((bytes[8] & 0x7f) << 7) | (bytes[9] & 0x7f);
-  return 10 + size + (bytes[5] & 0x10 ? 10 : 0);
-}
-
 // ---------------------------------------------------------------------------
-// Route — GET /api/tts/[chapterId]
+// POST /api/internal/tts
+// Body: { chapterId: string }
+// Returns: audio/mpeg download
 // ---------------------------------------------------------------------------
-export async function GET(
-  _req: NextRequest,
-  { params }: { params: Promise<{ chapterId: string }> }
-) {
-  const { chapterId } = await params;
+export async function POST(req: NextRequest) {
+  if (!isAuthorized(req)) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
   if (!ELEVENLABS_API_KEY) {
     return NextResponse.json({ error: "ElevenLabs API key not configured" }, { status: 500 });
   }
 
-  // 1. Serve from cache
-  const cached = await getCached(chapterId);
-  if (cached) {
-    return new NextResponse(cached, {
-      headers: {
-        "Content-Type": "audio/mpeg",
-        "Cache-Control": "public, max-age=31536000, immutable",
-      },
-    });
+  const { chapterId } = await req.json();
+  if (!chapterId) {
+    return NextResponse.json({ error: "chapterId is required" }, { status: 400 });
   }
 
-  // 2. Fetch chapter text
+  // Fetch chapter text
   let text: string;
+  let title: string;
   try {
+    const client = createContentfulClient();
     const entry = await client.getEntry(chapterId);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const content = (entry.fields as any).content;
+    const fields = entry.fields as any;
+    title = fields.title ?? "chapter";
+    const content = fields.content;
     if (!content) {
       return NextResponse.json({ error: "Chapter has no content" }, { status: 404 });
     }
@@ -217,19 +183,20 @@ export async function GET(
     return NextResponse.json({ error: "Chapter not found" }, { status: 404 });
   }
 
-  // 3. Generate + cache + return
+  // Generate audio
   try {
     const audio = await generateAudio(text);
-    saveToCache(chapterId, audio);
+    const safeName = title.replace(/[^a-zA-Z0-9_\- ]/g, "").replace(/\s+/g, "_");
 
     return new NextResponse(audio, {
       headers: {
         "Content-Type": "audio/mpeg",
-        "Cache-Control": "public, max-age=31536000, immutable",
+        "Content-Disposition": `attachment; filename="${safeName}.mp3"`,
       },
     });
   } catch (err) {
     console.error("TTS generation failed:", err);
-    return NextResponse.json({ error: "Failed to generate audio" }, { status: 500 });
+    const msg = err instanceof Error ? err.message : "Failed to generate audio";
+    return NextResponse.json({ error: msg }, { status: 500 });
   }
 }

@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Agdasima:wght@400;700&family=Bebas+Neue&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -8,10 +7,6 @@
 .bounce{
   animation-timing-function: cubic-bezier(0.175,0.885,0.32,1.275);
   transition-timing-function: cubic-bezier(0.175,0.885,0.32,1.275);
-}
-.setfont{
-  font-weight: 400;
-  font-style: normal;
 }
 
 

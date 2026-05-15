@@ -5,7 +5,7 @@ import { Main } from "@/components/osiris-restructured";
 type chapter={
   id:string,slug:string,title:string,chapterNumber:number|string,isFree:boolean,releaseDate:string
 }
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 export default async function Page() {
   const client = createContentfulClient();

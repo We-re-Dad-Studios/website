@@ -1,4 +1,5 @@
 // lib/contentful/server.ts
+import { cache } from "react";
 import { createClient } from "contentful";
 
 const getEnvValue = (...keys: string[]) => {
@@ -40,10 +41,11 @@ export interface ChapterRecord {
   previewText?: string;
   projectSlug?: string;
   content?: unknown;
+  audioUrl?: string;
   [key: string]: unknown;
 }
 
-export async function getNovelBySlug(slug: string) {
+export const getNovelBySlug = cache(async (slug: string) => {
   const client = createContentfulClient();
   const response = await client.getEntries({
     content_type: "novel",
@@ -53,9 +55,9 @@ export async function getNovelBySlug(slug: string) {
   });
 
   return response.items[0] ?? null;
-}
+});
 
-export async function getChapterList(novelId: string) {
+export const getChapterList = cache(async (novelId: string) => {
   const client = createContentfulClient();
   const response = await client.getEntries({
     content_type: "chapter",
@@ -70,12 +72,12 @@ export async function getChapterList(novelId: string) {
     id: item.sys.id,
     ...item.fields,
   }));
-}
+});
 
-export async function getBlogPost(id: string) {
+export const getBlogPost = cache(async (id: string) => {
   const client = createContentfulClient();
   return client.getEntry(id);
-}
+});
 
 export async function getChapterContent(chapterId: string) {
   const client = createContentfulClient();
@@ -83,7 +85,15 @@ export async function getChapterContent(chapterId: string) {
   return entry.fields.content;
 }
 
-export async function getChapterBySlug(slug: string): Promise<ChapterRecord | null> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function extractAudioUrl(fields: any): string | undefined {
+  const file = fields?.audio?.fields?.file;
+  if (!file?.url) return undefined;
+  // Contentful URLs are protocol-relative, prefix https:
+  return file.url.startsWith("//") ? `https:${file.url}` : file.url;
+}
+
+export const getChapterBySlug = cache(async (slug: string): Promise<ChapterRecord | null> => {
   const client = createContentfulClient();
   const response = await client.getEntries({
     content_type: "chapter",
@@ -107,8 +117,9 @@ export async function getChapterBySlug(slug: string): Promise<ChapterRecord | nu
     previewText: item.fields.previewText as string | undefined,
     projectSlug: item.fields.projectSlug as string | undefined,
     content: item.fields.content,
+    audioUrl: extractAudioUrl(item.fields),
   };
-}
+});
 
 export async function getChapterByNumber(
   chapterNumber: number,
@@ -138,6 +149,7 @@ export async function getChapterByNumber(
     previewText: item.fields.previewText as string | undefined,
     projectSlug: item.fields.projectSlug as string | undefined,
     content: item.fields.content,
+    audioUrl: extractAudioUrl(item.fields),
   };
 }
 // Generic Contentful system fields

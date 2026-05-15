@@ -1,18 +1,36 @@
 import type { Metadata, Viewport } from "next";
 import { Suspense } from "react";
+import dynamic from "next/dynamic";
+import { Agdasima, Bebas_Neue } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/Navbar";
-import { Newsletter } from "@/components/Newsletter";
 import { Footer } from "@/components/Footer";
 import { PostHogProvider } from "@/components/PostHogProvider";
 import PageView from "@/components/PhPageView";
 import { Toaster } from "@/components/ui/sonner";
-// import KoFiWidget from "@/components/KofiWidget";
 import { GlitchTransition } from "@/components/glitch-transition";
 import ScrollProgressBar, { ScrollProgressBarProvider } from "@/components/scroll-progress-bar";
 import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { OfflineBanner } from "@/components/OfflineBanner";
+
+const Newsletter = dynamic(() =>
+  import("@/components/Newsletter").then((mod) => mod.Newsletter)
+);
+
+const agdasima = Agdasima({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  display: "swap",
+  variable: "--font-agdasima",
+});
+
+const bebasNeue = Bebas_Neue({
+  subsets: ["latin"],
+  weight: "400",
+  display: "swap",
+  variable: "--font-bebas",
+});
 
 export const metadata: Metadata = {
   title: "We're Dad Studios",
@@ -64,9 +82,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${agdasima.variable} ${bebasNeue.variable}`}>
       <PostHogProvider>
-        <body className="antialiased bg-background text-foreground font-agdasima setfont">
+        <body className="antialiased bg-background text-foreground font-agdasima">
           <ThemeProvider>
             <ServiceWorkerRegister />
             <Suspense fallback={null}>

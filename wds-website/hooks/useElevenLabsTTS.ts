@@ -2,98 +2,53 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
-type TTSStatus = "idle" | "loading" | "playing" | "paused" | "error";
+type TTSStatus = "idle" | "playing" | "paused";
 
-export function useElevenLabsTTS(chapterId: string) {
+/**
+ * Simple audio player hook. Pass the URL of a pre-generated audio file
+ * (e.g. a Contentful asset). If no URL is provided the hook is inert.
+ */
+export function useAudioPlayer(audioUrl: string | undefined) {
   const [status, setStatus] = useState<TTSStatus>("idle");
   const [progress, setProgress] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [error, setError] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const blobUrlRef = useRef<string | null>(null);
-  const abortRef = useRef<AbortController | null>(null);
 
-  const cleanup = useCallback(() => {
-    abortRef.current?.abort();
-    abortRef.current = null;
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.removeAttribute("src");
-      audioRef.current = null;
-    }
-    if (blobUrlRef.current) {
-      URL.revokeObjectURL(blobUrlRef.current);
-      blobUrlRef.current = null;
-    }
-  }, []);
-
+  // Create / swap audio element when URL changes
   useEffect(() => {
-    return () => cleanup();
-  }, [chapterId, cleanup]);
+    if (!audioUrl) return;
 
-  const loadAudio = useCallback(async (): Promise<HTMLAudioElement> => {
-    if (audioRef.current) return audioRef.current;
+    const audio = new Audio(audioUrl);
 
-    const controller = new AbortController();
-    abortRef.current = controller;
-
-    const res = await fetch(`/api/tts/${chapterId}`, {
-      signal: controller.signal,
-    });
-
-    if (!res.ok) {
-      const body = await res.json().catch(() => ({ error: "Unknown error" }));
-      throw new Error(body.error ?? `HTTP ${res.status}`);
-    }
-
-    const blob = await res.blob();
-    const url = URL.createObjectURL(blob);
-    blobUrlRef.current = url;
-
-    const audio = new Audio(url);
-
-    audio.addEventListener("loadedmetadata", () => {
-      setDuration(audio.duration);
-    });
+    audio.addEventListener("loadedmetadata", () => setDuration(audio.duration));
     audio.addEventListener("timeupdate", () => {
       setCurrentTime(audio.currentTime);
-      if (audio.duration) {
-        setProgress(audio.currentTime / audio.duration);
-      }
+      if (audio.duration) setProgress(audio.currentTime / audio.duration);
     });
     audio.addEventListener("ended", () => {
       setStatus("idle");
       setProgress(1);
     });
-    audio.addEventListener("error", () => {
-      setStatus("error");
-      setError("Audio playback failed");
-    });
 
     audioRef.current = audio;
-    return audio;
-  }, [chapterId]);
+
+    return () => {
+      audio.pause();
+      audio.removeAttribute("src");
+      audioRef.current = null;
+    };
+  }, [audioUrl]);
 
   const play = useCallback(async () => {
-    try {
-      setStatus("loading");
-      setError(null);
-      const audio = await loadAudio();
-      await audio.play();
-      setStatus("playing");
-    } catch (err) {
-      if (err instanceof DOMException && err.name === "AbortError") return;
-      setStatus("error");
-      setError(err instanceof Error ? err.message : "Failed to play audio");
-    }
-  }, [loadAudio]);
+    if (!audioRef.current) return;
+    await audioRef.current.play();
+    setStatus("playing");
+  }, []);
 
   const pause = useCallback(() => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      setStatus("paused");
-    }
+    audioRef.current?.pause();
+    setStatus("paused");
   }, []);
 
   const stop = useCallback(() => {
@@ -122,7 +77,7 @@ export function useElevenLabsTTS(chapterId: string) {
     progress,
     currentTime,
     duration,
-    error,
+    hasAudio: !!audioUrl,
     play,
     pause,
     stop,

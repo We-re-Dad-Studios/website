@@ -7,7 +7,7 @@ import { notFound } from "next/navigation";
 import { BlogPostPageParams } from "../page";
 import { getBlogPost } from "@/lib/contentful";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 async function getBlogEntryOrNull(id: string) {
   try {

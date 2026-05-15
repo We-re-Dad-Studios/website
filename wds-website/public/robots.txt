@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Host
-Host: https://www.weredadstudios.com
+Host: https://weredadstudios.com
 
 # Sitemaps
-Sitemap: https://www.weredadstudios.com/sitemap.xml
+Sitemap: https://weredadstudios.com/sitemap.xml
