@@ -60,7 +60,7 @@ export const metadata: Metadata = {
     siteName: "We're Dad Studios",
     images: [
       {
-        url: "/images/WDS_LOGO_BLACK_.png", // local image
+        url: "/images/WDS LOGO BLACK_.png",
         width: 1200,
         height: 630,
         alt: "WDS Logo",
@@ -68,6 +68,13 @@ export const metadata: Metadata = {
     ],
     locale: "en_US",
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "We're Dad Studios",
+    description:
+      "WDS is a creative studio specializing in game development, animation, manhwa, manga, and novel creation.",
+    images: ["/images/WDS LOGO BLACK_.png"],
   },
 };
 
@@ -83,6 +90,27 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${agdasima.variable} ${bebasNeue.variable}`}>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: "We're Dad Studios",
+              url: "https://weredadstudios.com",
+              logo: "https://weredadstudios.com/images/WDS LOGO BLACK_.png",
+              sameAs: [
+                "https://www.tiktok.com/@weredadstudios",
+                "https://www.instagram.com/weredadstudios",
+                "https://discord.gg/Vjjw2f42",
+              ],
+              description:
+                "A creative studio specializing in game development, animation, manhwa, manga, and novel creation.",
+            }),
+          }}
+        />
+      </head>
       <PostHogProvider>
         <body className="antialiased bg-background text-foreground font-agdasima">
           <ThemeProvider>

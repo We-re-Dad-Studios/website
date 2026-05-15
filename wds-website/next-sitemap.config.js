@@ -13,7 +13,7 @@ module.exports = {
   sitemapSize: 7000,
   autoLastmod: true,
 
-  exclude: ["/api/*", "/server-sitemap.xml"],
+  exclude: ["/api/*", "/internal/*", "/server-sitemap.xml"],
 
   robotsTxtOptions: {
     policies: [

@@ -1,4 +1,5 @@
 // app/blog/page.tsx
+import { Metadata } from "next";
 import { Home } from "./[id]/_components/Home";
 import {
   CFBlogPost,
@@ -9,6 +10,20 @@ import {
 } from "@/lib/contentful";
 
 export const revalidate = 60;
+
+export const metadata: Metadata = {
+  title: "Blog | We're Dad Studios",
+  description:
+    "Dev logs, world-building deep dives, and updates from the WDS creative studio.",
+  openGraph: {
+    title: "Blog | We're Dad Studios",
+    description:
+      "Dev logs, world-building deep dives, and updates from the WDS creative studio.",
+    url: "https://weredadstudios.com/blog",
+  },
+  alternates: { canonical: "https://weredadstudios.com/blog" },
+};
+
 export interface BlogPostPageParams {
   params: Promise<{
     id: string;

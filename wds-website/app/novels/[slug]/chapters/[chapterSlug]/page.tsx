@@ -27,24 +27,27 @@ export const generateMetadata = async (props: { params: Promise<{ chapterSlug: s
     const {chapterSlug,slug}= await props.params;
     const chapterContent = await getChapterBySlug(chapterSlug);
 
+    const pageTitle = `${chapterContent?.title} | ${slug.replace(/-/g, " ")[0].toUpperCase()}${slug.replace(/_/g, " ").slice(1)}`;
+    const desc = chapterContent?.previewText as string || "Read more about this chapter by clicking the link.";
+
     return {
-        title: `${chapterContent?.title} | ${slug.replace(/-/g, " ")[0].toUpperCase()}${slug.replace(/_/g, " ").slice(1)}`,
-        description: chapterContent?.previewText as string || "Read more about this chapter by clicking the link.",
+        title: pageTitle,
+        description: desc,
         openGraph: {
-            title: ``,
-            description: chapterContent?.previewText as string || "Read more about this chapter by clicking the link.",
+            title: pageTitle,
+            description: desc,
             url: `https://weredadstudios.com/novels/${slug}/chapters/${chapterSlug}`,
-            siteName: "Dawnshipper",
+            siteName: "We're Dad Studios",
             images: [
                 {
-                    url: "https://weredadstudios.netlify.app/images/WDS%20LOGO%20BLACK_.png",
+                    url: "https://weredadstudios.com/images/WDS%20LOGO%20BLACK_.png",
                     width: 1200,
                     height: 630,
-                    alt: `${chapterContent?.title as string} | Dawnshipper`,
+                    alt: pageTitle,
                 },
             ],
         },
-
+        alternates: { canonical: `https://weredadstudios.com/novels/${slug}/chapters/${chapterSlug}` },
     }
 
 

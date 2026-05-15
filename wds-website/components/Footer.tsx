@@ -40,7 +40,7 @@ export const Footer = () => {
       <p className="mt-6 text-white text-center text-[20px]">Follow Us</p>
       <div className="flex w-full items-center mt-4 justify-center gap-x-[5%]">
 
-        <a href=" https://www.tiktok.com/@weredadstudios?is_from_webapp=1&sender_device=pc" target="_blank" rel="noreferrer" className="">
+        <a href="https://www.tiktok.com/@weredadstudios" target="_blank" rel="noopener noreferrer" className="">
           <FaTiktok  className="w-6 h-6 shrink text-white" />
         </a>
         {/* <a href="">

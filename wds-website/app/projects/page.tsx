@@ -1,4 +1,5 @@
 // app/projects/page.tsx
+import { Metadata } from "next";
 import { Entry, EntrySkeletonType } from "contentful";
 import { ProjectPageinator } from "./components/ProjectPageinator";
 import {
@@ -8,6 +9,19 @@ import {
 } from "@/lib/contentful";
 
 export const revalidate = 60;
+
+export const metadata: Metadata = {
+  title: "Projects | We're Dad Studios",
+  description:
+    "Explore WDS projects — from the dark fantasy epic Dawnshipper to the supernatural thriller Project Osiris.",
+  openGraph: {
+    title: "Projects | We're Dad Studios",
+    description:
+      "Explore WDS projects — from the dark fantasy epic Dawnshipper to the supernatural thriller Project Osiris.",
+    url: "https://weredadstudios.com/projects",
+  },
+  alternates: { canonical: "https://weredadstudios.com/projects" },
+};
 
 export default async function ProjectsPage() {
   const client = createContentfulClient();

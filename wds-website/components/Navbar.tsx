@@ -170,7 +170,7 @@ const ThemeToggle = () => {
 };
 
 const SocialIcon = ({ href, Icon }: { href: string; Icon: IconType }) => (
-  <a href={href} target="_blank" className="hover:scale-110 transition">
+  <a href={href} target="_blank" rel="noopener noreferrer" className="hover:scale-110 transition">
     <Icon className="w-6 h-6 text-foreground" />
   </a>
 );
