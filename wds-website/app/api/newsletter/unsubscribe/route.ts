@@ -6,7 +6,7 @@ export async function POST(req: Request) {
     return new Response(JSON.stringify({ error: "Invalid email" }), {
       status: 400});
   }
-  const resend = new Resend("re_eSSgwyaw_L9wFX7xBFYWMW3UuV68JLjJ2");
+  const resend = new Resend(process.env.RESEND_API_KEY!);
 
   try {
     const { error } = await resend.contacts.remove({
