@@ -13,7 +13,7 @@ export const EchoParticles = () => {
 
   if (!visible) return null;
 
- const particles = Array.from({ length: 18 });
+ const particles = Array.from({ length: 8 });
   
   
   // Echo element colors - luminescent orbs
@@ -65,16 +65,7 @@ export const EchoParticles = () => {
             }}
             className="absolute"
           >
-            {/* Outer glow rings */}
-            <div 
-              className={`absolute ${color.bg} backdrop-blur-md rounded-full blur-2xl opacity-40`}
-              style={{
-                width: '48px',
-                height: '48px',
-                transform: 'translate(-24px, -24px)',
-              }}
-            />
-            <div 
+            <div
               className={`absolute ${color.bg} rounded-full blur-xl opacity-50`}
               style={{
                 width: '32px',
@@ -82,27 +73,12 @@ export const EchoParticles = () => {
                 transform: 'translate(-16px, -16px)',
               }}
             />
-            
-            {/* Core light orb with radial gradient effect */}
             <div
               className="absolute w-[20px] h-[20px] rounded-full"
               style={{
                 background: `radial-gradient(circle at 30% 30%, white, ${color.glow} 40%, ${color.glow.replace('0.8', '0.4')} 100%)`,
-                boxShadow: `
-                  ${color.shadow},
-                  inset 0 0 8px rgba(255, 255, 255, 0.8),
-                  inset -2px -2px 4px rgba(0, 0, 0, 0.3)
-                `,
+                boxShadow: `${color.shadow}, inset 0 0 8px rgba(255, 255, 255, 0.8)`,
                 transform: 'translate(-10px, -10px)',
-              }}
-            />
-            
-            {/* Bright highlight */}
-            <div 
-              className="absolute w-[5px] h-[5px] bg-white rounded-full blur-[1px]"
-              style={{
-                transform: 'translate(-8px, -8px)',
-                opacity: 0.95,
               }}
             />
           </motion.div>

@@ -141,6 +141,7 @@ export const HeroSection = () => {
                   src="https://res.cloudinary.com/duorxojmh/image/upload/v1765045757/IMG_1190_1_hkbii6.jpg"
                   alt="Dawnshipper"
                   fill
+                  loading="lazy"
                   className="object-cover object-top group-hover:scale-105 transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
@@ -226,6 +227,7 @@ export const HeroSection = () => {
                   src="https://res.cloudinary.com/duorxojmh/image/upload/v1765045758/IMG_1239_ha8hk3.jpg"
                   alt="Project Osiris"
                   fill
+                  loading="lazy"
                   className="object-cover group-hover:scale-105 transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />

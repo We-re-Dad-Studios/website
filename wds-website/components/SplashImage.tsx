@@ -46,8 +46,8 @@ export const SplashImage = ({ onImageLoaded }: SplashImageProps) => {
                 onImageLoaded?.();
             }}
             className="splash-image absolute drop-shadow-md max-w-[95vw] w-[600px] object-cover"
-            width={2000}
-            height={2000}
+            width={600}
+            height={600}
             src={"/images/WDS LOGO WHITE.png"}
         />
     );
