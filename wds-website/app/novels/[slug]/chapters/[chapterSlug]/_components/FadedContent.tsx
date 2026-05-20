@@ -139,6 +139,7 @@ type FontFamily = "serif" | "sans" | "mono";
 type Theme = "dark" | "sepia" | "light" | "midnight";
 type LineHeight = "normal" | "relaxed" | "loose";
 type TextAlign = "left" | "justify";
+type ContentWidth = "narrow" | "medium" | "wide";
 
 export interface Chapter {
   id: string;
@@ -167,6 +168,7 @@ interface ReaderSettings {
   textAlign: TextAlign;
   showDropCap: boolean;
   focusMode: boolean;
+  contentWidth: ContentWidth;
 }
 
 const NAVBAR_HEIGHT = 80;
@@ -236,6 +238,12 @@ const lineHeights: Record<LineHeight, string> = {
   normal: "leading-relaxed",   // 1.625
   relaxed: "leading-loose",    // 2
   loose: "leading-[2.25]",     // 2.25
+};
+
+const contentWidths: Record<ContentWidth, string> = {
+  narrow: "600px",
+  medium: "720px",
+  wide:   "860px",
 };
 
 // ============ SETTINGS PANEL COMPONENT ============
@@ -424,6 +432,34 @@ function SettingsPanel({
                         py-2 px-3 rounded-lg border text-sm transition-all
                         ${settings.lineHeight === key 
                           ? `border-amber-400 ${currentTheme.cardBg}` 
+                          : `${currentTheme.border} hover:border-amber-400/50`
+                        }
+                      `}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Content Width */}
+              <div>
+                <label className={`text-sm font-medium ${currentTheme.mutedText} mb-3 block`}>
+                  Width
+                </label>
+                <div className="grid grid-cols-3 gap-2">
+                  {([
+                    { key: "narrow", label: "Narrow" },
+                    { key: "medium", label: "Medium" },
+                    { key: "wide",   label: "Wide" },
+                  ] as const).map(({ key, label }) => (
+                    <button
+                      key={key}
+                      onClick={() => setSettings(s => ({ ...s, contentWidth: key }))}
+                      className={`
+                        py-2 px-3 rounded-lg border text-sm transition-all
+                        ${settings.contentWidth === key
+                          ? `border-amber-400 ${currentTheme.cardBg}`
                           : `${currentTheme.border} hover:border-amber-400/50`
                         }
                       `}
@@ -672,6 +708,7 @@ function ChapterReader({
       textAlign: "left" as TextAlign,
       showDropCap: true,
       focusMode: false,
+      contentWidth: "medium" as ContentWidth,
     };
   });
 
@@ -938,7 +975,7 @@ function ChapterReader({
             transition-all duration-300
             ${showControls ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4 pointer-events-none"}
           `}
-          style={{ top: NAVBAR_HEIGHT*2 / 2 + 4, zIndex: 997 }}
+          style={{ top: NAVBAR_HEIGHT + 4, zIndex: 997 }}
         >
           <div 
             className={`backdrop-blur-md border mx-4 rounded-xl shadow-lg ${currentTheme.border}`}
@@ -1059,7 +1096,7 @@ function ChapterReader({
 
       <div
         className={`
-          min-h-screen ${currentTheme.bg} ${currentTheme.text} 
+          min-h-screen overflow-x-hidden ${currentTheme.bg} ${currentTheme.text}
           transition-colors duration-500 relative
         `}
       >
@@ -1067,7 +1104,7 @@ function ChapterReader({
         {/* ============ CHAPTER CONTENT ============ */}
         <main
           className="container mx-auto px-4 pb-32"
-          style={{ paddingTop: NAVBAR_HEIGHT + 20, maxWidth: "680px" }}
+          style={{ paddingTop: NAVBAR_HEIGHT + 20, maxWidth: `min(${contentWidths[settings.contentWidth]}, 100%)` }}
         >
           {/* Chapter Header */}
           <motion.div
@@ -1182,7 +1219,7 @@ function ChapterReader({
         </main>
 
         {/* ============ COMMENTS ============ */}
-        <div className="container mx-auto px-4 pb-32 max-w-3xl">
+        <div className="container mx-auto px-4 pb-32" style={{ maxWidth: `min(${contentWidths[settings.contentWidth]}, 100%)` }}>
           <Comments title={`${Novel}: chapter-${chapter.chapterNumber}`} />
         </div>
       </div>
