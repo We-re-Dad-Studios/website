@@ -21,7 +21,7 @@ const teamMembers = [
     name: "Ehiosu",
     role: "Co-founder,Lead",
     tagline: "The 'what if we try...' guy.",
-    bio: "I'm the "what if we try…" guy,the one jumping between stories, games, and animations to make sure every idea hits its spark. If I'm not the one who started it, I'm definitely the one poking it until it shines.",
+    bio: `I'm the "what if we try…" guy,the one jumping between stories, games, and animations to make sure every idea hits its spark. If I'm not the one who started it, I'm definitely the one poking it until it shines.`,
     image: "/images/ehi-2.png",
     color: "#F94C10",
     gradient: "from-orange-600 to-red-900",
