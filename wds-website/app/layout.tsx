@@ -13,6 +13,8 @@ import ScrollProgressBar, { ScrollProgressBarProvider } from "@/components/scrol
 import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { OfflineBanner } from "@/components/OfflineBanner";
+import { CommandPalette } from "@/components/CommandPalette";
+import { MotionConfig } from "framer-motion";
 
 const Newsletter = dynamic(() =>
   import("@/components/Newsletter").then((mod) => mod.Newsletter)
@@ -41,6 +43,9 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://weredadstudios.com"),
   alternates: {
     canonical: "https://weredadstudios.com",
+    types: {
+      "application/rss+xml": "https://weredadstudios.com/feed.xml",
+    },
   },
 
   // FAVICONS
@@ -113,12 +118,14 @@ export default function RootLayout({
       </head>
       <PostHogProvider>
         <body className="antialiased bg-background text-foreground font-agdasima">
+          <MotionConfig reducedMotion="user">
           <ThemeProvider>
             <ServiceWorkerRegister />
             <Suspense fallback={null}>
               <PageView />
             </Suspense>
             <Navbar />
+            <CommandPalette />
             <ScrollProgressBarProvider>
               <ScrollProgressBar/>
               <GlitchTransition>
@@ -130,6 +137,7 @@ export default function RootLayout({
             <OfflineBanner />
             <Footer />
           </ThemeProvider>
+          </MotionConfig>
         </body>
       </PostHogProvider>
     </html>

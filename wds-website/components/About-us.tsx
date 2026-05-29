@@ -90,6 +90,10 @@ const teamMembers = [
   },
 ];
 
+// A member without a real headshot falls back to the logo path; treat that as
+// "no photo yet" and render a branded initial instead of a cropped logo.
+const hasPhoto = (image: string) => !image.includes("WDS LOGO");
+
 // Deterministic positions — computed once at module load, never change on re-render.
 // Avoids Math.random() in render (causes position churn + hydration mismatch).
 const PARTICLES = Array.from({ length: 12 }, (_, i) => ({
@@ -108,7 +112,7 @@ export default function AboutUs() {
     if (!isAutoCycling) return;
     const interval = setInterval(() => {
       setSelectedMember((prev) => (prev + 1) % teamMembers.length);
-    }, 6000);
+    }, 9000);
     return () => clearInterval(interval);
   }, [isAutoCycling]);
 
@@ -173,10 +177,10 @@ export default function AboutUs() {
             <AnimatePresence mode="wait">
               <motion.div
                 key={selectedMember}
-                initial={{ opacity: 0, scale: 0.8, rotateY: -90 }}
-                animate={{ opacity: 1, scale: 1, rotateY: 0 }}
-                exit={{ opacity: 0, scale: 0.8, rotateY: 90 }}
-                transition={{ duration: 0.5, type: "spring" }}
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -24 }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
                 className="relative"
               >
                 <div
@@ -202,14 +206,24 @@ export default function AboutUs() {
                           className={`absolute inset-0 bg-gradient-to-br ${currentMember.gradient} opacity-30`}
                         />
                         <div className="relative w-full h-full rounded overflow-hidden">
-                          <Image
-                            src={currentMember.image}
-                            alt={currentMember.name}
-                            fill
-                            sizes="(max-width: 768px) 70vw, 50vw"
-                            priority
-                            className="relative w-full h-full object-contain object-top drop-shadow-2xl"
-                          />
+                          {hasPhoto(currentMember.image) ? (
+                            <Image
+                              src={currentMember.image}
+                              alt={currentMember.name}
+                              fill
+                              sizes="(max-width: 768px) 70vw, 50vw"
+                              priority
+                              className="relative w-full h-full object-contain object-top drop-shadow-2xl"
+                            />
+                          ) : (
+                            <div
+                              className={`flex h-full w-full items-center justify-center bg-gradient-to-br ${currentMember.gradient}`}
+                            >
+                              <span className="text-7xl md:text-8xl font-bold text-white/90">
+                                {currentMember.name.charAt(0)}
+                              </span>
+                            </div>
+                          )}
                         </div>
 
                         {/* Corner Decorations */}
@@ -286,29 +300,6 @@ export default function AboutUs() {
                         >
                           {currentMember.bio}
                         </motion.p>
-
-                        {/* Ability Bar Visualization */}
-                        <div className="space-y-3 mb-8">
-                          {["Creativity", "Technical", "Leadership"].map((skill, i) => (
-                            <div key={skill}>
-                              <div className="flex justify-between text-sm mb-1">
-                                <span className="text-gray-400">{skill}</span>
-                                <span style={{ color: currentMember.color }}>
-                                  {85 + i * 5}%
-                                </span>
-                              </div>
-                              <div className="h-2 bg-white/10 rounded-full overflow-hidden">
-                                <motion.div
-                                  className="h-full rounded-full"
-                                  style={{ backgroundColor: currentMember.color }}
-                                  initial={{ width: 0 }}
-                                  animate={{ width: `${85 + i * 5}%` }}
-                                  transition={{ duration: 1, delay: 0.3 + i * 0.1 }}
-                                />
-                              </div>
-                            </div>
-                          ))}
-                        </div>
                       </div>
                     </div>
                   </div>
@@ -361,13 +352,23 @@ export default function AboutUs() {
                       <div
                         className={`absolute inset-0 bg-gradient-to-br ${member.gradient} opacity-40`}
                       />
-                      <Image
-                        src={member.image}
-                        alt={member.name}
-                        fill
-                        sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 20vw"
-                        className="relative w-full h-full object-cover object-top"
-                      />
+                      {hasPhoto(member.image) ? (
+                        <Image
+                          src={member.image}
+                          alt={member.name}
+                          fill
+                          sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 20vw"
+                          className="relative w-full h-full object-cover object-top"
+                        />
+                      ) : (
+                        <div
+                          className={`flex h-full w-full items-center justify-center bg-gradient-to-br ${member.gradient}`}
+                        >
+                          <span className="text-3xl font-bold text-white/90">
+                            {member.name.charAt(0)}
+                          </span>
+                        </div>
+                      )}
 
                       {selectedMember === index && (
                         <div

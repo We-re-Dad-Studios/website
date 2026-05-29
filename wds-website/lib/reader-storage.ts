@@ -128,6 +128,16 @@ export const readerStorage = {
     return entries[0] ?? null;
   },
 
+  // Most recently-read, still-unfinished chapter across every novel.
+  // Powers the homepage "Continue Reading" card.
+  getMostRecentProgress(): ChapterProgress | null {
+    const store = read();
+    const entries = Object.values(store.progress)
+      .filter((p) => !p.finished && p.percent > 0.02)
+      .sort((a, b) => b.updatedAt - a.updatedAt);
+    return entries[0] ?? null;
+  },
+
   // ---------- Stats / streaks ----------
   recordChapterRead(chapterId: string): ReaderStats {
     const store = read();

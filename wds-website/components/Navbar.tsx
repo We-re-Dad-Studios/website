@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { ChevronDown, MenuIcon, Moon, Sun } from "lucide-react";
+import { ChevronDown, MenuIcon, Moon, Sun, Search } from "lucide-react";
 import { useTheme } from "next-themes";
 
 import { MenuProvider, useMenu } from "./MenuContext";
@@ -131,11 +131,20 @@ const NavbarInner = () => {
           >
             <NavLink href="/about-us" label="About Us" active={active} />
           </div>
+
+          {/* LIBRARY */}
+          <div
+            ref={(el) => {navRefs.current["/library"] = el}}
+            onMouseEnter={() => moveUnderline("/library")}
+          >
+            <NavLink href="/library" label="Library" active={active} />
+          </div>
         </div>
       </div>
 
       {/* Social + Theme Toggle */}
       <div className="hidden md:flex items-center gap-6">
+        <SearchButton />
         <ThemeToggle />
         <SocialIcon href="https://www.tiktok.com/@weredadstudios" Icon={FaTiktok} />
         <SocialIcon href="https://www.instagram.com/weredadstudios" Icon={FaInstagram} />
@@ -147,6 +156,23 @@ const NavbarInner = () => {
     </nav>
   );
 };
+
+const openSearch = () =>
+  window.dispatchEvent(new CustomEvent("wds:open-search"));
+
+const SearchButton = () => (
+  <button
+    onClick={openSearch}
+    aria-label="Search"
+    className="flex items-center gap-2 rounded-lg border border-border px-3 py-1.5 text-sm text-wds-text-secondary transition-colors hover:bg-foreground/10"
+  >
+    <Search className="h-4 w-4" />
+    <span className="hidden lg:inline">Search</span>
+    <kbd className="hidden lg:inline rounded bg-foreground/10 px-1.5 text-[11px]">
+      ⌘K
+    </kbd>
+  </button>
+);
 
 const ThemeToggle = () => {
   const { resolvedTheme, setTheme } = useTheme();
@@ -179,6 +205,13 @@ const MobileMenu = () => {
   const path = usePathname();
   return (
     <div className="md:hidden flex items-center gap-2">
+      <button
+        onClick={openSearch}
+        aria-label="Search"
+        className="p-2 rounded-lg hover:bg-foreground/10 transition-colors"
+      >
+        <Search className="w-5 h-5 text-foreground" />
+      </button>
       <ThemeToggle />
       <Popover>
         <PopoverTrigger asChild>
@@ -198,6 +231,7 @@ const MobileMenu = () => {
           <NavLink href="/projects" label="Projects" active={path} />
           <NavLink href="/blog" label="Blog" active={path} />
           <NavLink href="/about-us" label="About Us" active={path} />
+          <NavLink href="/library" label="Library" active={path} />
 
           <div className="flex gap-4 pt-2">
             <SocialIcon href="https://www.tiktok.com/@weredadstudios" Icon={FaTiktok} />

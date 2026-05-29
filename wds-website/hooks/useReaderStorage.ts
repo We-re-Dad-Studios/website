@@ -11,6 +11,7 @@ import {
   type Bookmark,
   type ChapterProgress,
   type ReaderStats,
+  type ReaderStore,
 } from "@/lib/reader-storage";
 
 function useReaderSubscription() {
@@ -43,6 +44,27 @@ export function useLatestNovelProgress(novelSlug: string): ChapterProgress | nul
   useEffect(() => {
     setValue(readerStorage.getLatestProgressForNovel(novelSlug));
   }, [novelSlug, tick]);
+  return value;
+}
+
+// Whole-store snapshot for the My Library page. `hydrated` flips true after the
+// first client read so the page can show a skeleton/empty state without a
+// hydration mismatch (server + first paint render the same empty store).
+export function useReaderStore(): { store: ReaderStore | null; hydrated: boolean } {
+  const tick = useReaderSubscription();
+  const [store, setStore] = useState<ReaderStore | null>(null);
+  useEffect(() => {
+    setStore(readerStorage.get());
+  }, [tick]);
+  return { store, hydrated: store !== null };
+}
+
+export function useMostRecentProgress(): ChapterProgress | null {
+  const tick = useReaderSubscription();
+  const [value, setValue] = useState<ChapterProgress | null>(null);
+  useEffect(() => {
+    setValue(readerStorage.getMostRecentProgress());
+  }, [tick]);
   return value;
 }
 

@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e \"const e = require\\('@elevenlabs/elevenlabs-js'\\); console.log\\(Object.keys\\(e\\)\\)\")",
+      "Bash(node -e ':*)"
+    ]
+  }
+}

@@ -5,7 +5,7 @@
 //   3. Contentful images           → cache-first, 30-day TTL
 // Everything else is network-only.
 
-const VERSION = "wds-v2";
+const VERSION = "wds-v3";
 const SHELL_CACHE = `${VERSION}-shell`;
 const CHAPTER_CACHE = `${VERSION}-chapters`;
 const IMAGE_CACHE = `${VERSION}-images`;
@@ -178,4 +178,43 @@ self.addEventListener("fetch", (event) => {
     event.respondWith(staleWhileRevalidate(SHELL_CACHE, request));
     return;
   }
+});
+
+// ---------- Web Push ----------
+self.addEventListener("push", (event) => {
+  let data = {};
+  try {
+    data = event.data ? event.data.json() : {};
+  } catch {
+    data = { title: "We're Dad Studios", body: event.data && event.data.text() };
+  }
+
+  const title = data.title || "We're Dad Studios";
+  const options = {
+    body: data.body || "A new chapter is live.",
+    icon: data.icon || "/images/android-chrome-192x192.png",
+    badge: "/images/android-chrome-192x192.png",
+    data: { url: data.url || "/" },
+    tag: data.tag || "wds-chapter",
+    renotify: true,
+  };
+
+  event.waitUntil(self.registration.showNotification(title, options));
+});
+
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+  const target = (event.notification.data && event.notification.data.url) || "/";
+
+  event.waitUntil(
+    self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((clients) => {
+      for (const client of clients) {
+        if ("focus" in client) {
+          client.navigate(target);
+          return client.focus();
+        }
+      }
+      return self.clients.openWindow(target);
+    })
+  );
 });

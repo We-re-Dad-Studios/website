@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { BookOpen, Clock, Flame, ArrowRight } from "lucide-react";
 import { FlagshipProgress } from "@/components/reader/FlagshipProgress";
+import { ContinueReading } from "@/components/reader/ContinueReading";
 
 export const HeroSection = () => {
   return (
@@ -81,6 +82,9 @@ export const HeroSection = () => {
           </div>
         </motion.div>
       </section>
+
+      {/* CONTINUE READING — only renders for returning readers with progress */}
+      <ContinueReading />
 
       {/* STATS BAR */}
       <section className="w-full bg-background border-y border-border">
