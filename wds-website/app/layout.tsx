@@ -94,7 +94,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${agdasima.variable} ${bebasNeue.variable}`}>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${agdasima.variable} ${bebasNeue.variable}`}
+    >
       <head>
         <script
           type="application/ld+json"

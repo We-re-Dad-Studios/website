@@ -6,6 +6,7 @@ import Link from "next/link";
 import { BookOpen, Clock, Flame, ArrowRight } from "lucide-react";
 import { FlagshipProgress } from "@/components/reader/FlagshipProgress";
 import { ContinueReading } from "@/components/reader/ContinueReading";
+import { LatestReleases } from "@/components/LatestReleases";
 
 export const HeroSection = () => {
   return (
@@ -108,6 +109,9 @@ export const HeroSection = () => {
           </div>
         </div>
       </section>
+
+      {/* LATEST RELEASES — freshest chapters, the reason readers return */}
+      <LatestReleases />
 
       {/* FLAGSHIP NOVELS SECTION */}
       <section id="flagships" className="w-full bg-background py-16 sm:py-20 px-4 sm:px-6">
@@ -306,8 +310,8 @@ export const HeroSection = () => {
         </div>
       </section>
 
-      {/* WHAT TO EXPECT */}
-      <section className="w-full bg-gradient-to-b from-background to-wds-surface py-14 sm:py-16 px-4 sm:px-6">
+      {/* CLOSING CTA — drop readers straight into Chapter 1 */}
+      <section className="w-full bg-gradient-to-b from-background to-wds-surface py-16 sm:py-20 px-4 sm:px-6">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -315,23 +319,41 @@ export const HeroSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground mb-6 sm:mb-8">
-              What You&apos;re Getting Into
-            </h3>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-3">
+              Start Reading — <span className="text-primary-0">it&apos;s free</span>
+            </h2>
+            <p className="text-wds-text-secondary text-base sm:text-lg max-w-xl mx-auto mb-8 sm:mb-10">
+              No signup. No paywall on the opening arc. Just pick a world and fall in.
+            </p>
 
-            <div className="grid sm:grid-cols-3 gap-4 sm:gap-6 text-left">
-              <div className="p-4 sm:p-5 bg-wds-surface border border-border rounded-xl">
-                <div className="text-purple-500 dark:text-purple-400 font-bold text-base sm:text-lg mb-2">Free to Start</div>
-                <p className="text-wds-text-secondary text-xs sm:text-sm">Every novel begins with free chapters. No signup walls, no tricks.</p>
-              </div>
-              <div className="p-4 sm:p-5 bg-wds-surface border border-border rounded-xl">
-                <div className="text-purple-500 dark:text-purple-400 font-bold text-base sm:text-lg mb-2">Daily Updates</div>
-                <p className="text-wds-text-secondary text-xs sm:text-sm">New chapters drop every day or two. The story keeps moving.</p>
-              </div>
-              <div className="p-4 sm:p-5 bg-wds-surface border border-border rounded-xl">
-                <div className="text-purple-500 dark:text-purple-400 font-bold text-base sm:text-lg mb-2">Complete Arcs</div>
-                <p className="text-wds-text-secondary text-xs sm:text-sm">No abandoned projects. Both novels have planned endings.</p>
-              </div>
+            <div className="grid sm:grid-cols-2 gap-4 max-w-2xl mx-auto">
+              <Link
+                href="/novels/dawnshipper/chapters/echoes-and-embers"
+                className="group flex items-center justify-between gap-3 rounded-2xl border border-orange-500/30 bg-gradient-to-br from-orange-950/40 to-neutral-950 p-5 sm:p-6 text-left text-white transition-all hover:border-orange-500/60 hover:shadow-[0_0_30px_rgba(249,76,16,0.25)]"
+              >
+                <span>
+                  <span className="block text-xs font-semibold uppercase tracking-wider text-primary-0">
+                    Dark Fantasy
+                  </span>
+                  <span className="block text-xl sm:text-2xl font-bold">Dawnshipper</span>
+                  <span className="text-sm text-white/60">Begin at Chapter 1</span>
+                </span>
+                <ArrowRight className="h-6 w-6 shrink-0 text-primary-0 transition-transform group-hover:translate-x-1" />
+              </Link>
+
+              <Link
+                href="/novels/project_osiris/chapters/chapter-1"
+                className="group flex items-center justify-between gap-3 rounded-2xl border border-cyan-500/30 bg-gradient-to-br from-cyan-950/40 to-neutral-950 p-5 sm:p-6 text-left text-white transition-all hover:border-cyan-500/60 hover:shadow-[0_0_30px_rgba(6,182,212,0.25)]"
+              >
+                <span>
+                  <span className="block text-xs font-semibold uppercase tracking-wider text-cyan-400">
+                    Sci-Fi Thriller
+                  </span>
+                  <span className="block text-xl sm:text-2xl font-bold">Project Osiris</span>
+                  <span className="text-sm text-white/60">Begin at Chapter 1</span>
+                </span>
+                <ArrowRight className="h-6 w-6 shrink-0 text-cyan-400 transition-transform group-hover:translate-x-1" />
+              </Link>
             </div>
           </motion.div>
         </div>
