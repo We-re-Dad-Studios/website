@@ -1,8 +1,18 @@
-import { getChapterByNumber, getChapterBySlug } from "@/lib/contentful";
+import { getAllChapterParams, getChapterByNumber, getChapterBySlug } from "@/lib/contentful";
 import { redirect } from "next/navigation";
 import { Chapter, Content } from "./_components/FadedContent";
 import { Document } from "@contentful/rich-text-types";
 import { Metadata } from "next";
+
+// Pre-render every published chapter at build time; new chapters not in this
+// list still render on demand (dynamicParams) and are cached thereafter.
+// Pages refresh via the Contentful webhook (/api/revalidate) or this fallback.
+export const revalidate = 3600;
+export const dynamicParams = true;
+
+export async function generateStaticParams() {
+  return getAllChapterParams();
+}
 
 export default async function Page(props:{params:Promise<{chapterSlug:string,slug:string}>}) {
     const {chapterSlug,slug}= await props.params;

@@ -13,6 +13,7 @@ import ScrollProgressBar, { ScrollProgressBarProvider } from "@/components/scrol
 import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { OfflineBanner } from "@/components/OfflineBanner";
+import { RoyalRoadBanner } from "@/components/RoyalRoadBanner";
 import { CommandPalette } from "@/components/CommandPalette";
 import { MotionConfig } from "framer-motion";
 
@@ -128,6 +129,7 @@ export default function RootLayout({
             <Suspense fallback={null}>
               <PageView />
             </Suspense>
+            <RoyalRoadBanner />
             <Navbar />
             <CommandPalette />
             <ScrollProgressBarProvider>

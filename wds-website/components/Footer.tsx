@@ -5,6 +5,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaTiktok } from "react-icons/fa6";
+import { Crown } from "lucide-react";
+import { ROYAL_ROAD_LINKS } from "@/lib/royal-road";
 
 export const Footer = () => {
   const path = usePathname();
@@ -49,6 +51,30 @@ export const Footer = () => {
         {/* <a href="">
           <YoutubeIcon className="w-6 h-6 shrink" />
         </a> */}
+      </div>
+
+      <p className="mt-8 text-white text-center text-[20px] flex items-center gap-2">
+        <Crown className="w-5 h-5 text-amber-300" />
+        Read on Royal Road
+      </p>
+      <div className="mt-3 flex items-center justify-center gap-4 text-[14px] text-white">
+        <a
+          href={ROYAL_ROAD_LINKS.dawnshipper}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline decoration-white/40 underline-offset-2 hover:decoration-white"
+        >
+          Dawnshipper
+        </a>
+        <span className="text-white/50">·</span>
+        <a
+          href={ROYAL_ROAD_LINKS.project_osiris}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline decoration-white/40 underline-offset-2 hover:decoration-white"
+        >
+          Project Osiris
+        </a>
       </div>
     </footer>
   );

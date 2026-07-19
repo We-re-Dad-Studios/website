@@ -1,6 +1,22 @@
 // lib/contentful/server.ts
 import { cache } from "react";
+import { unstable_cache } from "next/cache";
 import { createClient } from "contentful";
+
+// Cache tags used for on-demand revalidation from the Contentful webhook.
+// `chapters` / `novels` / `blog` bust every page of that type;
+// `chapter:<slug>` busts a single chapter page.
+export const CACHE_TAGS = {
+  chapters: "chapters",
+  novels: "novels",
+  blog: "blog",
+  wiki: "wiki",
+  chapter: (slug: string) => `chapter:${slug}`,
+} as const;
+
+// How long (seconds) a cached Contentful read survives without a webhook.
+// The webhook makes updates near-instant; this is just a safety net.
+const CONTENTFUL_REVALIDATE = 3600;
 
 const getEnvValue = (...keys: string[]) => {
   for (const key of keys) {
@@ -93,64 +109,199 @@ function extractAudioUrl(fields: any): string | undefined {
   return file.url.startsWith("//") ? `https:${file.url}` : file.url;
 }
 
-export const getChapterBySlug = cache(async (slug: string): Promise<ChapterRecord | null> => {
-  const client = createContentfulClient();
-  const response = await client.getEntries({
-    content_type: "chapter",
-    "fields.slug": slug,
-    limit: 1,
-  });
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function extractAssetUrl(asset: any): string | undefined {
+  const url = asset?.fields?.file?.url;
+  if (!url) return undefined;
+  return url.startsWith("//") ? `https:${url}` : url;
+}
 
-  const item = response.items[0];
-  if (!item) {
-    return null;
-  }
+// ---------- Wiki / lore ----------
+// Manually curated codex of characters, places, factions and terms.
+// Contentful content type `wikiEntry` with fields:
+//   name (Symbol), slug (Symbol), type (Symbol: character|place|faction|term|other),
+//   aliases (Symbol list), spoilerFreeSummary (Text), body (RichText),
+//   firstAppearanceChapter (Symbol), novel (Symbol slug), image (Asset),
+//   hasSpoilers (Boolean)
+export interface WikiEntryRecord {
+  id: string;
+  slug: string;
+  name: string;
+  type: string;
+  aliases?: string[];
+  spoilerFreeSummary?: string;
+  body?: unknown;
+  firstAppearanceChapter?: string;
+  novel?: string;
+  imageUrl?: string;
+  hasSpoilers?: boolean;
+}
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function mapWikiEntry(item: any): WikiEntryRecord {
   return {
     id: item.sys.id,
-    ...(item.fields as Record<string, unknown>),
     slug: item.fields.slug as string,
-    title: item.fields.title as string,
-    chapterNumber: item.fields.chapterNumber as number,
-    releaseDate: item.fields.releaseDate as string,
-    isFree: item.fields.isFree as boolean | undefined,
-    previewText: item.fields.previewText as string | undefined,
-    projectSlug: item.fields.projectSlug as string | undefined,
-    content: item.fields.content,
-    audioUrl: extractAudioUrl(item.fields),
+    name: item.fields.name as string,
+    type: (item.fields.type as string) ?? "other",
+    aliases: item.fields.aliases as string[] | undefined,
+    spoilerFreeSummary: item.fields.spoilerFreeSummary as string | undefined,
+    body: item.fields.body,
+    firstAppearanceChapter: item.fields.firstAppearanceChapter as string | undefined,
+    novel: item.fields.novel as string | undefined,
+    imageUrl: extractAssetUrl(item.fields.image),
+    hasSpoilers: item.fields.hasSpoilers as boolean | undefined,
   };
-});
+}
 
-export async function getChapterByNumber(
+export const getWikiEntries = cache(
+  (): Promise<WikiEntryRecord[]> =>
+    unstable_cache(
+      async () => {
+        try {
+          const client = createContentfulClient();
+          const response = await client.getEntries({
+            content_type: "wikiEntry",
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            order: "fields.name" as any,
+            limit: 1000,
+            include: 1,
+          });
+          return response.items.map(mapWikiEntry);
+        } catch {
+          // Content type not yet created in Contentful — show an empty codex
+          // rather than crashing the page.
+          return [];
+        }
+      },
+      ["wiki-entries"],
+      { tags: [CACHE_TAGS.wiki], revalidate: CONTENTFUL_REVALIDATE }
+    )()
+);
+
+export const getWikiEntryBySlug = cache(
+  (slug: string): Promise<WikiEntryRecord | null> =>
+    unstable_cache(
+      async () => {
+        try {
+          const client = createContentfulClient();
+          const response = await client.getEntries({
+            content_type: "wikiEntry",
+            "fields.slug": slug,
+            limit: 1,
+            include: 1,
+          });
+          const item = response.items[0];
+          return item ? mapWikiEntry(item) : null;
+        } catch {
+          return null;
+        }
+      },
+      ["wiki-entry", slug],
+      { tags: [CACHE_TAGS.wiki, `wiki:${slug}`], revalidate: CONTENTFUL_REVALIDATE }
+    )()
+);
+
+export const getChapterBySlug = cache(
+  (slug: string): Promise<ChapterRecord | null> =>
+    unstable_cache(
+      async (): Promise<ChapterRecord | null> => {
+        const client = createContentfulClient();
+        const response = await client.getEntries({
+          content_type: "chapter",
+          "fields.slug": slug,
+          limit: 1,
+        });
+
+        const item = response.items[0];
+        if (!item) {
+          return null;
+        }
+
+        return {
+          id: item.sys.id,
+          ...(item.fields as Record<string, unknown>),
+          slug: item.fields.slug as string,
+          title: item.fields.title as string,
+          chapterNumber: item.fields.chapterNumber as number,
+          releaseDate: item.fields.releaseDate as string,
+          isFree: item.fields.isFree as boolean | undefined,
+          previewText: item.fields.previewText as string | undefined,
+          projectSlug: item.fields.projectSlug as string | undefined,
+          content: item.fields.content,
+          audioUrl: extractAudioUrl(item.fields),
+        };
+      },
+      ["chapter-by-slug", slug],
+      {
+        tags: [CACHE_TAGS.chapters, CACHE_TAGS.chapter(slug)],
+        revalidate: CONTENTFUL_REVALIDATE,
+      }
+    )()
+);
+
+// All { slug, chapterSlug } pairs for generateStaticParams.
+// `slug` is the novel slug (stored as `projectSlug` on the chapter).
+export const getAllChapterParams = cache(
+  (): Promise<{ slug: string; chapterSlug: string }[]> =>
+    unstable_cache(
+      async () => {
+        const client = createContentfulClient();
+        const response = await client.getEntries({
+          content_type: "chapter",
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          select: ["fields.slug", "fields.projectSlug"] as any,
+          limit: 1000,
+        });
+
+        return response.items
+          .map((item) => ({
+            slug: item.fields.projectSlug as string,
+            chapterSlug: item.fields.slug as string,
+          }))
+          .filter((p) => p.slug && p.chapterSlug);
+      },
+      ["all-chapter-params"],
+      { tags: [CACHE_TAGS.chapters], revalidate: CONTENTFUL_REVALIDATE }
+    )()
+);
+
+export function getChapterByNumber(
   chapterNumber: number,
   projectSlug: string
 ): Promise<ChapterRecord | null> {
-  const client = createContentfulClient();
-  const response = await client.getEntries({
-    content_type: "chapter",
-    "fields.chapterNumber": chapterNumber,
-    "fields.projectSlug": projectSlug,
-    limit: 1,
-  });
+  return unstable_cache(
+    async (): Promise<ChapterRecord | null> => {
+      const client = createContentfulClient();
+      const response = await client.getEntries({
+        content_type: "chapter",
+        "fields.chapterNumber": chapterNumber,
+        "fields.projectSlug": projectSlug,
+        limit: 1,
+      });
 
-  const item = response.items[0];
-  if (!item) {
-    return null;
-  }
+      const item = response.items[0];
+      if (!item) {
+        return null;
+      }
 
-  return {
-    id: item.sys.id,
-    ...(item.fields as Record<string, unknown>),
-    slug: item.fields.slug as string,
-    title: item.fields.title as string,
-    chapterNumber: item.fields.chapterNumber as number,
-    releaseDate: item.fields.releaseDate as string,
-    isFree: item.fields.isFree as boolean | undefined,
-    previewText: item.fields.previewText as string | undefined,
-    projectSlug: item.fields.projectSlug as string | undefined,
-    content: item.fields.content,
-    audioUrl: extractAudioUrl(item.fields),
-  };
+      return {
+        id: item.sys.id,
+        ...(item.fields as Record<string, unknown>),
+        slug: item.fields.slug as string,
+        title: item.fields.title as string,
+        chapterNumber: item.fields.chapterNumber as number,
+        releaseDate: item.fields.releaseDate as string,
+        isFree: item.fields.isFree as boolean | undefined,
+        previewText: item.fields.previewText as string | undefined,
+        projectSlug: item.fields.projectSlug as string | undefined,
+        content: item.fields.content,
+        audioUrl: extractAudioUrl(item.fields),
+      };
+    },
+    ["chapter-by-number", projectSlug, String(chapterNumber)],
+    { tags: [CACHE_TAGS.chapters], revalidate: CONTENTFUL_REVALIDATE }
+  )();
 }
 // Generic Contentful system fields
 export interface Sys {

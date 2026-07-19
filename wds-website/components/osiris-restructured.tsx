@@ -14,6 +14,7 @@ import { ArrowRight, BookOpen, Clock, Zap } from "lucide-react";
 import { ChapterListComponent } from "@/app/projects/components/chapter-list-component";
 import { ContinueReadingCard } from "@/components/reader/ContinueReadingCard";
 import { ReaderStatsCard } from "@/components/reader/ReaderStatsCard";
+import { RoyalRoadButton } from "@/components/RoyalRoadButton";
 
 type Chapter = {
   id: string;
@@ -97,19 +98,25 @@ function OsirisContent({
             </div>
 
             {/* Primary CTA */}
-            {chapters.length > 0 ? (
-              <Link
-                href={`/novels/project_osiris/chapters/${chapters[0]?.slug || 'chapter-1'}`}
-                className="group inline-flex items-center gap-3 px-6 py-3 sm:px-8 sm:py-4 bg-cyan-500 hover:bg-cyan-400 text-black text-base sm:text-lg font-bold rounded-xl transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(6,182,212,0.4)]"
-              >
-                Start Reading Chapter 1
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            ) : (
-              <div className="inline-flex items-center gap-3 px-6 py-3 sm:px-8 sm:py-4 bg-white/10 border border-white/20 text-white/70 text-base sm:text-lg font-bold rounded-xl">
-                Chapters Coming Soon
-              </div>
-            )}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+              {chapters.length > 0 ? (
+                <Link
+                  href={`/novels/project_osiris/chapters/${chapters[0]?.slug || 'chapter-1'}`}
+                  className="group inline-flex items-center justify-center gap-3 px-6 py-3 sm:px-8 sm:py-4 bg-cyan-500 hover:bg-cyan-400 text-black text-base sm:text-lg font-bold rounded-xl transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(6,182,212,0.4)]"
+                >
+                  Start Reading Chapter 1
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </Link>
+              ) : (
+                <div className="inline-flex items-center justify-center gap-3 px-6 py-3 sm:px-8 sm:py-4 bg-white/10 border border-white/20 text-white/70 text-base sm:text-lg font-bold rounded-xl">
+                  Chapters Coming Soon
+                </div>
+              )}
+              <RoyalRoadButton slug="project_osiris" variant="outline" className="sm:py-4 sm:text-lg" />
+            </div>
+            <p className="mt-3 text-xs sm:text-sm text-white/50">
+              New chapters go up first on Royal Road.
+            </p>
           </motion.div>
         </div>
       </section>

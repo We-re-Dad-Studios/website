@@ -7,6 +7,7 @@ import { BookOpen, Clock, Flame, ArrowRight } from "lucide-react";
 import { FlagshipProgress } from "@/components/reader/FlagshipProgress";
 import { ContinueReading } from "@/components/reader/ContinueReading";
 import { LatestReleases } from "@/components/LatestReleases";
+import { RoyalRoadButton } from "@/components/RoyalRoadButton";
 
 export const HeroSection = () => {
   return (
@@ -217,6 +218,12 @@ export const HeroSection = () => {
                     All Chapters
                   </Link>
                 </div>
+                <RoyalRoadButton
+                  slug="dawnshipper"
+                  variant="link"
+                  className="mt-3"
+                  label="Also on Royal Road"
+                />
               </div>
             </motion.div>
 
@@ -303,6 +310,12 @@ export const HeroSection = () => {
                     All Chapters
                   </Link>
                 </div>
+                <RoyalRoadButton
+                  slug="project_osiris"
+                  variant="link"
+                  className="mt-3"
+                  label="Also on Royal Road"
+                />
               </div>
             </motion.div>
 

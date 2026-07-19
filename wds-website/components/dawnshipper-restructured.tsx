@@ -16,6 +16,7 @@ import { Chapter } from "@/app/projects/dawnshipper/page";
 import { ChapterListComponent } from "@/app/projects/components/chapter-list-component";
 import { ContinueReadingCard } from "@/components/reader/ContinueReadingCard";
 import { ReaderStatsCard } from "@/components/reader/ReaderStatsCard";
+import { RoyalRoadButton } from "@/components/RoyalRoadButton";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -88,13 +89,19 @@ function MainContent({
             </div>
 
             {/* Primary CTA */}
-            <Link
-              href={`/novels/dawnshipper/chapters/${chapters[0]?.slug || 'echoes-and-embers'}`}
-              className="group inline-flex items-center gap-3 px-6 py-3 sm:px-8 sm:py-4 bg-primary-0 hover:bg-primary-0/90 text-white text-base sm:text-lg font-bold rounded-xl transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(249,76,16,0.4)]"
-            >
-              Start Reading Chapter 1
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </Link>
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+              <Link
+                href={`/novels/dawnshipper/chapters/${chapters[0]?.slug || 'echoes-and-embers'}`}
+                className="group inline-flex items-center justify-center gap-3 px-6 py-3 sm:px-8 sm:py-4 bg-primary-0 hover:bg-primary-0/90 text-white text-base sm:text-lg font-bold rounded-xl transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(249,76,16,0.4)]"
+              >
+                Start Reading Chapter 1
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </Link>
+              <RoyalRoadButton slug="dawnshipper" variant="outline" className="sm:py-4 sm:text-lg" />
+            </div>
+            <p className="mt-3 text-xs sm:text-sm text-white/50">
+              New chapters go up first on Royal Road.
+            </p>
           </motion.div>
         </div>
       </section>

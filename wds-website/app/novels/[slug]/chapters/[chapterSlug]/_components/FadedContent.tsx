@@ -29,6 +29,7 @@ import {
   Check,
 } from "lucide-react";
 import { useScrollProgress } from "@/components/scroll-progress-bar";
+import { usePostHog } from "posthog-js/react";
 import { useScroll, motion, AnimatePresence, useMotionValueEvent } from "framer-motion";
 import { ChapterEndCTA } from "@/components/chapterendcta";
 import { StickyNewsletterBar } from "@/components/stickynewsletterbar";
@@ -781,8 +782,37 @@ function ChapterReader({
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const latestPercent = useRef(0);
 
+  // Analytics: emit one event per progress milestone so we can build a
+  // per-chapter drop-off funnel in PostHog (started → 25 → 50 → 75 → finished).
+  const posthog = usePostHog();
+  const firedMilestones = useRef<Set<number>>(new Set());
+  useEffect(() => {
+    firedMilestones.current = new Set();
+  }, [chapter.id]);
+  const chapterEventProps = useCallback(
+    () => ({
+      novelSlug: Novel as string,
+      chapterSlug: chapter.slug,
+      chapterNumber: chapter.chapterNumber,
+      chapterTitle: chapter.title,
+    }),
+    [chapter.slug, chapter.chapterNumber, chapter.title, Novel]
+  );
+
   useMotionValueEvent(scrollYProgress, "change", (v) => {
     latestPercent.current = v;
+
+    // Milestone events fire immediately (not debounced) and only once each.
+    for (const milestone of [0, 25, 50, 75] as const) {
+      if (v * 100 >= milestone && !firedMilestones.current.has(milestone)) {
+        firedMilestones.current.add(milestone);
+        posthog?.capture("chapter_progress", {
+          ...chapterEventProps(),
+          milestone,
+        });
+      }
+    }
+
     if (saveTimer.current) clearTimeout(saveTimer.current);
     saveTimer.current = setTimeout(() => {
       const result = readerStorage.saveProgress(chapter.id, {
@@ -793,6 +823,7 @@ function ChapterReader({
         title: chapter.title,
       });
       if (result.justFinished) {
+        posthog?.capture("chapter_finished", chapterEventProps());
         const stats = readerStorage.recordChapterRead(chapter.id);
         const streakLine =
           stats.streak.current > 1
