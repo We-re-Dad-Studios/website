@@ -4,15 +4,33 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Mail, Check } from "lucide-react";
 
+/** Surface tokens supplied by the reader's own theme system (dark/midnight/sepia/light).
+ *  Defaults preserve the original dark look when rendered outside the reader. */
+interface ReaderThemeTokens {
+  text: string;
+  mutedText: string;
+  border: string;
+  cardBg: string;
+}
+
+const DEFAULT_THEME: ReaderThemeTokens = {
+  text: "text-white",
+  mutedText: "text-white/50",
+  border: "border-white/10",
+  cardBg: "bg-gray-900",
+};
+
 interface StickyNewsletterBarProps {
   /** Show after scrolling this percentage (0-100) */
   showAfter?: number;
   novelName?: string;
+  theme?: ReaderThemeTokens;
 }
 
-export function StickyNewsletterBar({ 
+export function StickyNewsletterBar({
   showAfter = 30,
-  novelName 
+  novelName,
+  theme = DEFAULT_THEME,
 }: StickyNewsletterBarProps) {
   const [isVisible, setIsVisible] = useState(false);
   const [isDismissed, setIsDismissed] = useState(false);
@@ -86,11 +104,11 @@ export function StickyNewsletterBar({
           className="fixed bottom-0 left-0 right-0 z-[998] p-4 pointer-events-none"
         >
           <div className="max-w-2xl mx-auto pointer-events-auto">
-            <div className="relative bg-gradient-to-r from-gray-900 via-gray-900 to-purple-900/50 rounded-2xl border border-white/10 shadow-2xl shadow-black/50 overflow-hidden">
+            <div className={`relative ${theme.cardBg} rounded-2xl border ${theme.border} shadow-2xl shadow-black/50 overflow-hidden`}>
               {/* Close button */}
               <button
                 onClick={handleDismiss}
-                className="absolute top-3 right-3 p-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white/50 hover:text-white transition-all z-10"
+                className={`absolute top-3 right-3 p-1.5 rounded-full bg-foreground/10 hover:bg-foreground/20 ${theme.mutedText} hover:text-primary-0 transition-all z-10`}
               >
                 <X className="w-4 h-4" />
               </button>
@@ -100,7 +118,7 @@ export function StickyNewsletterBar({
                   <div className="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center">
                     <Check className="w-4 h-4 text-green-400" />
                   </div>
-                  <span className="text-white font-medium">Subscribed! Check your inbox.</span>
+                  <span className={`${theme.text} font-medium`}>Subscribed! Check your inbox.</span>
                 </div>
               ) : isExpanded ? (
                 <form onSubmit={handleSubmit} className="p-4">
@@ -111,7 +129,7 @@ export function StickyNewsletterBar({
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       autoFocus
-                      className="flex-1 px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-primary-0"
+                      className={`flex-1 px-4 py-3 rounded-xl bg-foreground/5 border ${theme.border} ${theme.text} focus:outline-none focus:ring-2 focus:ring-primary-0`}
                     />
                     <button
                       type="submit"
@@ -123,7 +141,7 @@ export function StickyNewsletterBar({
                     <button
                       type="button"
                       onClick={() => setIsExpanded(false)}
-                      className="px-4 py-3 rounded-xl bg-white/10 text-white/70 hover:text-white transition-all sm:hidden"
+                      className={`px-4 py-3 rounded-xl bg-foreground/10 ${theme.mutedText} hover:text-primary-0 transition-all sm:hidden`}
                     >
                       Cancel
                     </button>
@@ -136,14 +154,14 @@ export function StickyNewsletterBar({
                       <Mail className="w-5 h-5 text-primary-0" />
                     </div>
                     <div className="hidden sm:block">
-                      <p className="text-white font-medium">
+                      <p className={`${theme.text} font-medium`}>
                         {novelName ? `Get ${novelName} updates` : "Get chapter updates"}
                       </p>
-                      <p className="text-white/50 text-sm">
+                      <p className={`${theme.mutedText} text-sm`}>
                         New chapters delivered to your inbox
                       </p>
                     </div>
-                    <p className="sm:hidden text-white font-medium">
+                    <p className={`sm:hidden ${theme.text} font-medium`}>
                       Get new chapter updates
                     </p>
                   </div>

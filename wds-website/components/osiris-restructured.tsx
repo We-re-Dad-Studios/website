@@ -136,8 +136,8 @@ function OsirisContent({
               viewport={{ once: true }}
               className="mb-10"
             >
-              <h2 className="text-2xl font-bold text-white mb-4">The Story</h2>
-              <div className="text-lg leading-relaxed text-neutral_300 space-y-4">
+              <h2 className="text-2xl font-bold text-foreground mb-4">The Story</h2>
+              <div className="text-lg leading-relaxed text-muted-foreground space-y-4">
                 <p>
            In the near future, death has become negotiable—but only for the wealthy. Thanks to Osiris Inc., the world&apos;s first soul-retrieval company, anyone can be brought back—as long as their Time of Death hasn&apos;t exceeded 48 hours.
 Walkers, elite operatives trained to extract souls within a dangerous liminal realm called the Light, maintain this impossible industry. But missions are failing. Teams are disappearing.
@@ -165,13 +165,13 @@ When seventeen-year-old Sami Illia becomes the sole survivor of a catastrophic r
               viewport={{ once: true }}
               className="mb-10"
             >
-              <h3 className="text-lg font-semibold text-white mb-3">Genres & Tags</h3>
+              <h3 className="text-lg font-semibold text-foreground mb-3">Genres & Tags</h3>
               <div className="flex gap-2 flex-wrap">
                 {["Science Fantasy", "Supernatural Thriller", "Dystopian", "Corporate Horror", "Team Dynamics"].map(
                   (g) => (
                     <span
                       key={g}
-                      className="px-3 py-1.5 text-sm bg-cyan-500/10 text-cyan-200 rounded-full border border-cyan-500/20"
+                      className="px-3 py-1.5 text-sm bg-cyan-500/10 text-cyan-700 dark:text-cyan-200 rounded-full border border-cyan-500/20"
                     >
                       {g}
                     </span>
@@ -186,12 +186,12 @@ When seventeen-year-old Sami Illia becomes the sole survivor of a catastrophic r
               initial="hidden"
               whileInView="show"
               viewport={{ once: true }}
-              className="bg-white/5 border border-white/10 rounded-xl p-6"
+              className="bg-foreground/5 border border-foreground/10 rounded-xl p-6"
             >
-              <h3 className="text-lg font-semibold text-white mb-4">
+              <h3 className="text-lg font-semibold text-foreground mb-4">
                 Why You&apos;ll Love Project Osiris
               </h3>
-              <ul className="space-y-3 text-neutral_300">
+              <ul className="space-y-3 text-muted-foreground">
                 <li className="flex items-start gap-3">
                   <span className="text-cyan-400 mt-1">✦</span>
                   A haunting liminal realm where the rules of reality don&apos;t apply
@@ -228,14 +228,14 @@ When seventeen-year-old Sami Illia becomes the sole survivor of a catastrophic r
               initial="hidden"
               whileInView="show"
               viewport={{ once: true }}
-              className="bg-white/5 border border-white/10 rounded-xl p-6 backdrop-blur-sm"
+              className="bg-foreground/5 border border-foreground/10 rounded-xl p-6 backdrop-blur-sm"
             >
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl font-semibold text-white flex items-center gap-2">
-                  <BookOpen className="w-5 h-5 text-cyan-400" />
+                <h3 className="text-xl font-semibold text-foreground flex items-center gap-2">
+                  <BookOpen className="w-5 h-5 text-cyan-500 dark:text-cyan-400" />
                   Chapters
                 </h3>
-                <span className="text-sm text-white/50">
+                <span className="text-sm text-muted-foreground">
                   {chapters.length > 0 ? `${chapters.length} available` : "Coming soon"}
                 </span>
               </div>
@@ -252,25 +252,25 @@ When seventeen-year-old Sami Illia becomes the sole survivor of a catastrophic r
               initial="hidden"
               whileInView="show"
               viewport={{ once: true }}
-              className="bg-white/5 border border-white/10 rounded-xl p-6 text-center backdrop-blur-sm"
+              className="bg-foreground/5 border border-foreground/10 rounded-xl p-6 text-center backdrop-blur-sm"
             >
-              <p className="font-semibold text-white mb-4">Follow for Updates</p>
+              <p className="font-semibold text-foreground mb-4">Follow for Updates</p>
               <div className="flex justify-center gap-4">
                 <a
                   href="https://www.tiktok.com/@weredadstudios"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-3 bg-white/10 rounded-xl hover:bg-white/20 transition-colors"
+                  className="p-3 bg-foreground/10 rounded-xl hover:bg-foreground/20 transition-colors"
                 >
-                  <FaTiktok className="w-6 h-6 text-white" />
+                  <FaTiktok className="w-6 h-6 text-foreground" />
                 </a>
                 <a
                   href="https://www.instagram.com/weredadstudios"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-3 bg-white/10 rounded-xl hover:bg-white/20 transition-colors"
+                  className="p-3 bg-foreground/10 rounded-xl hover:bg-foreground/20 transition-colors"
                 >
-                  <FaInstagram className="w-6 h-6 text-white" />
+                  <FaInstagram className="w-6 h-6 text-foreground" />
                 </a>
               </div>
             </motion.div>
@@ -286,7 +286,7 @@ When seventeen-year-old Sami Illia becomes the sole survivor of a catastrophic r
             viewport={{ once: true }}
             className="mt-16"
           >
-            <h2 className="text-2xl font-bold text-white text-center mb-8">
+            <h2 className="text-2xl font-bold text-foreground text-center mb-8">
               Related Posts
             </h2>
 
@@ -306,7 +306,7 @@ When seventeen-year-old Sami Illia becomes the sole survivor of a catastrophic r
 
       {/* ============ MOBILE STICKY CTA ============ */}
       {chapters.length > 0 && (
-        <div className="lg:hidden fixed bottom-0 left-0 right-0 p-4 bg-black/90 backdrop-blur-lg border-t border-white/10 z-50">
+        <div className="lg:hidden fixed bottom-0 left-0 right-0 p-4 bg-background/90 backdrop-blur-lg border-t border-border z-50">
           <Link
             href={`/novels/project_osiris/chapters/${chapters[0]?.slug || 'chapter-1'}`}
             className="flex items-center justify-center gap-2 w-full py-4 bg-cyan-500 text-black font-bold rounded-xl"
@@ -333,22 +333,22 @@ function RelatedCard({
   return (
     <Link
       href={to}
-      className="group border border-white/10 rounded-xl overflow-hidden bg-white/5 backdrop-blur-sm hover:bg-white/10 transition"
+      className="group border border-foreground/10 rounded-xl overflow-hidden bg-foreground/5 backdrop-blur-sm hover:bg-foreground/10 transition"
     >
-      <div className="aspect-video relative bg-neutral_900">
+      <div className="aspect-video relative bg-foreground/5">
         <Image
           src="/images/WDS LOGO WHITE.png"
           alt={title}
           fill
-          className="object-contain p-6 opacity-50 group-hover:opacity-70 transition"
+          className="object-contain p-6 opacity-50 group-hover:opacity-70 transition dark:invert-0 invert"
         />
       </div>
 
       <div className="p-4">
-        <h3 className="text-lg font-semibold text-white group-hover:text-cyan-400 transition line-clamp-2">
+        <h3 className="text-lg font-semibold text-foreground group-hover:text-cyan-500 dark:group-hover:text-cyan-400 transition line-clamp-2">
           {title}
         </h3>
-        <p className="text-sm text-neutral_400 mt-2 line-clamp-2">
+        <p className="text-sm text-muted-foreground mt-2 line-clamp-2">
           {description}
         </p>
       </div>

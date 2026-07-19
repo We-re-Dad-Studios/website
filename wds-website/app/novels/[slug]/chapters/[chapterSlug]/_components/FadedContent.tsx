@@ -1209,7 +1209,7 @@ function ChapterReader({
             {documentToReactComponents(content, createOptions(settings.showDropCap))}
           </motion.article>
 
-          <StickyNewsletterBar showAfter={30} novelName={novelDisplayName} />
+          <StickyNewsletterBar showAfter={30} novelName={novelDisplayName} theme={currentTheme} />
 
           {/* Next Chapter CTA */}
           {/* {nextChapter && (
@@ -1246,6 +1246,7 @@ function ChapterReader({
             novelSlug={Novel as string}
             novelName={novelDisplayName}
             chapterNumber={chapter.chapterNumber}
+            theme={currentTheme}
           />
         </main>
 

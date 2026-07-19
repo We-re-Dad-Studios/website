@@ -33,7 +33,7 @@ function MainContent({
 }) {
   return (
     <div className="w-full">
-      {/* ============ HERO SECTION - ALWAYS FIRST ============ */}
+      {/* ============ HERO SECTION - ALWAYS FIRST (over image → intentionally light text) ============ */}
       <section className="relative w-full min-h-[55vh] sm:min-h-[65vh] md:min-h-[70vh] flex items-center sm:items-end pb-8 sm:pb-12 overflow-hidden">
         {/* Background */}
         <div className="absolute inset-0">
@@ -109,10 +109,10 @@ function MainContent({
       {/* ============ MAIN CONTENT ============ */}
       <div className="container mx-auto px-4 lg:px-8 py-12">
         <div className="flex flex-col lg:flex-row gap-12">
-          
+
           {/* LEFT COLUMN - Story Details (shows first on mobile now) */}
           <div className="flex-1 max-w-3xl order-1">
-            
+
             {/* Description */}
             <motion.div
               variants={fadeUp}
@@ -121,8 +121,8 @@ function MainContent({
               viewport={{ once: true }}
               className="mb-10"
             >
-              <h2 className="text-2xl font-bold text-white mb-4">The Story</h2>
-              <div className="text-lg leading-relaxed text-neutral_300 space-y-4">
+              <h2 className="text-2xl font-bold text-foreground mb-4">The Story</h2>
+              <div className="text-lg leading-relaxed text-muted-foreground space-y-4">
                 <p>
                   In the world of Thaloria, power is everything. Humans wield
                   elemental magic by forming connections with Echoes—semi-sentient
@@ -130,9 +130,9 @@ function MainContent({
                   collapse, as political tensions edge toward civil war.
                 </p>
                 <p>
-                  Devvyn, a stubborn lowborn troublemaker, forms an impossible bond,granting him powers that breaks the rules 
-                  of the world. As new threats move across the continent, Devvyn must 
-                  uncover the truth behind his family&apos;s legacy... or become the spark 
+                  Devvyn, a stubborn lowborn troublemaker, forms an impossible bond,granting him powers that breaks the rules
+                  of the world. As new threats move across the continent, Devvyn must
+                  uncover the truth behind his family&apos;s legacy... or become the spark
                   that ignites Thaloria&apos;ss downfall.
                 </p>
               </div>
@@ -145,12 +145,12 @@ function MainContent({
                 initial="hidden"
                 whileInView="show"
                 viewport={{ once: true }}
-                className="mb-10 bg-white/5 border border-white/10 rounded-xl p-6"
+                className="mb-10 bg-foreground/5 border border-foreground/10 rounded-xl p-6"
               >
-                <h3 className="text-lg font-semibold text-white mb-3">
+                <h3 className="text-lg font-semibold text-foreground mb-3">
                   Chapter 1 Preview
                 </h3>
-                <p className="text-neutral_300 leading-relaxed italic">
+                <p className="text-muted-foreground leading-relaxed italic">
                   &quot;{chapters[0].previewText}&quot;
                 </p>
                 <Link
@@ -171,13 +171,13 @@ function MainContent({
               viewport={{ once: true }}
               className="mb-10"
             >
-              <h3 className="text-lg font-semibold text-white mb-3">Genres & Tags</h3>
+              <h3 className="text-lg font-semibold text-foreground mb-3">Genres & Tags</h3>
               <div className="flex gap-2 flex-wrap">
                 {["Dark Epic Fantasy", "Magic System", "Academy", "Political Intrigue", "Found Family"].map(
                   (g) => (
                     <span
                       key={g}
-                      className="px-3 py-1.5 text-sm bg-white/10 text-white/80 rounded-full border border-white/10"
+                      className="px-3 py-1.5 text-sm bg-foreground/10 text-foreground/80 rounded-full border border-foreground/10"
                     >
                       {g}
                     </span>
@@ -192,12 +192,12 @@ function MainContent({
               initial="hidden"
               whileInView="show"
               viewport={{ once: true }}
-              className="bg-white/5 border border-white/10 rounded-xl p-6"
+              className="bg-foreground/5 border border-foreground/10 rounded-xl p-6"
             >
-              <h3 className="text-lg font-semibold text-white mb-4">
+              <h3 className="text-lg font-semibold text-foreground mb-4">
                 Why Readers Love Dawnshipper
               </h3>
-              <ul className="space-y-3 text-neutral_300">
+              <ul className="space-y-3 text-muted-foreground">
                 <li className="flex items-start gap-3">
                   <span className="text-primary-0 mt-1">✦</span>
                   A grounded yet powerful magic system shaped by elemental Echoes
@@ -234,14 +234,14 @@ function MainContent({
               initial="hidden"
               whileInView="show"
               viewport={{ once: true }}
-              className="bg-white/5 border border-white/10 rounded-xl p-6 backdrop-blur-sm"
+              className="bg-foreground/5 border border-foreground/10 rounded-xl p-6 backdrop-blur-sm"
             >
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl font-semibold text-white flex items-center gap-2">
+                <h3 className="text-xl font-semibold text-foreground flex items-center gap-2">
                   <BookOpen className="w-5 h-5 text-primary-0" />
                   Chapters
                 </h3>
-                <span className="text-sm text-white/50">
+                <span className="text-sm text-muted-foreground">
                   {chapters.length} available
                 </span>
               </div>
@@ -258,25 +258,25 @@ function MainContent({
               initial="hidden"
               whileInView="show"
               viewport={{ once: true }}
-              className="bg-white/5 border border-white/10 rounded-xl p-6 text-center backdrop-blur-sm"
+              className="bg-foreground/5 border border-foreground/10 rounded-xl p-6 text-center backdrop-blur-sm"
             >
-              <p className="font-semibold text-white mb-4">Follow for Updates</p>
+              <p className="font-semibold text-foreground mb-4">Follow for Updates</p>
               <div className="flex justify-center gap-4">
                 <a
                   href="https://www.tiktok.com/@weredadstudios"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-3 bg-white/10 rounded-xl hover:bg-white/20 transition-colors"
+                  className="p-3 bg-foreground/10 rounded-xl hover:bg-foreground/20 transition-colors"
                 >
-                  <FaTiktok className="w-6 h-6 text-white" />
+                  <FaTiktok className="w-6 h-6 text-foreground" />
                 </a>
                 <a
                   href="https://www.instagram.com/weredadstudios"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-3 bg-white/10 rounded-xl hover:bg-white/20 transition-colors"
+                  className="p-3 bg-foreground/10 rounded-xl hover:bg-foreground/20 transition-colors"
                 >
-                  <FaInstagram className="w-6 h-6 text-white" />
+                  <FaInstagram className="w-6 h-6 text-foreground" />
                 </a>
               </div>
             </motion.div>
@@ -292,7 +292,7 @@ function MainContent({
             viewport={{ once: true }}
             className="mt-16"
           >
-            <h2 className="text-2xl font-bold text-white text-center mb-8">
+            <h2 className="text-2xl font-bold text-foreground text-center mb-8">
               Related Posts
             </h2>
 
@@ -311,7 +311,7 @@ function MainContent({
       </div>
 
       {/* ============ MOBILE STICKY CTA ============ */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 p-4 bg-black/90 backdrop-blur-lg border-t border-white/10 z-50">
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 p-4 bg-background/90 backdrop-blur-lg border-t border-border z-50">
         <Link
           href={`/novels/dawnshipper/chapters/${chapters[0]?.slug || 'echoes-and-embers'}`}
           className="flex items-center justify-center gap-2 w-full py-4 bg-primary-0 text-white font-bold rounded-xl"
@@ -337,22 +337,22 @@ function RelatedCard({
   return (
     <Link
       href={to}
-      className="group border border-white/10 rounded-xl overflow-hidden bg-white/5 backdrop-blur-sm hover:bg-white/10 transition"
+      className="group border border-foreground/10 rounded-xl overflow-hidden bg-foreground/5 backdrop-blur-sm hover:bg-foreground/10 transition"
     >
-      <div className="aspect-video relative bg-neutral_900">
+      <div className="aspect-video relative bg-foreground/5">
         <Image
           src="/images/WDS LOGO WHITE.png"
           alt={title}
           fill
-          className="object-contain p-6 opacity-50 group-hover:opacity-70 transition"
+          className="object-contain p-6 opacity-50 group-hover:opacity-70 transition dark:invert-0 invert"
         />
       </div>
 
       <div className="p-4">
-        <h3 className="text-lg font-semibold text-white group-hover:text-primary-0 transition line-clamp-2">
+        <h3 className="text-lg font-semibold text-foreground group-hover:text-primary-0 transition line-clamp-2">
           {title}
         </h3>
-        <p className="text-sm text-neutral_400 mt-2 line-clamp-2">
+        <p className="text-sm text-muted-foreground mt-2 line-clamp-2">
           {description}
         </p>
       </div>

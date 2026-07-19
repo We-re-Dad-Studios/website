@@ -20,20 +20,20 @@ export function ContinueReadingCard({ novelSlug }: { novelSlug: string }) {
           <BookOpen className="w-5 h-5 text-amber-300" />
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-xs uppercase tracking-[0.18em] text-amber-300/80 mb-1">
+          <p className="text-xs uppercase tracking-[0.18em] text-amber-600 dark:text-amber-300/80 mb-1">
             Continue reading
           </p>
-          <p className="text-lg font-semibold text-white truncate">
+          <p className="text-lg font-semibold text-foreground truncate">
             Chapter {progress.chapterNumber}: {progress.title}
           </p>
           <div className="mt-3 flex items-center gap-3">
-            <div className="relative flex-1 h-1.5 rounded-full bg-white/10 overflow-hidden">
+            <div className="relative flex-1 h-1.5 rounded-full bg-foreground/10 overflow-hidden">
               <div
                 className="absolute inset-y-0 left-0 bg-gradient-to-r from-amber-500 to-orange-500"
                 style={{ width: `${percent}%` }}
               />
             </div>
-            <span className="text-xs font-mono text-amber-200/80 tabular-nums">
+            <span className="text-xs font-mono text-amber-600 dark:text-amber-200/80 tabular-nums">
               {percent}%
             </span>
           </div>

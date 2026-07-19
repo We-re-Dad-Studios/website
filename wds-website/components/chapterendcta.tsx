@@ -4,21 +4,38 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
-import { 
-  ArrowRight, 
-  ChevronRight, 
-  Mail, 
-  Sparkles, 
+import {
+  ArrowRight,
+  ChevronRight,
+  Mail,
+  Sparkles,
   Check,
   BookOpen,
   Zap
 } from "lucide-react";
+
+/** Surface tokens supplied by the reader's own theme system (dark/midnight/sepia/light).
+ *  Defaults preserve the original dark look when rendered outside the reader. */
+interface ReaderThemeTokens {
+  text: string;
+  mutedText: string;
+  border: string;
+  cardBg: string;
+}
+
+const DEFAULT_THEME: ReaderThemeTokens = {
+  text: "text-white",
+  mutedText: "text-white/60",
+  border: "border-white/10",
+  cardBg: "bg-white/5",
+};
 
 interface ChapterEndCTAProps {
   nextChapter?: string | null;
   novelSlug: string;
   novelName: string;
   chapterNumber: number;
+  theme?: ReaderThemeTokens;
 }
 
 const otherNovels = {
@@ -47,6 +64,7 @@ export function ChapterEndCTA({
   novelSlug,
   novelName,
   chapterNumber,
+  theme = DEFAULT_THEME,
 }: ChapterEndCTAProps) {
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -88,9 +106,9 @@ export function ChapterEndCTA({
     <div className="mt-16 space-y-8">
       {/* Divider */}
       <div className="flex items-center gap-4">
-        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+        <div className={`flex-1 h-px border-t ${theme.border}`} />
         <Sparkles className="w-5 h-5 text-primary-0" />
-        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+        <div className={`flex-1 h-px border-t ${theme.border}`} />
       </div>
 
       {/* Next Chapter CTA - Most prominent */}
@@ -109,7 +127,7 @@ export function ChapterEndCTA({
                 <p className="text-sm text-purple-500 font-medium mb-1">
                   Continue Reading
                 </p>
-                <h3 className="text-xl md:text-2xl font-bold text-white group-hover:text-purple-400 transition-colors">
+                <h3 className={`text-xl md:text-2xl font-bold ${theme.text} group-hover:text-primary-0 transition-colors`}>
                   Chapter {chapterNumber + 1}
                 </h3>
               </div>
@@ -129,15 +147,15 @@ export function ChapterEndCTA({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.1 }}
-          className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-sm"
+          className={`${theme.cardBg} border ${theme.border} rounded-2xl p-6 backdrop-blur-sm`}
         >
           {isSuccess ? (
             <div className="text-center py-4">
               <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-green-500/20 flex items-center justify-center">
                 <Check className="w-7 h-7 text-green-400" />
               </div>
-              <h4 className="text-xl font-bold text-white mb-2">You&apos;re subscribed! 🎉</h4>
-              <p className="text-white/60 text-sm">
+              <h4 className={`text-xl font-bold ${theme.text} mb-2`}>You&apos;re subscribed! 🎉</h4>
+              <p className={`${theme.mutedText} text-sm`}>
                 Check your inbox for a welcome message.
               </p>
             </div>
@@ -148,8 +166,8 @@ export function ChapterEndCTA({
                   <Mail className="w-5 h-5 text-primary-0" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-white">Get Chapter Updates</h4>
-                  <p className="text-xs text-white/50">Never miss a new release</p>
+                  <h4 className={`font-bold ${theme.text}`}>Get Chapter Updates</h4>
+                  <p className={`text-xs ${theme.mutedText}`}>Never miss a new release</p>
                 </div>
               </div>
 
@@ -159,14 +177,14 @@ export function ChapterEndCTA({
                   placeholder="First name"
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-primary-0 text-sm"
+                  className={`w-full px-4 py-3 rounded-xl ${theme.cardBg} border ${theme.border} ${theme.text} focus:outline-none focus:ring-2 focus:ring-primary-0 text-sm`}
                 />
                 <input
                   type="email"
                   placeholder="Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-primary-0 text-sm"
+                  className={`w-full px-4 py-3 rounded-xl ${theme.cardBg} border ${theme.border} ${theme.text} focus:outline-none focus:ring-2 focus:ring-primary-0 text-sm`}
                 />
                 <button
                   type="submit"
@@ -181,7 +199,7 @@ export function ChapterEndCTA({
                 <p className="text-red-400 text-xs mt-2">{error}</p>
               )}
 
-              <p className="text-center text-white/30 text-xs mt-3">
+              <p className={`text-center ${theme.mutedText} text-xs mt-3`}>
                 No spam. Unsubscribe anytime.
               </p>
             </>
@@ -198,9 +216,9 @@ export function ChapterEndCTA({
           >
             <Link
               href={otherNovel.link}
-              className="group block h-full bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:border-white/20 transition-all"
+              className={`group block h-full ${theme.cardBg} border ${theme.border} rounded-2xl overflow-hidden hover:border-primary-0/40 transition-all`}
             >
-              {/* Image */}
+              {/* Image (always over a dark gradient → light text) */}
               <div className="relative h-32 overflow-hidden">
                 <Image
                   src={otherNovel.image}
@@ -208,7 +226,7 @@ export function ChapterEndCTA({
                   fill
                   className="object-cover opacity-60 group-hover:opacity-80 group-hover:scale-105 transition-all duration-500"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent" />
               </div>
 
               {/* Content */}
@@ -219,10 +237,10 @@ export function ChapterEndCTA({
                     {otherNovel.genre}
                   </span>
                 </div>
-                <h4 className="text-lg font-bold text-white group-hover:text-primary-0 transition-colors mb-1">
+                <h4 className={`text-lg font-bold ${theme.text} group-hover:text-primary-0 transition-colors mb-1`}>
                   {otherNovel.title}
                 </h4>
-                <p className="text-sm text-white/60 mb-3">
+                <p className={`text-sm ${theme.mutedText} mb-3`}>
                   {otherNovel.tagline}
                 </p>
                 <div className="flex items-center gap-2 text-sm text-primary-0 font-medium">
@@ -245,7 +263,7 @@ export function ChapterEndCTA({
       >
         <Link
           href={`/projects/${novelSlug}`}
-          className="inline-flex items-center gap-2 text-white/50 hover:text-white transition-colors text-sm"
+          className={`inline-flex items-center gap-2 ${theme.mutedText} hover:text-primary-0 transition-colors text-sm`}
         >
           ← Back to all {novelName} chapters
         </Link>
