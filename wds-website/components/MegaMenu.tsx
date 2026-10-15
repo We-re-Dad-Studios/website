@@ -24,8 +24,8 @@ export const MegaMenu = () => {
           ref={menuRef}
           className="
             absolute left-1/2 -translate-x-1/2 top-[48px]
-            w-[540px] bg-background/80 backdrop-blur-xl
-            border border-border rounded-xl shadow-xl
+            w-[540px] bg-card
+            border border-border border-t-4 border-t-brand-pink shadow-xl
             p-6 grid grid-cols-2 gap-6 text-foreground z-50
           "
           onMouseEnter={openMenu}

@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Suspense } from "react";
 import dynamic from "next/dynamic";
 import { Agdasima, Bebas_Neue } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -33,6 +34,15 @@ const bebasNeue = Bebas_Neue({
   weight: "400",
   display: "swap",
   variable: "--font-bebas",
+});
+
+// Brand display face. Rebuilt from the Brand Guidelines PDF outlines —
+// swap in the licensed Plaguard file before launch.
+const plaguard = localFont({
+  src: "./fonts/PlaguardWDS.woff",
+  weight: "400",
+  display: "swap",
+  variable: "--font-plaguard",
 });
 
 export const metadata: Metadata = {
@@ -98,7 +108,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${agdasima.variable} ${bebasNeue.variable}`}
+      className={`${agdasima.variable} ${bebasNeue.variable} ${plaguard.variable}`}
     >
       <head>
         <script

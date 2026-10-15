@@ -45,7 +45,7 @@ export default function Home() {
       {!hasVisited ? (
         <motion.section
           key="welcome-section"
-          className="w-full min-h-screen flex justify-center items-center flex-col relative"
+          className="w-full min-h-screen flex justify-center items-center flex-col relative overflow-hidden bg-brand-indigo text-white"
           initial="hidden"
           animate="visible"
           exit="exit"
@@ -55,7 +55,7 @@ export default function Home() {
           <SplashImage onImageLoaded={() => setSplashImageLoaded(true)} />
           <motion.button
             onClick={handleVisited}
-            className="mt-8 transition-all duration-300 z-[20] flex flex-row items-center gap-2 py-3 px-12 welcome-btn main-btn hover:gap-4 hover:scale-105"
+            className="mt-8 transition-all duration-300 z-[20] flex flex-row items-center gap-2 py-3 px-12 welcome-btn main-btn cut-corners font-bold uppercase tracking-[0.06em] hover:gap-4 hover:scale-105"
             initial={{ opacity: 0 }}
             animate={{ opacity: splashImageLoaded ? 1 : 0 }}
             transition={{ duration: 0.4, delay: 0.3 }}

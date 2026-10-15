@@ -55,27 +55,28 @@ const NavbarInner = () => {
     <nav
       className="
         sticky top-0 left-0 w-full h-[80px]
-        bg-wds-nav-bg/40 backdrop-blur-xl border-b border-wds-nav-border/10
-        flex items-center justify-between px-4 md:px-16 z-[999]
+        bg-wds-nav-bg text-white border-b border-wds-nav-border/30
+        flex items-center justify-between gap-6 px-4 md:px-10 lg:px-16 z-[999]
       "
     >
-      {/* Logo */}
-      <Link href="/">
+      {/* Logo — guideline "Small" size (100px band) */}
+      <Link href="/" aria-label="We're Dad Studios — home" className="py-2">
         <Image
-          src="/images/WDS LOGO WHITE.png"
-          width={95}
-          height={40}
-          alt="WDS Logo"
-          className="w-[95px] h-auto dark:invert-0 invert"
+          src="/images/wds-mark-white.svg"
+          width={112}
+          height={46}
+          alt="WDS"
+          priority
+          className="w-[88px] md:w-[112px] h-auto"
         />
       </Link>
 
       {/* Desktop nav */}
       <div className="hidden md:flex items-center gap-10 relative">
-        <div className="relative flex items-center gap-10 font-agdasima text-[20px]">
+        <div className="relative flex items-center gap-6 lg:gap-10 font-agdasima text-[20px]">
           {/* animated underline */}
           <motion.div
-            className="absolute bottom-[-6px] h-[2px] bg-purple-400 rounded"
+            className="absolute bottom-[-8px] h-[3px] bg-brand-green"
             animate={{ width: underlineProps.width, x: underlineProps.left }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
           />
@@ -110,7 +111,7 @@ const NavbarInner = () => {
                 active={active}
                 onFocus={openMenu}
               />
-              <ChevronDown className="w-4 h-4 mt-1 text-foreground" />
+              <ChevronDown className="w-4 h-4 mt-1 text-brand-mist" />
             </div>
 
             <MegaMenu />
@@ -142,13 +143,16 @@ const NavbarInner = () => {
         </div>
       </div>
 
-      {/* Social + Theme Toggle */}
-      <div className="hidden md:flex items-center gap-6">
+      {/* Search + Theme Toggle + CTA (socials live in the footer) */}
+      <div className="hidden md:flex items-center gap-3">
         <SearchButton />
         <ThemeToggle />
-        <SocialIcon href="https://www.tiktok.com/@weredadstudios" Icon={FaTiktok} />
-        <SocialIcon href="https://www.instagram.com/weredadstudios" Icon={FaInstagram} />
-        <SocialIcon href="https://discord.gg/Vjjw2f42" Icon={FaDiscord} />
+        <Link
+          href="/#flagships"
+          className="cut-corners-sm hidden lg:inline-flex h-11 items-center px-5 bg-brand-pink text-brand-ink font-agdasima font-bold text-[19px] uppercase tracking-[0.06em] transition-colors hover:bg-[#F87FE2]"
+        >
+          Start reading
+        </Link>
       </div>
 
       {/* Mobile */}
@@ -164,11 +168,11 @@ const SearchButton = () => (
   <button
     onClick={openSearch}
     aria-label="Search"
-    className="flex items-center gap-2 rounded-lg border border-border px-3 py-1.5 text-sm text-wds-text-secondary transition-colors hover:bg-foreground/10"
+    className="flex h-11 items-center gap-2 border border-white/50 px-3 font-agdasima text-[17px] text-white transition-colors hover:bg-white/10"
   >
     <Search className="h-4 w-4" />
-    <span className="hidden lg:inline">Search</span>
-    <kbd className="hidden lg:inline rounded bg-foreground/10 px-1.5 text-[11px]">
+    <span className="hidden xl:inline uppercase tracking-[0.06em]">Search</span>
+    <kbd className="hidden xl:inline bg-white/15 px-1.5 font-agdasima text-[13px]">
       ⌘K
     </kbd>
   </button>
@@ -183,13 +187,13 @@ const ThemeToggle = () => {
   return (
     <button
       onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
-      className="p-2 rounded-lg hover:bg-foreground/10 transition-colors"
+      className="flex h-11 w-11 items-center justify-center hover:bg-white/10 transition-colors"
       aria-label="Toggle theme"
     >
       {resolvedTheme === "dark" ? (
-        <Sun className="w-5 h-5 text-foreground" />
+        <Sun className="w-5 h-5 text-white" />
       ) : (
-        <Moon className="w-5 h-5 text-foreground" />
+        <Moon className="w-5 h-5 text-white" />
       )}
     </button>
   );
@@ -197,7 +201,7 @@ const ThemeToggle = () => {
 
 const SocialIcon = ({ href, Icon }: { href: string; Icon: IconType }) => (
   <a href={href} target="_blank" rel="noopener noreferrer" className="hover:scale-110 transition">
-    <Icon className="w-6 h-6 text-foreground" />
+    <Icon className="w-6 h-6 text-white" />
   </a>
 );
 
@@ -208,23 +212,26 @@ const MobileMenu = () => {
       <button
         onClick={openSearch}
         aria-label="Search"
-        className="p-2 rounded-lg hover:bg-foreground/10 transition-colors"
+        className="flex h-11 w-11 items-center justify-center hover:bg-white/10 transition-colors"
       >
-        <Search className="w-5 h-5 text-foreground" />
+        <Search className="w-5 h-5 text-white" />
       </button>
       <ThemeToggle />
       <Popover>
         <PopoverTrigger asChild>
-          <button className="p-2 rounded-md bg-purple-500 text-black">
+          <button
+            aria-label="Open menu"
+            className="cut-corners-sm flex h-11 w-11 items-center justify-center bg-brand-pink text-brand-ink"
+          >
             <MenuIcon className="w-6 h-6" />
           </button>
         </PopoverTrigger>
         <PopoverContent
           side="bottom"
           className="
-            md:hidden flex flex-col gap-4 p-6
-            bg-background/90 backdrop-blur-xl border border-border
-            rounded-xl shadow-xl text-foreground
+            md:hidden flex flex-col gap-4 p-6 font-agdasima text-[20px]
+            bg-brand-indigo border border-white/25 border-t-4 border-t-brand-green
+            rounded-none shadow-xl text-white
           "
         >
           <NavLink href="/" label="Home" active={path} />
@@ -236,6 +243,7 @@ const MobileMenu = () => {
           <div className="flex gap-4 pt-2">
             <SocialIcon href="https://www.tiktok.com/@weredadstudios" Icon={FaTiktok} />
             <SocialIcon href="https://www.instagram.com/weredadstudios" Icon={FaInstagram} />
+            <SocialIcon href="https://discord.gg/Vjjw2f42" Icon={FaDiscord} />
           </div>
         </PopoverContent>
       </Popover>

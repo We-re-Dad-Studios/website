@@ -39,6 +39,29 @@ const securityHeaders = [
   { key: "Cross-Origin-Resource-Policy", value: "cross-origin" },
 ];
 
+// [old slug, new slug] — see redirects() below.
+const DAWNSHIPPER_RENAMED_CHAPTERS = [
+  ["the-stage-on-the-railway", "a-clear-winner"],
+  ["the-judgement-at-port-azure", "the-unbound"],
+  ["the-shadow-beneath-the-celebration", "the-wanderer"],
+  ["smoke-over-port-azure", "not-while-i-live"],
+  ["the-square-that-burned", "i-was-invited"],
+  ["shattered-pieces", "a-story-for-the-papers"],
+  ["the-silence-at-home", "blueprint-and-bloodlines"],
+  ["the-highlords-invitation", "small-mercies"],
+  ["a-seat-among-lions", "what-found-him-in-the-dark"],
+  ["blueprints-and-faultlines", "the-defector"],
+  ["sugar-smoke-and-shadows", "the-boy-who-dreamed"],
+  ["the-defectors-shadow", "seeds-of-resistance"],
+  ["the-knife-in-the-dark", "lets-steal-an-echo"],
+  ["the-man-in-the-tunnel", "the-book-of-names"],
+  ["the-weight-of-whats-hidden", "sleight-of-hand"],
+  ["the-crowd-at-the-gates", "the-price-of-three-echoes"],
+  ["the-plan-before-dawn", "insurance"],
+  ["before-the-coves", "it-wasnt-my-fault"],
+  ["the-hunters-blind-spot", "the-mark-of-chaos"],
+];
+
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
@@ -67,6 +90,15 @@ const nextConfig = {
       { protocol: "https", hostname: "images.ctfassets.net", port: "" },
       { protocol: "https", hostname: "*", port: "" },
     ],
+  },
+  // Dawnshipper chapters 2–20 were re-titled when the book was re-imported from
+  // the master Google Doc (Oct 2026). Old links go to the chapter now at the same number.
+  async redirects() {
+    return DAWNSHIPPER_RENAMED_CHAPTERS.map(([from, to]) => ({
+      source: `/novels/dawnshipper/chapters/${from}`,
+      destination: `/novels/dawnshipper/chapters/${to}`,
+      permanent: true,
+    }));
   },
   async rewrites() {
     return [

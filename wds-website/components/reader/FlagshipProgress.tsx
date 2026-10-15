@@ -5,7 +5,9 @@ import { readerStorage } from "@/lib/reader-storage";
 import { useEffect, useState } from "react";
 
 const ACCENT_MAP: Record<string, string> = {
-  "primary-0": "#4F1787",
+  "primary-0": "#3732CC",
+  "brand-pink": "#F659DA",
+  "brand-green": "#34F58C",
   "cyan-500": "#06b6d4",
 };
 
@@ -44,9 +46,9 @@ export function FlagshipProgress({
         <span className="text-white font-medium">{label}</span>
       </div>
       {latest && (
-        <div className="mt-1.5 sm:mt-2 h-1 sm:h-1.5 bg-white/20 rounded-full overflow-hidden">
+        <div className="mt-1.5 sm:mt-2 h-1 sm:h-1.5 bg-white/20 overflow-hidden">
           <div
-            className="h-full rounded-full transition-all duration-500"
+            className="h-full transition-all duration-500"
             style={{
               width: `${currentPercent}%`,
               backgroundColor: ACCENT_MAP[accentColor] ?? ACCENT_MAP["primary-0"],

@@ -26,10 +26,24 @@ const config: Config = {
   			neutral_1000: '#151314',
   			base_black: '#0a0a0b',
   			primary: {
-  				'0': '#4F1787',
-  				'100': '#E9D9F9',
+  				// Mystical Indigo — fills (bg, gradients). Text/border/ring uses
+  				// below swap to a lighter indigo in dark mode for contrast.
+  				'0': 'rgb(var(--wds-primary) / <alpha-value>)',
+  				'100': '#E9E8FB',
   				DEFAULT: 'hsl(var(--primary))',
   				foreground: 'hsl(var(--primary-foreground))'
+  			},
+  			// Brand Guidelines palette (fixed, theme-independent)
+  			brand: {
+  				indigo: '#3732CC',
+  				'indigo-deep': '#2621A8',
+  				pink: '#F659DA',
+  				green: '#34F58C',
+  				ink: '#0F0D33',
+  				mist: '#DCDBF7',
+  				lilac: '#EFEEFD',
+  				muted: '#4A4790',
+  				rule: '#D9D8F5'
   			},
   			card: {
   				DEFAULT: 'hsl(var(--card))',
@@ -73,10 +87,21 @@ const config: Config = {
   				'5': 'hsl(var(--chart-5))'
   			}
   		},
+  		textColor: {
+  			primary: { '0': 'rgb(var(--wds-primary-accent) / <alpha-value>)' }
+  		},
+  		borderColor: {
+  			primary: { '0': 'rgb(var(--wds-primary-accent) / <alpha-value>)' }
+  		},
+  		ringColor: {
+  			primary: { '0': 'rgb(var(--wds-primary-accent) / <alpha-value>)' }
+  		},
   		fontFamily: {
 			bebas: ['var(--font-bebas)', 'sans-serif'],
-			agdasima: ['var(--font-agdasima)', 'sans-serif']
-		  },		  
+			agdasima: ['var(--font-agdasima)', 'sans-serif'],
+			// Plaguard: headers, hooks, capital-letter moments. Always uppercase.
+			plaguard: ['var(--font-plaguard)', 'var(--font-agdasima)', 'sans-serif']
+		  },
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',

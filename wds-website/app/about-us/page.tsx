@@ -1,167 +1,153 @@
 import { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
-import { Users } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import AboutUs from "@/components/About-us";
+import { BrandStripes } from "@/components/BrandStripes";
 
 export const metadata: Metadata = {
   title: "About Us | We're Dad Studios",
   description:
-    "Meet the team behind WDS — a creative studio building games, novels, and animated worlds rooted in African storytelling.",
+    "Meet the team behind WDS — a creative collective building games, novels, manga and animated worlds through transmedia storytelling.",
   openGraph: {
     title: "About Us | We're Dad Studios",
     description:
-      "Meet the team behind WDS — a creative studio building games, novels, and animated worlds rooted in African storytelling.",
+      "Meet the team behind WDS — a creative collective building games, novels, manga and animated worlds through transmedia storytelling.",
     url: "https://weredadstudios.com/about-us",
   },
   alternates: { canonical: "https://weredadstudios.com/about-us" },
 };
 
+// Who / Mission / Vision copy comes from the WDS Brand Guidelines.
+const PILLARS = [
+  {
+    label: "Who we are",
+    body: "We're Dad Studios is a creative collective centred on transmedia storytelling across gaming, manga and graphic novels. It grew out of university movie nights, where action anime sparked a desire to craft the same emotional journeys for others.",
+  },
+  {
+    label: "Mission",
+    body: "We make the stories that make creators. We inspire the next generation through immersive, high-stakes narratives — community at the heart, human-crafted storytelling over automated content, always.",
+  },
+  {
+    label: "Vision",
+    body: "A studio rooted in a fan-centric philosophy that prioritises creative integrity and long-term brand sustainability.",
+  },
+];
+
+const STATS = [
+  { value: "2", label: "Flagship novels" },
+  { value: "20+", label: "Chapters live" },
+  { value: "7", label: "Team members" },
+];
+
 export default function Page() {
   return (
-    <div className="dark min-h-screen bg-[#0a0a0b] text-white overflow-hidden">
-      {/* Hero — server-rendered, CSS animations only (no JS required) */}
-      <section className="relative min-h-screen flex items-center justify-center px-4">
-        <div className="relative z-10 text-center max-w-6xl">
-          <h1
-            className="text-6xl md:text-8xl font-bold mb-6"
-            style={{ animation: "hero-fade-up 0.6s 0.4s ease both" }}
-          >
-            <span className="bg-gradient-to-r from-purple-400 via-pink-500 to-orange-500 bg-clip-text text-transparent">
-              WE&apos;RE DAD
-            </span>
-            <br />
-            <span className="text-white">STUDIOS</span>
-          </h1>
-
-          <div
-            className="flex justify-center gap-4 mb-8"
-            style={{ animation: "hero-fade-up 0.6s 0.6s ease both" }}
-          >
-            <div className="h-2 w-2 rounded-full bg-purple-500 animate-pulse" />
-            <div className="h-2 w-16 rounded-full bg-gradient-to-r from-purple-500 to-pink-500" />
-            <div className="h-2 w-2 rounded-full bg-pink-500 animate-pulse" />
-          </div>
-
-          <p
-            className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed"
-            style={{ animation: "hero-fade-up 0.6s 0.8s ease both" }}
-          >
-            Crafting immersive worlds through games, novels, manga, and animation.
-            <br />
-            <span className="text-purple-400">Where imagination meets innovation.</span>
-          </p>
-
-          <div
-            className="mt-12"
-            style={{ animation: "hero-fade-up 0.6s 1s ease both" }}
-          >
-            <a
-              href="#team"
-              className="inline-block px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full font-bold text-lg hover:shadow-[0_0_40px_rgba(168,85,247,0.6)] transition-all duration-300 hover:scale-105"
-            >
-              Meet The Team
-            </a>
-          </div>
-        </div>
-
-        {/* Scroll Indicator — CSS animation, no JS */}
-        <div
-          className="absolute bottom-8 left-1/2"
-          style={{ animation: "scroll-indicator-bounce 2s ease-in-out infinite" }}
-        >
-          <div className="w-6 h-10 border-2 border-purple-500 rounded-full flex items-start justify-center p-2">
-            <div
-              className="w-1.5 h-1.5 bg-purple-500 rounded-full"
-              style={{ animation: "scroll-dot-slide 2s ease-in-out infinite" }}
+    <div className="w-full bg-background text-foreground">
+      {/* HERO — Mystical Indigo */}
+      <section className="relative overflow-hidden bg-brand-indigo text-white">
+        <BrandStripes className="left-0 top-0 h-[260px] w-[110px] sm:h-[400px] sm:w-[180px]" />
+        <BrandStripes className="bottom-0 right-0 h-[260px] w-[110px] rotate-180 sm:h-[400px] sm:w-[180px]" />
+        <div className="relative mx-auto flex max-w-7xl flex-wrap items-end justify-between gap-10 px-5 pb-20 pt-14 sm:px-6 sm:pb-28 sm:pt-20">
+          <div className="min-w-0 flex-[2_1_520px]">
+            <Image
+              src="/images/wds-mark-white.svg"
+              alt="WDS"
+              width={200}
+              height={82}
+              priority
+              className="h-auto w-[140px] sm:w-[200px]"
             />
-          </div>
-        </div>
-      </section>
-
-      {/* Our Story — server-rendered static content */}
-      <section className="relative py-20 px-4">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Our{" "}
-              <span className="bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
-                Story
-              </span>
-            </h2>
-            <div className="space-y-5 text-lg text-gray-300 leading-relaxed text-left">
-              <p>
-                We&apos;re Dad Studios is an independent creative studio telling
-                ambitious, character-driven stories rooted in African myth and
-                imagination — across novels, games, manga, and animation.
-              </p>
-              <p>
-                We started with a simple belief: the worlds we grew up wishing
-                existed deserve to be built. Today that means two flagship
-                serialized novels updated almost daily, with games and animation
-                growing out of the same universe.
-              </p>
-              <p className="text-purple-300">
-                No filler. No abandoned projects. Just worlds worth getting lost
-                in.
-              </p>
+            <h1 className="mb-6 mt-10 font-plaguard text-[48px] font-normal leading-[0.95] sm:text-[72px] lg:text-[96px]">
+              We make the stories
+              <span className="block text-brand-pink">that make creators</span>
+            </h1>
+            <p className="m-0 max-w-[600px] text-[21px] leading-[1.4] text-brand-mist sm:text-[25px]">
+              A creative collective building novels, games, manga and animation as one
+              connected universe — human-crafted, fan-first, and built to last.
+            </p>
+            <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
+              <a
+                href="#team"
+                className="cut-corners group inline-flex min-h-14 items-center justify-center gap-3 bg-brand-pink px-8 text-[20px] font-bold uppercase tracking-[0.06em] text-brand-ink transition-colors hover:bg-[#F87FE2] sm:text-[22px]"
+              >
+                Meet the team
+                <ArrowRight className="h-5 w-5 rotate-90" strokeWidth={2.5} aria-hidden="true" />
+              </a>
+              <Link
+                href="/projects"
+                className="inline-flex min-h-14 items-center justify-center border-2 border-white px-7 text-[20px] font-bold uppercase tracking-[0.06em] text-white transition-colors hover:bg-white hover:text-brand-indigo sm:text-[22px]"
+              >
+                Explore our worlds
+              </Link>
             </div>
           </div>
-
-          {/* Honest stats */}
-          <div className="grid grid-cols-3 gap-4 sm:gap-6">
-            {[
-              { value: "2", label: "Flagship Novels" },
-              { value: "20+", label: "Chapters Live" },
-              { value: "7", label: "Team Members", icon: true },
-            ].map((stat) => (
-              <div
-                key={stat.label}
-                className="relative bg-black/40 backdrop-blur-sm border border-white/10 rounded-lg p-5 sm:p-8 text-center hover:border-purple-500/50 transition-all"
-              >
-                {stat.icon && (
-                  <Users className="w-8 h-8 sm:w-10 sm:h-10 mx-auto mb-3 text-purple-500" />
-                )}
-                <div className="text-3xl sm:text-4xl font-bold mb-1 bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
-                  {stat.value}
-                </div>
-                <div className="text-xs sm:text-sm text-gray-400">{stat.label}</div>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 
-      {/* Interactive team section — client component */}
+      {/* WHO / MISSION / VISION */}
+      <section className="bg-secondary px-4 py-16 sm:px-6 sm:py-24">
+        <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-3 md:gap-8">
+          {PILLARS.map((p) => (
+            <div key={p.label}>
+              <div className="border-b border-t-2 border-primary-0 pb-4 pt-3">
+                <h2 className="m-0 font-plaguard text-[30px] font-normal leading-none text-primary-0 sm:text-[36px]">
+                  {p.label}
+                </h2>
+              </div>
+              <p className="m-0 mt-5 text-[20px] leading-[1.5] text-foreground sm:text-[21px]">{p.body}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* STATS */}
+      <section aria-label="Studio at a glance" className="border-b-2 border-primary-0 bg-background">
+        <div className="mx-auto grid max-w-7xl grid-cols-3 px-4 sm:px-6">
+          {STATS.map((s, i) => (
+            <div
+              key={s.label}
+              className={`flex flex-col items-center px-2 py-7 text-center sm:py-9 ${i < STATS.length - 1 ? "border-r border-border" : ""}`}
+            >
+              <span className="font-plaguard text-[34px] leading-none text-primary-0 sm:text-[52px]">{s.value}</span>
+              <span className="mt-2 text-[14px] uppercase tracking-[0.12em] text-wds-text-secondary sm:text-[18px]">
+                {s.label}
+              </span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* TEAM — client component */}
       <AboutUs />
 
-      {/* CTA — server-rendered static content */}
-      <section className="relative py-32 px-4">
-        <div className="absolute inset-0 bg-gradient-to-t from-purple-900/20 to-transparent" />
-        <div className="relative max-w-4xl mx-auto text-center">
-          <h2 className="text-5xl font-bold mb-6">
-            Ready to{" "}
-            <span className="bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
-              Level Up
-            </span>
-            ?
-          </h2>
-          <p className="text-xl text-gray-300 mb-8">
-            Join our community and be part of the adventure
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+      {/* CTA */}
+      <section className="relative overflow-hidden bg-brand-indigo px-4 py-16 text-white sm:px-6 sm:py-24">
+        <BrandStripes className="right-0 top-0 h-[300px] w-[130px] -scale-x-100 sm:h-[400px] sm:w-[180px]" />
+        <div className="relative mx-auto flex max-w-7xl flex-wrap items-end justify-between gap-10">
+          <div className="min-w-0 flex-[1_1_440px]">
+            <h2 className="mb-5 font-plaguard text-[44px] font-normal leading-[0.98] sm:text-[64px] lg:text-[80px]">
+              Feel the
+              <span className="block text-brand-green">connection</span>
+            </h2>
+            <p className="m-0 max-w-[480px] text-[21px] text-brand-mist sm:text-[24px]">
+              Join the community shaping these worlds with us — theories, sneak peeks and
+              release-day chaos.
+            </p>
+          </div>
+          <div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
             <a
               href="https://discord.gg/Vjjw2f42"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full font-bold text-lg hover:shadow-[0_0_40px_rgba(168,85,247,0.6)] transition-all duration-300 hover:scale-105"
+              className="cut-corners inline-flex min-h-14 items-center justify-center gap-3 bg-brand-green px-8 text-[20px] font-bold uppercase tracking-[0.06em] text-brand-ink transition-colors hover:bg-[#5CF7A3] sm:text-[22px]"
             >
               Join the Discord
             </a>
             <Link
               href="/projects"
-              className="inline-block px-8 py-4 border-2 border-white/30 hover:border-white/60 rounded-full font-medium text-lg transition-all duration-300 hover:bg-white/5"
+              className="inline-flex min-h-14 items-center justify-center border-2 border-white px-7 text-[20px] font-bold uppercase tracking-[0.06em] text-white transition-colors hover:bg-white hover:text-brand-indigo sm:text-[22px]"
             >
-              Explore Our Worlds
+              Explore our worlds
             </Link>
           </div>
         </div>

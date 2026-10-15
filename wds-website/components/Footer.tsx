@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { FaTiktok } from "react-icons/fa6";
+import { FaTiktok, FaInstagram, FaDiscord } from "react-icons/fa6";
 import { Crown } from "lucide-react";
 import { ROYAL_ROAD_LINKS } from "@/lib/royal-road";
 
@@ -34,7 +34,7 @@ export const Footer = () => {
         width={1000}
         height={1000}
       />
-      <div className="w-full text-[14px] text-white text-center bg-black/20 dark:bg-neutral_900/90 py-4 border-t-2 border-b-2 border-t-white/20 border-b-white/20 flex items-center justify-center gap-x-[5%]">
+      <div className="w-full text-[14px] text-white text-center bg-brand-indigo-deep py-4 border-t-2 border-b-2 border-t-white/20 border-b-white/20 flex items-center justify-center gap-x-[5%]">
         <Link href={"/"}>Home</Link>
         <Link href={"/projects"}>Projects</Link>
         <Link href={"/about-us"}>About Us</Link>
@@ -42,8 +42,14 @@ export const Footer = () => {
       <p className="mt-6 text-white text-center text-[20px]">Follow Us</p>
       <div className="flex w-full items-center mt-4 justify-center gap-x-[5%]">
 
-        <a href="https://www.tiktok.com/@weredadstudios" target="_blank" rel="noopener noreferrer" className="">
+        <a href="https://www.tiktok.com/@weredadstudios" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
           <FaTiktok  className="w-6 h-6 shrink text-white" />
+        </a>
+        <a href="https://www.instagram.com/weredadstudios" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+          <FaInstagram className="w-6 h-6 shrink text-white" />
+        </a>
+        <a href="https://discord.gg/Vjjw2f42" target="_blank" rel="noopener noreferrer" aria-label="Discord">
+          <FaDiscord className="w-6 h-6 shrink text-white" />
         </a>
         {/* <a href="">
           <TwitterIcon className="w-6 h-6 shrink" />

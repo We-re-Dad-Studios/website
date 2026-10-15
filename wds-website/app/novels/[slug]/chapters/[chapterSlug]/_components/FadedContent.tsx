@@ -32,6 +32,7 @@ import { useScrollProgress } from "@/components/scroll-progress-bar";
 import { usePostHog } from "posthog-js/react";
 import { useScroll, motion, AnimatePresence, useMotionValueEvent } from "framer-motion";
 import { ChapterEndCTA } from "@/components/chapterendcta";
+import { RoyalRoadGate } from "@/components/reader/RoyalRoadGate";
 import { StickyNewsletterBar } from "@/components/stickynewsletterbar";
 import { readerStorage, type Bookmark, type HighlightColor } from "@/lib/reader-storage";
 import { useBookmarks, useOfflineChapters } from "@/hooks/useReaderStorage";
@@ -119,20 +120,30 @@ export const Content = withFadeIn(
     chapter,
     previousChapter,
     nextChapter,
+    royalRoad,
   }: {
     content: Document;
     chapter: Chapter;
     previousChapter?: string;
     nextChapter?: string;
+    royalRoad?: RoyalRoadHandoff;
   }) => (
     <ChapterReader
       chapter={chapter}
       content={content}
       prevChapter={previousChapter}
       nextChapter={nextChapter}
+      royalRoad={royalRoad}
     />
   )
 );
+
+/** Set when this chapter is in the Royal Road half: `content` is only a teaser. */
+export interface RoyalRoadHandoff {
+  url: string;
+  /** Highest chapterNumber that is fully readable on-site */
+  onSiteLimit: number;
+}
 
 // ============ TYPES ============
 type FontSize = "sm" | "md" | "lg" | "xl";
@@ -159,6 +170,7 @@ interface ChapterReaderProps {
   content: Document;
   nextChapter?: string | null;
   prevChapter?: string | null;
+  royalRoad?: RoyalRoadHandoff;
 }
 
 interface ReaderSettings {
@@ -667,6 +679,7 @@ function ChapterReader({
   chapter,
   content,
   nextChapter,
+  royalRoad,
 }: ChapterReaderProps) {
   const { slug: Novel } = useParams();
   const cleanedText = extractPlainText(chapter.content as Document)
@@ -813,6 +826,9 @@ function ChapterReader({
       }
     }
 
+    // A Royal Road teaser isn't the chapter — never record it as read.
+    if (royalRoad) return;
+
     if (saveTimer.current) clearTimeout(saveTimer.current);
     saveTimer.current = setTimeout(() => {
       const result = readerStorage.saveProgress(chapter.id, {
@@ -849,6 +865,7 @@ function ChapterReader({
   useEffect(() => {
     if (resumeOfferedRef.current) return;
     resumeOfferedRef.current = true;
+    if (royalRoad) return;
     const saved = readerStorage.getProgress(chapter.id);
     if (!saved || saved.finished) return;
     if (saved.percent < 0.05 || saved.percent > 0.95) return;
@@ -871,7 +888,12 @@ function ChapterReader({
         },
       },
     });
-  }, [chapter.id]);
+  }, [chapter.id, royalRoad]);
+
+  // Funnel: how many readers reach a Royal Road hand-off (clicks are tracked in the gate).
+  useEffect(() => {
+    if (royalRoad) posthog?.capture("royal_road_gate_view", chapterEventProps());
+  }, [royalRoad, posthog, chapterEventProps]);
 
   // ---------- Highlight selection handling ----------
   useEffect(() => {
@@ -1168,7 +1190,7 @@ function ChapterReader({
                 })}
               </span>
               <span className="w-1.5 h-1.5 bg-current rounded-full opacity-50" />
-              <span>{readingTime} min read</span>
+              <span>{royalRoad ? "Continues on Royal Road" : `${readingTime} min read`}</span>
             </div>
 
             {/* Decorative Divider */}
@@ -1191,6 +1213,7 @@ function ChapterReader({
               ${lineHeights[settings.lineHeight]}
               ${settings.textAlign === "justify" ? "text-justify" : "text-left"}
               ${settings.focusMode ? "focus-mode" : ""}
+              ${royalRoad ? "[-webkit-mask-image:linear-gradient(to_bottom,black_45%,transparent)] [mask-image:linear-gradient(to_bottom,black_45%,transparent)]" : ""}
               tracking-[0.01em]
               [word-spacing:0.05em]
               prose max-w-none
@@ -1209,7 +1232,17 @@ function ChapterReader({
             {documentToReactComponents(content, createOptions(settings.showDropCap))}
           </motion.article>
 
-          <StickyNewsletterBar showAfter={30} novelName={novelDisplayName} theme={currentTheme} />
+          {royalRoad ? (
+            <RoyalRoadGate
+              url={royalRoad.url}
+              novelSlug={Novel as string}
+              novelName={novelDisplayName}
+              chapterNumber={chapter.chapterNumber}
+              onSiteLimit={royalRoad.onSiteLimit}
+            />
+          ) : (
+            <StickyNewsletterBar showAfter={30} novelName={novelDisplayName} theme={currentTheme} />
+          )}
 
           {/* Next Chapter CTA */}
           {/* {nextChapter && (
@@ -1241,13 +1274,15 @@ function ChapterReader({
             </motion.div>
           )} */}
 
-          <ChapterEndCTA
-            nextChapter={nextChapter}
-            novelSlug={Novel as string}
-            novelName={novelDisplayName}
-            chapterNumber={chapter.chapterNumber}
-            theme={currentTheme}
-          />
+          {!royalRoad && (
+            <ChapterEndCTA
+              nextChapter={nextChapter}
+              novelSlug={Novel as string}
+              novelName={novelDisplayName}
+              chapterNumber={chapter.chapterNumber}
+              theme={currentTheme}
+            />
+          )}
         </main>
 
         {/* ============ COMMENTS ============ */}

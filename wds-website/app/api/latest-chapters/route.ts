@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { createContentfulClient } from "@/lib/contentful";
+import { createContentfulClient, getNovelChapterNumbers } from "@/lib/contentful";
+import { getOnSiteChapterLimit } from "@/lib/royal-road";
 
 // Newest chapters across all novels for the home page "Latest Releases" strip.
 export const revalidate = 3600;
@@ -12,6 +13,8 @@ export type LatestChapter = {
   slug: string;
   releaseDate: string | null;
   isFree: boolean;
+  /** In the second half of the novel: on-site page is a teaser for Royal Road */
+  onRoyalRoad: boolean;
   preview: string | null;
 };
 
@@ -32,16 +35,25 @@ export async function GET() {
       limit: 6,
       include: 0,
     });
+    const limits = new Map<string, number>();
     for (const item of res.items) {
       const f = item.fields as Record<string, unknown>;
       const slug = f.slug as string | undefined;
       const projectSlug = f.projectSlug as string | undefined;
       if (!slug || !projectSlug) continue;
+      if (!limits.has(projectSlug)) {
+        limits.set(
+          projectSlug,
+          getOnSiteChapterLimit(projectSlug, await getNovelChapterNumbers(projectSlug))
+        );
+      }
+      const chapterNumber = (f.chapterNumber as number) ?? null;
       chapters.push({
+        onRoyalRoad: chapterNumber != null && chapterNumber > (limits.get(projectSlug) as number),
         title: (f.title as string) ?? "Untitled",
         novelSlug: projectSlug,
         novelName: NOVEL_NAMES[projectSlug] ?? projectSlug,
-        chapterNumber: (f.chapterNumber as number) ?? null,
+        chapterNumber,
         slug,
         releaseDate: (f.releaseDate as string) ?? item.sys.createdAt ?? null,
         isFree: f.isFree !== false,

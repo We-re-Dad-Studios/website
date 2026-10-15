@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Clock, ArrowRight, Lock } from "lucide-react";
+import { ArrowRight, Crown, Lock } from "lucide-react";
 import type { LatestChapter } from "@/app/api/latest-chapters/route";
 
 function timeAgo(iso: string | null): string {
@@ -33,75 +33,84 @@ export function LatestReleases() {
   if (!chapters || chapters.length === 0) return null;
 
   return (
-    <section className="w-full bg-background px-4 sm:px-6 py-14 sm:py-16">
+    <section className="w-full bg-background px-4 sm:px-6 py-16 sm:py-20">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-8 flex items-end justify-between gap-4">
-          <div>
-            <div className="mb-1 flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-primary-0">
-              <Clock className="h-4 w-4" /> Latest Releases
-            </div>
-            <h2 className="text-2xl font-bold text-foreground sm:text-3xl">
-              Hot off the press
-            </h2>
-          </div>
+        <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-3 border-b border-t-2 border-primary-0 pb-5 pt-4">
+          <h2 className="m-0 font-plaguard text-[34px] font-normal leading-none text-primary-0 sm:text-[46px] lg:text-[60px]">
+            Latest releases
+          </h2>
           <Link
-            href="/projects"
-            className="hidden shrink-0 items-center gap-1.5 text-sm font-medium text-wds-text-secondary transition-colors hover:text-primary-0 sm:flex"
+            href="/library"
+            className="inline-flex shrink-0 items-center gap-2 text-[18px] font-bold uppercase tracking-[0.06em] text-primary-0 transition-colors hover:text-foreground sm:text-[20px]"
           >
-            All chapters <ArrowRight className="h-4 w-4" />
+            Open the library <ArrowRight className="h-5 w-5" strokeWidth={2.5} />
           </Link>
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="m-0 list-none p-0">
           {chapters.map((ch, i) => (
-            <motion.div
+            <motion.li
               key={`${ch.novelSlug}-${ch.slug}`}
-              initial={{ opacity: 0, y: 16 }}
+              className="border-b border-border"
+              initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: i * 0.05 }}
             >
               <Link
                 href={`/novels/${ch.novelSlug}/chapters/${ch.slug}`}
-                className="group flex h-full flex-col rounded-xl border border-border bg-wds-surface p-4 transition-all hover:border-primary-0/50 hover:shadow-sm"
+                className="group flex flex-wrap items-center gap-x-5 gap-y-2 px-1 py-4 text-foreground transition-colors hover:bg-foreground/5 sm:py-5"
               >
-                <div className="mb-2 flex items-center justify-between gap-2">
-                  <span className="truncate text-xs font-semibold uppercase tracking-wider text-primary-0">
+                <span className="flex min-w-[150px] items-center gap-2">
+                  <span
+                    className={`px-2.5 py-0.5 text-[14px] font-bold uppercase tracking-[0.1em] sm:text-[16px] ${novelTagClass(ch.novelSlug)}`}
+                  >
                     {ch.novelName}
                   </span>
-                  <span className="shrink-0 text-xs text-wds-text-secondary">
-                    {timeAgo(ch.releaseDate)}
+                </span>
+                {ch.chapterNumber != null && (
+                  <span className="min-w-[64px] text-[16px] uppercase tracking-[0.08em] text-wds-text-secondary sm:text-[18px]">
+                    Ch. {ch.chapterNumber}
                   </span>
-                </div>
-                <div className="mb-1 font-bold text-foreground">
-                  {ch.chapterNumber != null && (
-                    <span className="text-wds-text-secondary">
-                      Ch. {ch.chapterNumber} ·{" "}
-                    </span>
-                  )}
-                  {ch.title}
-                </div>
-                {ch.preview && (
-                  <p className="mb-3 line-clamp-2 text-sm text-wds-text-secondary">
-                    {ch.preview}
-                  </p>
                 )}
-                <div className="mt-auto flex items-center gap-2 text-sm font-medium text-foreground">
-                  {ch.isFree ? (
-                    <span className="inline-flex items-center gap-1 text-primary-0 group-hover:gap-2 transition-all">
-                      Read now <ArrowRight className="h-4 w-4" />
-                    </span>
-                  ) : (
-                    <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/15 px-2 py-0.5 text-xs font-semibold text-amber-600 dark:text-amber-400">
-                      <Lock className="h-3 w-3" /> Early Access
+                <span className="min-w-0 flex-[1_1_260px]">
+                  <span className="block text-[21px] font-bold leading-tight sm:text-[25px]">{ch.title}</span>
+                  {ch.preview && (
+                    <span className="mt-1 line-clamp-1 text-[17px] text-wds-text-secondary">
+                      {ch.preview}
                     </span>
                   )}
-                </div>
+                </span>
+                <span className="text-[16px] text-wds-text-secondary sm:text-[18px]">
+                  {timeAgo(ch.releaseDate)}
+                </span>
+                {ch.onRoyalRoad ? (
+                  <span className="inline-flex items-center gap-1.5 bg-brand-indigo px-2.5 py-1 text-[14px] font-bold uppercase tracking-[0.08em] text-white">
+                    <Crown className="h-3.5 w-3.5" aria-hidden="true" /> On Royal Road
+                  </span>
+                ) : ch.isFree ? (
+                  <ArrowRight
+                    className="h-6 w-6 shrink-0 text-primary-0 transition-transform group-hover:translate-x-1"
+                    strokeWidth={2.5}
+                    aria-label="Read now"
+                  />
+                ) : (
+                  <span className="inline-flex items-center gap-1.5 bg-brand-ink px-2.5 py-1 text-[14px] font-bold uppercase tracking-[0.08em] text-brand-green">
+                    <Lock className="h-3.5 w-3.5" /> Early access
+                  </span>
+                )}
               </Link>
-            </motion.div>
+            </motion.li>
           ))}
-        </div>
+        </ul>
       </div>
     </section>
   );
+}
+
+// Novel identity colours: Dawnshipper = Pink Fantasy, Osiris = Electric Green.
+function novelTagClass(novelSlug: string): string {
+  if (novelSlug === "dawnshipper") return "bg-brand-pink text-brand-ink";
+  if (novelSlug === "project_osiris") return "bg-brand-green text-brand-ink";
+  return "bg-brand-indigo text-white";
 }

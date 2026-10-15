@@ -240,6 +240,29 @@ export const getChapterBySlug = cache(
     )()
 );
 
+// Every chapterNumber published for a novel — used to work out which half
+// of the novel stays on-site (see getOnSiteChapterLimit).
+export const getNovelChapterNumbers = cache(
+  (projectSlug: string): Promise<number[]> =>
+    unstable_cache(
+      async () => {
+        const client = createContentfulClient();
+        const response = await client.getEntries({
+          content_type: "chapter",
+          "fields.projectSlug": projectSlug,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          select: ["fields.chapterNumber"] as any,
+          limit: 1000,
+        });
+        return response.items
+          .map((item) => Number(item.fields.chapterNumber))
+          .filter((n) => Number.isFinite(n));
+      },
+      ["novel-chapter-numbers", projectSlug],
+      { tags: [CACHE_TAGS.chapters], revalidate: CONTENTFUL_REVALIDATE }
+    )()
+);
+
 // All { slug, chapterSlug } pairs for generateStaticParams.
 // `slug` is the novel slug (stored as `projectSlug` on the chapter).
 export const getAllChapterParams = cache(
