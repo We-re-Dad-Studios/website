@@ -45,16 +45,28 @@ export const MegaMenu = () => {
                 desc: "Supernatural sci-fi thriller with soul retrieval.",
                 href: "/projects/project_osiris",
               },
+              {
+                key: "more",
+                title: "More Projects",
+                desc: "Browse all WDS projects.",
+                href: "/projects",
+              },
             ]}
           />
 
           <MegaMenuColumn
             items={[
               {
-                key: "more",
-                title: "More Projects",
-                desc: "Browse all WDS projects.",
-                href: "/projects",
+                key: "afterlives",
+                title: "Afterlives",
+                desc: "Mythic action game across six afterlives.",
+                href: "/projects/afterlives",
+              },
+              {
+                key: "stryfe",
+                title: "Stryfe (Hex War)",
+                desc: "5v5 team arena war for the Hexnodes.",
+                href: "/projects/stryfe",
               },
               {
                 key: "blog",

@@ -18,7 +18,7 @@ export const NavLink = ({
     prefetch
     onFocus={onFocus}
     aria-current={active === href ? "page" : undefined}
-    className={`uppercase tracking-[0.06em] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-green ${
+    className={`whitespace-nowrap uppercase tracking-[0.06em] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-green ${
       active === href ? "text-white" : "text-brand-mist hover:text-white"
     }`}
   >

@@ -149,7 +149,7 @@ const NavbarInner = () => {
         <ThemeToggle />
         <Link
           href="/#flagships"
-          className="cut-corners-sm hidden lg:inline-flex h-11 items-center px-5 bg-brand-pink text-brand-ink font-agdasima font-bold text-[19px] uppercase tracking-[0.06em] transition-colors hover:bg-[#F87FE2]"
+          className="cut-corners-sm hidden xl:inline-flex h-11 items-center whitespace-nowrap px-5 bg-brand-pink text-brand-ink font-agdasima font-bold text-[19px] uppercase tracking-[0.06em] transition-colors hover:bg-[#F87FE2]"
         >
           Start reading
         </Link>
