@@ -17,7 +17,7 @@ const DEFAULT_THEME: ReaderThemeTokens = {
   text: "text-white",
   mutedText: "text-white/50",
   border: "border-white/10",
-  cardBg: "bg-gray-900",
+  cardBg: "bg-brand-ink",
 };
 
 interface StickyNewsletterBarProps {
@@ -104,19 +104,19 @@ export function StickyNewsletterBar({
           className="fixed bottom-0 left-0 right-0 z-[998] p-4 pointer-events-none"
         >
           <div className="max-w-2xl mx-auto pointer-events-auto">
-            <div className={`relative ${theme.cardBg} rounded-2xl border ${theme.border} shadow-2xl shadow-black/50 overflow-hidden`}>
+            <div className={`relative ${theme.cardBg} border ${theme.border} border-t-4 border-t-brand-pink shadow-2xl shadow-black/50 overflow-hidden`}>
               {/* Close button */}
               <button
                 onClick={handleDismiss}
-                className={`absolute top-3 right-3 p-1.5 rounded-full bg-foreground/10 hover:bg-foreground/20 ${theme.mutedText} hover:text-primary-0 transition-all z-10`}
+                className={`absolute top-3 right-3 p-1.5 rounded-full bg-foreground/10 hover:bg-foreground/20 ${theme.mutedText} hover:text-[var(--reader-accent)] transition-all z-10`}
               >
                 <X className="w-4 h-4" />
               </button>
 
               {isSuccess ? (
                 <div className="flex items-center justify-center gap-3 p-4">
-                  <div className="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center">
-                    <Check className="w-4 h-4 text-green-400" />
+                  <div className="flex h-8 w-8 items-center justify-center bg-brand-green">
+                    <Check className="h-4 w-4 text-brand-ink" />
                   </div>
                   <span className={`${theme.text} font-medium`}>Subscribed! Check your inbox.</span>
                 </div>
@@ -129,19 +129,19 @@ export function StickyNewsletterBar({
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       autoFocus
-                      className={`flex-1 px-4 py-3 rounded-xl bg-foreground/5 border ${theme.border} ${theme.text} focus:outline-none focus:ring-2 focus:ring-primary-0`}
+                      className={`flex-1 px-4 py-3 bg-foreground/5 border ${theme.border} ${theme.text} focus:outline-none focus:ring-2 focus:ring-brand-pink`}
                     />
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="px-6 py-3 rounded-xl bg-primary-0 hover:bg-primary-0/90 text-white font-semibold transition-all disabled:opacity-50 whitespace-nowrap"
+                      className="cut-corners-sm whitespace-nowrap bg-brand-indigo px-6 py-3 font-bold uppercase tracking-[0.08em] text-white transition-colors hover:bg-brand-indigo-deep disabled:opacity-50"
                     >
                       {isSubmitting ? "..." : "Subscribe"}
                     </button>
                     <button
                       type="button"
                       onClick={() => setIsExpanded(false)}
-                      className={`px-4 py-3 rounded-xl bg-foreground/10 ${theme.mutedText} hover:text-primary-0 transition-all sm:hidden`}
+                      className={`px-4 py-3 bg-foreground/10 ${theme.mutedText} hover:text-[var(--reader-accent)] transition-all sm:hidden`}
                     >
                       Cancel
                     </button>
@@ -150,8 +150,8 @@ export function StickyNewsletterBar({
               ) : (
                 <div className="flex items-center justify-between gap-4 p-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-primary-0/20 flex items-center justify-center flex-shrink-0">
-                      <Mail className="w-5 h-5 text-primary-0" />
+                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center bg-brand-indigo">
+                      <Mail className="h-5 w-5 text-white" />
                     </div>
                     <div className="hidden sm:block">
                       <p className={`${theme.text} font-medium`}>
@@ -167,7 +167,7 @@ export function StickyNewsletterBar({
                   </div>
                   <button
                     onClick={() => setIsExpanded(true)}
-                    className="px-5 py-2.5 rounded-xl bg-primary-0 hover:bg-primary-0/90 text-white font-semibold transition-all whitespace-nowrap flex-shrink-0"
+                    className="cut-corners-sm flex-shrink-0 whitespace-nowrap bg-brand-indigo px-5 py-2.5 font-bold uppercase tracking-[0.08em] text-white transition-colors hover:bg-brand-indigo-deep"
                   >
                     Subscribe Free
                   </button>

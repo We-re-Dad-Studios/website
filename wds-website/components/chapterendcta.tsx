@@ -45,7 +45,7 @@ const otherNovels = {
     genre: "Sci-Fi Thriller",
     image: "https://res.cloudinary.com/duorxojmh/image/upload/v1765045758/IMG_1239_ha8hk3.jpg",
     link: "/start/project_osiris",
-    accentColor: "text-cyan-400",
+    accentColor: "text-[var(--reader-accent)]",
     icon: Zap,
   },
   project_osiris: {
@@ -54,7 +54,7 @@ const otherNovels = {
     genre: "Dark Epic Fantasy",
     image: "https://res.cloudinary.com/duorxojmh/image/upload/v1765045757/IMG_1190_1_hkbii6.jpg",
     link: "/start/dawnshipper",
-    accentColor: "text-purple-400",
+    accentColor: "text-[var(--reader-accent)]",
     icon: BookOpen,
   },
 };
@@ -107,7 +107,7 @@ export function ChapterEndCTA({
       {/* Divider */}
       <div className="flex items-center gap-4">
         <div className={`flex-1 h-px border-t ${theme.border}`} />
-        <Sparkles className="w-5 h-5 text-primary-0" />
+        <Sparkles className="w-5 h-5 text-[var(--reader-accent)]" />
         <div className={`flex-1 h-px border-t ${theme.border}`} />
       </div>
 
@@ -120,19 +120,19 @@ export function ChapterEndCTA({
         >
           <Link
             href={`/novels/${novelSlug}/chapters/${nextChapter}`}
-            className="group block w-full p-6 bg-gradient-to-r from-primary-0/20 to-orange-600/20 border border-primary-0/30 rounded-2xl hover:border-primary-0/60 transition-all hover:shadow-[0_0_30px_rgba(249,76,16,0.2)]"
+            className="cut-tr-sm group block w-full bg-brand-indigo p-6 transition-colors hover:bg-brand-indigo-deep"
           >
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-purple-500 font-medium mb-1">
+                <p className="mb-1 text-[14px] font-bold uppercase tracking-[0.12em] text-brand-mist">
                   Continue Reading
                 </p>
-                <h3 className={`text-xl md:text-2xl font-bold ${theme.text} group-hover:text-primary-0 transition-colors`}>
+                <h3 className="font-plaguard text-[26px] font-normal leading-tight text-white md:text-[32px]">
                   Chapter {chapterNumber + 1}
                 </h3>
               </div>
-              <div className="w-12 h-12 rounded-full bg-primary-0 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <ChevronRight className="w-6 h-6 text-white" />
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center bg-brand-pink transition-transform group-hover:translate-x-1">
+                <ChevronRight className="h-6 w-6 text-brand-ink" />
               </div>
             </div>
           </Link>
@@ -147,12 +147,12 @@ export function ChapterEndCTA({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.1 }}
-          className={`${theme.cardBg} border ${theme.border} rounded-2xl p-6 backdrop-blur-sm`}
+          className={`${theme.cardBg} border ${theme.border} p-6 backdrop-blur-sm`}
         >
           {isSuccess ? (
             <div className="text-center py-4">
-              <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-green-500/20 flex items-center justify-center">
-                <Check className="w-7 h-7 text-green-400" />
+              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center bg-brand-green">
+                <Check className="h-7 w-7 text-brand-ink" />
               </div>
               <h4 className={`text-xl font-bold ${theme.text} mb-2`}>You&apos;re subscribed! 🎉</h4>
               <p className={`${theme.mutedText} text-sm`}>
@@ -162,8 +162,8 @@ export function ChapterEndCTA({
           ) : (
             <>
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-xl bg-primary-0/20 flex items-center justify-center">
-                  <Mail className="w-5 h-5 text-primary-0" />
+                <div className="flex h-10 w-10 items-center justify-center bg-brand-indigo">
+                  <Mail className="h-5 w-5 text-white" />
                 </div>
                 <div>
                   <h4 className={`font-bold ${theme.text}`}>Get Chapter Updates</h4>
@@ -177,19 +177,19 @@ export function ChapterEndCTA({
                   placeholder="First name"
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
-                  className={`w-full px-4 py-3 rounded-xl ${theme.cardBg} border ${theme.border} ${theme.text} focus:outline-none focus:ring-2 focus:ring-primary-0 text-sm`}
+                  className={`w-full px-4 py-3 ${theme.cardBg} border ${theme.border} ${theme.text} focus:outline-none focus:ring-2 focus:ring-brand-pink text-sm`}
                 />
                 <input
                   type="email"
                   placeholder="Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className={`w-full px-4 py-3 rounded-xl ${theme.cardBg} border ${theme.border} ${theme.text} focus:outline-none focus:ring-2 focus:ring-primary-0 text-sm`}
+                  className={`w-full px-4 py-3 ${theme.cardBg} border ${theme.border} ${theme.text} focus:outline-none focus:ring-2 focus:ring-brand-pink text-sm`}
                 />
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full py-3 rounded-xl bg-primary-0 hover:bg-primary-0/90 text-white font-semibold transition-all disabled:opacity-50"
+                  className="cut-corners-sm min-h-[48px] w-full bg-brand-indigo font-bold uppercase tracking-[0.08em] text-white transition-colors hover:bg-brand-indigo-deep disabled:opacity-50"
                 >
                   {isSubmitting ? "Subscribing..." : "Subscribe Free"}
                 </button>
@@ -216,7 +216,7 @@ export function ChapterEndCTA({
           >
             <Link
               href={otherNovel.link}
-              className={`group block h-full ${theme.cardBg} border ${theme.border} rounded-2xl overflow-hidden hover:border-primary-0/40 transition-all`}
+              className={`group block h-full ${theme.cardBg} border ${theme.border} overflow-hidden hover:border-[var(--reader-accent)] transition-all`}
             >
               {/* Image (always over a dark gradient → light text) */}
               <div className="relative h-32 overflow-hidden">
@@ -237,13 +237,13 @@ export function ChapterEndCTA({
                     {otherNovel.genre}
                   </span>
                 </div>
-                <h4 className={`text-lg font-bold ${theme.text} group-hover:text-primary-0 transition-colors mb-1`}>
+                <h4 className={`text-lg font-bold ${theme.text} group-hover:text-[var(--reader-accent)] transition-colors mb-1`}>
                   {otherNovel.title}
                 </h4>
                 <p className={`text-sm ${theme.mutedText} mb-3`}>
                   {otherNovel.tagline}
                 </p>
-                <div className="flex items-center gap-2 text-sm text-primary-0 font-medium">
+                <div className="flex items-center gap-2 text-sm text-[var(--reader-accent)] font-medium">
                   Start reading
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </div>
@@ -263,7 +263,7 @@ export function ChapterEndCTA({
       >
         <Link
           href={`/projects/${novelSlug}`}
-          className={`inline-flex items-center gap-2 ${theme.mutedText} hover:text-primary-0 transition-colors text-sm`}
+          className={`inline-flex items-center gap-2 ${theme.mutedText} hover:text-[var(--reader-accent)] transition-colors text-sm`}
         >
           ← Back to all {novelName} chapters
         </Link>

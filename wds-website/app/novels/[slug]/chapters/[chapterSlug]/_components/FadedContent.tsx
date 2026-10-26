@@ -16,7 +16,6 @@ import { extractPlainText } from "@/lib/extract-doc-text";
 // import { useAudioPlayer } from "@/hooks/useElevenLabsTTS";
 import {
   ChevronLeft,
-  BookOpen,
   Settings2,
   X,
   Minus,
@@ -60,7 +59,7 @@ const createOptions = (showDropCap: boolean): Options => {
       const idx = paragraphIdx;
       if (idx === 0 && showDropCap) {
         return (
-          <p data-para-idx={idx} className="wds-para mb-6 last:mb-0 first-letter:text-5xl first-letter:font-serif first-letter:font-bold first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:leading-none first-letter:text-amber-400">
+          <p data-para-idx={idx} className="wds-para mb-6 last:mb-0 first-letter:text-5xl first-letter:font-serif first-letter:font-bold first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:leading-none first-letter:text-[var(--reader-accent)]">
             {children}
           </p>
         );
@@ -92,7 +91,7 @@ const createOptions = (showDropCap: boolean): Options => {
       <li className="pl-2">{children}</li>
     ),
     [BLOCKS.QUOTE]: (node, children) => (
-      <blockquote className="border-l-4 border-amber-500/60 pl-6 pr-4 my-8 italic opacity-90 font-serif text-[1.05em]">
+      <blockquote className="border-l-4 border-[var(--reader-accent)] pl-6 pr-4 my-8 italic opacity-90 font-serif text-[1.05em]">
         {children}
       </blockquote>
     ),
@@ -184,53 +183,82 @@ interface ReaderSettings {
   contentWidth: ContentWidth;
 }
 
+const DEFAULT_READER_SETTINGS: ReaderSettings = {
+  fontSize: "md",
+  fontFamily: "serif",
+  theme: "dark",
+  lineHeight: "relaxed",
+  textAlign: "left",
+  showDropCap: true,
+  focusMode: false,
+  contentWidth: "medium",
+};
+
 const NAVBAR_HEIGHT = 80;
 
 // ============ THEME CONFIGURATIONS ============
+// Reader themes, tuned to the WDS brand: Ink/indigo for the dark pair, white
+// and warm paper for the light pair. `accentHex` drives the drop cap and
+// quote rule (via --reader-accent); `chrome` is the floating toolbar.
 const themes: Record<Theme, {
   bg: string;
   text: string;
   accent: string;
+  accentHex: string;
   headerBg: string;
   mutedText: string;
   border: string;
   cardBg: string;
+  chrome: string;
+  isDark: boolean;
 }> = {
   dark: {
-    bg: "bg-gray-900",
-    text: "text-gray-100",
-    accent: "text-amber-400",
-    headerBg: "bg-gray-900/95",
-    mutedText: "text-gray-400",
-    border: "border-gray-700",
-    cardBg: "bg-gray-800/50",
+    bg: "bg-[#0F0D33]",
+    text: "text-[#EDEDFB]",
+    accent: "text-[#A5A2FF]",
+    accentHex: "#A5A2FF",
+    headerBg: "bg-[#0F0D33]/95",
+    mutedText: "text-[#A9A7DE]",
+    border: "border-[#2E2B66]",
+    cardBg: "bg-[#16134A]",
+    chrome: "rgba(22, 19, 74, 0.96)",
+    isDark: true,
   },
   midnight: {
-    bg: "bg-[#0d1117]",
-    text: "text-[#c9d1d9]",
-    accent: "text-amber-400",
-    headerBg: "bg-[#0d1117]/95",
-    mutedText: "text-[#8b949e]",
-    border: "border-[#30363d]",
-    cardBg: "bg-[#161b22]",
+    bg: "bg-[#08071A]",
+    text: "text-[#D6D5F2]",
+    accent: "text-[#A5A2FF]",
+    accentHex: "#A5A2FF",
+    headerBg: "bg-[#08071A]/95",
+    mutedText: "text-[#8E8BC9]",
+    border: "border-[#24214F]",
+    cardBg: "bg-[#110F33]",
+    chrome: "rgba(17, 15, 51, 0.96)",
+    isDark: true,
   },
   sepia: {
     bg: "bg-[#f4ecd8]",
-    text: "text-[#5c4b37]",
-    accent: "text-amber-700",
+    text: "text-[#3d3226]",
+    accent: "text-[#3732CC]",
+    accentHex: "#3732CC",
     headerBg: "bg-[#f4ecd8]/95",
-    mutedText: "text-[#8b7355]",
+    mutedText: "text-[#6e5c45]",
     border: "border-[#d4c4a8]",
     cardBg: "bg-[#ebe3d0]",
+    chrome: "rgba(244, 236, 216, 0.96)",
+    isDark: false,
   },
   light: {
-    bg: "bg-[#fafafa]",
-    text: "text-gray-800",
-    accent: "text-amber-600",
+    bg: "bg-white",
+    text: "text-[#0F0D33]",
+    accent: "text-[#3732CC]",
+    accentHex: "#3732CC",
     headerBg: "bg-white/95",
-    mutedText: "text-gray-500",
-    border: "border-gray-200",
-    cardBg: "bg-white",
+    mutedText: "text-[#4A4790]",
+    border: "border-[#D9D8F5]",
+    cardBg: "bg-[#F5F5FE]",
+    chrome: "rgba(255, 255, 255, 0.96)",
+    isDark: false,
   },
 };
 
@@ -320,7 +348,7 @@ function SettingsPanel({
               md:bottom-auto md:top-[10%] md:left-1/3 md:-translate-x-1/3 md:-translate-y-1/2
               md:w-[420px] md:max-w-[90vw]
               ${currentTheme.cardBg} ${currentTheme.text}
-              rounded-2xl shadow-2xl border ${currentTheme.border}
+              shadow-2xl border ${currentTheme.border}
               max-h-[80vh] overflow-y-auto
             `}
           >
@@ -329,7 +357,7 @@ function SettingsPanel({
               <h3 className="font-semibold text-lg">Reading Settings</h3>
               <button
                 onClick={onClose}
-                className={`p-2 rounded-lg hover:bg-black/10 transition-colors ${currentTheme.mutedText}`}
+                className={`p-2 hover:bg-black/10 transition-colors ${currentTheme.mutedText}`}
               >
                 <X className="w-5 h-5" />
               </button>
@@ -348,7 +376,7 @@ function SettingsPanel({
                       const idx = sizes.indexOf(settings.fontSize);
                       if (idx > 0) setSettings(s => ({ ...s, fontSize: sizes[idx - 1] }));
                     }}
-                    className={`p-2 rounded-lg ${currentTheme.cardBg} border ${currentTheme.border} hover:border-amber-400 transition-colors`}
+                    className={`p-2 ${currentTheme.cardBg} border ${currentTheme.border} hover:border-brand-pink transition-colors`}
                   >
                     <Minus className="w-4 h-4" />
                   </button>
@@ -361,7 +389,7 @@ function SettingsPanel({
                       const idx = sizes.indexOf(settings.fontSize);
                       if (idx < sizes.length - 1) setSettings(s => ({ ...s, fontSize: sizes[idx + 1] }));
                     }}
-                    className={`p-2 rounded-lg ${currentTheme.cardBg} border ${currentTheme.border} hover:border-amber-400 transition-colors`}
+                    className={`p-2 ${currentTheme.cardBg} border ${currentTheme.border} hover:border-brand-pink transition-colors`}
                   >
                     <Plus className="w-4 h-4" />
                   </button>
@@ -383,10 +411,10 @@ function SettingsPanel({
                       key={key}
                       onClick={() => setSettings(s => ({ ...s, fontFamily: key }))}
                       className={`
-                        p-3 rounded-lg border transition-all
+                        p-3 border transition-all
                         ${settings.fontFamily === key 
-                          ? `border-amber-400 ${currentTheme.cardBg}` 
-                          : `${currentTheme.border} hover:border-amber-400/50`
+                          ? `border-brand-pink ${currentTheme.cardBg}` 
+                          : `${currentTheme.border} hover:border-brand-pink/60`
                         }
                       `}
                     >
@@ -406,21 +434,21 @@ function SettingsPanel({
                   {([
                     { key: "light", color: "bg-white", label: "Light" },
                     { key: "sepia", color: "bg-[#f4ecd8]", label: "Sepia" },
-                    { key: "dark", color: "bg-gray-800", label: "Dark" },
-                    { key: "midnight", color: "bg-[#0d1117]", label: "Night" },
+                    { key: "dark", color: "bg-[#0F0D33]", label: "Dark" },
+                    { key: "midnight", color: "bg-[#08071A]", label: "Night" },
                   ] as const).map(({ key, color, label }) => (
                     <button
                       key={key}
                       onClick={() => setSettings(s => ({ ...s, theme: key }))}
                       className={`
-                        flex flex-col items-center gap-2 p-2 rounded-lg border transition-all
+                        flex flex-col items-center gap-2 p-2 border transition-all
                         ${settings.theme === key 
-                          ? "border-amber-400" 
-                          : `${currentTheme.border} hover:border-amber-400/50`
+                          ? "border-brand-pink" 
+                          : `${currentTheme.border} hover:border-brand-pink/60`
                         }
                       `}
                     >
-                      <div className={`w-8 h-8 rounded-full ${color} border border-gray-300`} />
+                      <div className={`w-8 h-8 rounded-full ${color} border border-[#D9D8F5]`} />
                       <span className={`text-xs ${currentTheme.mutedText}`}>{label}</span>
                     </button>
                   ))}
@@ -442,10 +470,10 @@ function SettingsPanel({
                       key={key}
                       onClick={() => setSettings(s => ({ ...s, lineHeight: key }))}
                       className={`
-                        py-2 px-3 rounded-lg border text-sm transition-all
+                        py-2 px-3 border text-sm transition-all
                         ${settings.lineHeight === key 
-                          ? `border-amber-400 ${currentTheme.cardBg}` 
-                          : `${currentTheme.border} hover:border-amber-400/50`
+                          ? `border-brand-pink ${currentTheme.cardBg}` 
+                          : `${currentTheme.border} hover:border-brand-pink/60`
                         }
                       `}
                     >
@@ -470,10 +498,10 @@ function SettingsPanel({
                       key={key}
                       onClick={() => setSettings(s => ({ ...s, contentWidth: key }))}
                       className={`
-                        py-2 px-3 rounded-lg border text-sm transition-all
+                        py-2 px-3 border text-sm transition-all
                         ${settings.contentWidth === key
-                          ? `border-amber-400 ${currentTheme.cardBg}`
-                          : `${currentTheme.border} hover:border-amber-400/50`
+                          ? `border-brand-pink ${currentTheme.cardBg}`
+                          : `${currentTheme.border} hover:border-brand-pink/60`
                         }
                       `}
                     >
@@ -492,10 +520,10 @@ function SettingsPanel({
                   <button
                     onClick={() => setSettings(s => ({ ...s, textAlign: "left" }))}
                     className={`
-                      flex items-center justify-center gap-2 py-2 px-3 rounded-lg border transition-all
+                      flex items-center justify-center gap-2 py-2 px-3 border transition-all
                       ${settings.textAlign === "left" 
-                        ? `border-amber-400 ${currentTheme.cardBg}` 
-                        : `${currentTheme.border} hover:border-amber-400/50`
+                        ? `border-brand-pink ${currentTheme.cardBg}` 
+                        : `${currentTheme.border} hover:border-brand-pink/60`
                       }
                     `}
                   >
@@ -505,10 +533,10 @@ function SettingsPanel({
                   <button
                     onClick={() => setSettings(s => ({ ...s, textAlign: "justify" }))}
                     className={`
-                      flex items-center justify-center gap-2 py-2 px-3 rounded-lg border transition-all
+                      flex items-center justify-center gap-2 py-2 px-3 border transition-all
                       ${settings.textAlign === "justify" 
-                        ? `border-amber-400 ${currentTheme.cardBg}` 
-                        : `${currentTheme.border} hover:border-amber-400/50`
+                        ? `border-brand-pink ${currentTheme.cardBg}` 
+                        : `${currentTheme.border} hover:border-brand-pink/60`
                       }
                     `}
                   >
@@ -527,7 +555,7 @@ function SettingsPanel({
                     onClick={() => setSettings(s => ({ ...s, showDropCap: !s.showDropCap }))}
                     className={`
                       w-12 h-6 rounded-full transition-colors relative
-                      ${settings.showDropCap ? "bg-amber-500" : currentTheme.border + " bg-transparent border"}
+                      ${settings.showDropCap ? "bg-brand-indigo" : currentTheme.border + " bg-transparent border"}
                     `}
                   >
                     <div
@@ -549,7 +577,7 @@ function SettingsPanel({
                     onClick={() => setSettings(s => ({ ...s, focusMode: !s.focusMode }))}
                     className={`
                       w-12 h-6 rounded-full transition-colors relative flex-shrink-0
-                      ${settings.focusMode ? "bg-amber-500" : currentTheme.border + " bg-transparent border"}
+                      ${settings.focusMode ? "bg-brand-indigo" : currentTheme.border + " bg-transparent border"}
                     `}
                   >
                     <div
@@ -622,7 +650,7 @@ function BookmarksDrawer({
               </h3>
               <button
                 onClick={onClose}
-                className={`p-2 rounded-lg hover:bg-black/10 ${currentTheme.mutedText}`}
+                className={`p-2 hover:bg-black/10 ${currentTheme.mutedText}`}
               >
                 <X className="w-5 h-5" />
               </button>
@@ -641,7 +669,7 @@ function BookmarksDrawer({
                   .map((b) => (
                     <div
                       key={b.id}
-                      className={`group p-3 rounded-lg border ${currentTheme.border} hover:border-amber-400 transition-colors`}
+                      className={`group p-3 border ${currentTheme.border} hover:border-brand-pink transition-colors`}
                     >
                       <div className="flex items-start gap-2">
                         <div className={`mt-1 w-2 h-2 rounded-full flex-shrink-0 wds-highlight-swatch-${b.color}`} />
@@ -698,37 +726,38 @@ function ChapterReader({
   //   hasAudio,
   // } = useAudioPlayer(chapter.audioUrl);
 
-  // Load settings from localStorage, with system-preference theme fallback
-  const [settings, setSettings] = useState<ReaderSettings>(() => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("readerSettings");
-      if (saved) {
-        try {
-          return JSON.parse(saved);
-        } catch {
-          // ignore
-        }
-      }
-    }
-    // No saved settings — match OS preference for initial theme.
-    const prefersLight =
-      typeof window !== "undefined" &&
-      window.matchMedia?.("(prefers-color-scheme: light)").matches;
-    return {
-      fontSize: "md" as FontSize,
-      fontFamily: "serif" as FontFamily,
-      theme: (prefersLight ? "light" : "dark") as Theme,
-      lineHeight: "relaxed" as LineHeight,
-      textAlign: "left" as TextAlign,
-      showDropCap: true,
-      focusMode: false,
-      contentWidth: "medium" as ContentWidth,
-    };
-  });
+  // Render with fixed defaults first so server and client markup match, then
+  // apply the reader's saved settings (or their OS light/dark preference)
+  // right after mount. Reading localStorage during the first render caused a
+  // hydration mismatch that left the server's default theme on screen.
+  const [settings, setSettings] = useState<ReaderSettings>(DEFAULT_READER_SETTINGS);
+  const settingsLoaded = useRef(false);
 
-  // Save settings to localStorage
   useEffect(() => {
-    localStorage.setItem("readerSettings", JSON.stringify(settings));
+    let next: ReaderSettings | null = null;
+    try {
+      const saved = localStorage.getItem("readerSettings");
+      if (saved) next = { ...DEFAULT_READER_SETTINGS, ...JSON.parse(saved) };
+    } catch {
+      // ignore corrupt or unavailable storage
+    }
+    if (!next) {
+      const prefersLight = window.matchMedia?.("(prefers-color-scheme: light)").matches;
+      next = { ...DEFAULT_READER_SETTINGS, theme: prefersLight ? "light" : "dark" };
+    }
+    settingsLoaded.current = true;
+    setSettings(next);
+  }, []);
+
+  // Save settings to localStorage — only once the saved ones have been read,
+  // so the defaults never overwrite a reader's choices.
+  useEffect(() => {
+    if (!settingsLoaded.current) return;
+    try {
+      localStorage.setItem("readerSettings", JSON.stringify(settings));
+    } catch {
+      // storage unavailable
+    }
   }, [settings]);
 
   const [showControls, setShowControls] = useState(true);
@@ -1031,8 +1060,8 @@ function ChapterReader({
           style={{ top: NAVBAR_HEIGHT + 4, zIndex: 997 }}
         >
           <div 
-            className={`backdrop-blur-md border mx-4 rounded-xl shadow-lg ${currentTheme.border}`}
-            style={{ backgroundColor: settings.theme === 'dark' ? 'rgba(17, 24, 39, 0.95)' : settings.theme === 'midnight' ? 'rgba(13, 17, 23, 0.95)' : settings.theme === 'sepia' ? 'rgba(244, 236, 216, 0.95)' : 'rgba(255, 255, 255, 0.95)' }}
+            className={`backdrop-blur-md border mx-4 shadow-lg ${currentTheme.border}`}
+            style={{ backgroundColor: currentTheme.chrome }}
           >
             <div className={`px-4 py-3 flex items-center justify-between ${currentTheme.text}`}>
               {/* Back Button */}
@@ -1051,8 +1080,8 @@ function ChapterReader({
                 <button
                   onClick={() => setShowBookmarks(true)}
                   className={`
-                    relative flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg transition-all text-sm
-                    ${settings.theme === "dark" || settings.theme === "midnight"
+                    relative flex items-center gap-1.5 px-2.5 py-1.5 transition-all text-sm
+                    ${currentTheme.isDark
                       ? "bg-white/10 hover:bg-white/20"
                       : "bg-black/10 hover:bg-black/20"
                     }
@@ -1062,7 +1091,7 @@ function ChapterReader({
                   <BookmarkIcon className="w-4 h-4" />
                   <span className="hidden sm:inline">Bookmarks</span>
                   {bookmarks.length > 0 && (
-                    <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-amber-500 text-white text-[10px] font-bold flex items-center justify-center">
+                    <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-brand-pink text-brand-ink text-[10px] font-bold flex items-center justify-center">
                       {bookmarks.length}
                     </span>
                   )}
@@ -1072,10 +1101,10 @@ function ChapterReader({
                 <button
                   onClick={isOfflineCached ? handleRemoveOffline : handleSaveOffline}
                   className={`
-                    flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg transition-all text-sm
+                    flex items-center gap-1.5 px-2.5 py-1.5 transition-all text-sm
                     ${isOfflineCached
                       ? "bg-emerald-500 text-white"
-                      : settings.theme === "dark" || settings.theme === "midnight"
+                      : currentTheme.isDark
                         ? "bg-white/10 hover:bg-white/20"
                         : "bg-black/10 hover:bg-black/20"
                     }
@@ -1090,8 +1119,8 @@ function ChapterReader({
                 <button
                   onClick={() => setShowSettings(true)}
                   className={`
-                    flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg transition-all text-sm
-                    ${settings.theme === "dark" || settings.theme === "midnight"
+                    flex items-center gap-1.5 px-2.5 py-1.5 transition-all text-sm
+                    ${currentTheme.isDark
                       ? "bg-white/10 hover:bg-white/20"
                       : "bg-black/10 hover:bg-black/20"
                     }
@@ -1102,15 +1131,15 @@ function ChapterReader({
                 </button>
 
                 {/* Quick Theme Toggle */}
-                <div className={`hidden md:flex gap-1 p-1 rounded-lg ${settings.theme === "dark" || settings.theme === "midnight" ? "bg-white/10" : "bg-black/10"}`}>
+                <div className={`hidden md:flex gap-1 p-1 ${currentTheme.isDark ? "bg-white/10" : "bg-black/10"}`}>
                   {(Object.keys(themes) as Theme[]).map((t) => (
                     <button
                       key={t}
                       onClick={() => setSettings(s => ({ ...s, theme: t }))}
                       className={`
                         w-5 h-5 sm:w-6 sm:h-6 rounded-full transition-all
-                        ${t === "dark" ? "bg-gray-700" : t === "midnight" ? "bg-[#0d1117]" : t === "sepia" ? "bg-[#f4ecd8]" : "bg-white border border-gray-300"}
-                        ${settings.theme === t ? "ring-2 ring-amber-400 scale-110" : "opacity-70 hover:opacity-100"}
+                        ${t === "dark" ? "bg-[#0F0D33] border border-[#2E2B66]" : t === "midnight" ? "bg-[#08071A] border border-[#24214F]" : t === "sepia" ? "bg-[#f4ecd8]" : "bg-white border border-[#D9D8F5]"}
+                        ${settings.theme === t ? "ring-2 ring-brand-pink scale-110" : "opacity-70 hover:opacity-100"}
                       `}
                       aria-label={`${t} theme`}
                     />
@@ -1128,17 +1157,7 @@ function ChapterReader({
       {mounted && createPortal(
         <button
           onClick={() => setShowSettings(true)}
-          className={`
-            fixed bottom-6 right-6 
-            w-12 h-12 rounded-full 
-            flex items-center justify-center
-            shadow-lg transition-all duration-300
-            hover:scale-110 active:scale-95
-            ${settings.theme === "dark" || settings.theme === "midnight"
-              ? "bg-amber-500 text-white hover:bg-amber-400"
-              : "bg-amber-500 text-white hover:bg-amber-400"
-            }
-          `}
+          className="cut-corners-sm fixed bottom-6 right-6 flex h-12 w-12 items-center justify-center bg-brand-pink text-brand-ink shadow-lg transition-colors duration-300 hover:bg-[#F87FE2]"
           style={{ zIndex: 996 }}
           aria-label="Open reading settings"
         >
@@ -1157,7 +1176,7 @@ function ChapterReader({
         {/* ============ CHAPTER CONTENT ============ */}
         <main
           className="container mx-auto px-4 pb-32"
-          style={{ paddingTop: NAVBAR_HEIGHT + 20, maxWidth: `min(${contentWidths[settings.contentWidth]}, 100%)` }}
+          style={{ paddingTop: NAVBAR_HEIGHT + 20, maxWidth: `min(${contentWidths[settings.contentWidth]}, 100%)`, ["--reader-accent" as string]: currentTheme.accentHex }}
         >
           {/* Chapter Header */}
           <motion.div
@@ -1166,37 +1185,41 @@ function ChapterReader({
             transition={{ duration: 0.6 }}
             className="mb-16 pt-8 text-center"
           >
-            <div className={`flex items-center justify-center gap-2 ${currentTheme.accent} mb-6`}>
-              <BookOpen className="w-5 h-5" />
-              <span className="text-sm font-medium uppercase tracking-[0.2em]">
+            {/* Novel tag + chapter label (brand: Pink = Dawnshipper, Green = Osiris) */}
+            <div className="mb-5 flex flex-wrap items-center justify-center gap-3">
+              <span
+                className={`px-2.5 py-0.5 text-[14px] font-bold uppercase tracking-[0.12em] text-brand-ink ${
+                  Novel === "project_osiris" ? "bg-brand-green" : "bg-brand-pink"
+                }`}
+              >
                 {novelDisplayName}
+              </span>
+              <span className={`text-[14px] font-bold uppercase tracking-[0.14em] ${currentTheme.mutedText}`}>
+                Chapter {chapter.chapterNumber}
               </span>
             </div>
 
-            <h1 className={`text-4xl md:text-5xl font-bold ${currentTheme.accent} mb-3 font-display`}>
-              Chapter {chapter.chapterNumber}
+            <h1 className={`mb-6 font-plaguard text-[40px] font-normal leading-[0.98] md:text-[56px] ${currentTheme.accent}`}>
+              {chapter.title}
             </h1>
 
-            <h2 className={`text-xl md:text-2xl opacity-80 mb-8 font-display italic`}>
-              {chapter.title}
-            </h2>
-
-            <div className={`flex items-center justify-center gap-4 text-sm ${currentTheme.mutedText}`}>
+            <div className={`flex items-center justify-center gap-4 text-[15px] ${currentTheme.mutedText}`}>
               <span>
-                {new Date(chapter.releaseDate).toLocaleDateString("en-US", {
+                {new Date(chapter.releaseDate).toLocaleDateString("en-GB", {
                   year: "numeric",
                   month: "long",
                   day: "numeric",
+                  timeZone: "Africa/Lagos",
                 })}
               </span>
-              <span className="w-1.5 h-1.5 bg-current rounded-full opacity-50" />
+              <span className="w-1.5 h-1.5 bg-current opacity-50" />
               <span>{royalRoad ? "Continues on Royal Road" : `${readingTime} min read`}</span>
             </div>
 
-            {/* Decorative Divider */}
-            <div className="mt-12 flex items-center justify-center gap-4">
+            {/* Divider: the brand slash */}
+            <div className="mt-10 flex items-center justify-center gap-3" aria-hidden="true">
               <span className={`h-px w-16 ${currentTheme.border} border-t`} />
-              <span className={`text-xl ${currentTheme.mutedText}`}>❦</span>
+              <span className="h-3 w-3 -skew-x-[30deg] bg-[var(--reader-accent)]" />
               <span className={`h-px w-16 ${currentTheme.border} border-t`} />
             </div>
           </motion.div>
@@ -1217,7 +1240,7 @@ function ChapterReader({
               tracking-[0.01em]
               [word-spacing:0.05em]
               prose max-w-none
-              ${settings.theme === "dark" || settings.theme === "midnight" ? "prose-invert" : ""}
+              ${currentTheme.isDark ? "prose-invert" : ""}
               prose-headings:${currentTheme.accent}
               prose-a:${currentTheme.accent}
               prose-strong:font-semibold
@@ -1264,7 +1287,7 @@ function ChapterReader({
                   bg-gradient-to-r from-amber-500 to-orange-500
                   hover:from-amber-400 hover:to-orange-400
                   text-white font-bold text-lg
-                  rounded-xl transition-all duration-300
+                  transition-all duration-300
                   hover:scale-[1.02] hover:shadow-[0_0_40px_rgba(249,115,22,0.3)]
                 `}
               >
@@ -1304,7 +1327,7 @@ function ChapterReader({
       {mounted && selectionBar && createPortal(
         <div
           data-wds-selection-bar
-          className="fixed z-[9997] -translate-x-1/2 -translate-y-full bg-gray-900 text-white rounded-xl shadow-2xl border border-gray-700 px-2 py-1.5 flex items-center gap-1"
+          className="fixed z-[9997] -translate-x-1/2 -translate-y-full bg-brand-ink text-white shadow-2xl border border-[#2E2B66] px-2 py-1.5 flex items-center gap-1"
           style={{ left: selectionBar.x, top: selectionBar.y }}
           onMouseDown={(e) => e.preventDefault()}
         >
@@ -1411,7 +1434,7 @@ function ChapterReader({
         }
         @keyframes wds-flash {
           0%, 100% { background-color: transparent; }
-          20%      { background-color: rgba(251, 191, 36, 0.25); }
+          20%      { background-color: rgba(55, 50, 204, 0.18); }
         }
       `}</style>
     </>
