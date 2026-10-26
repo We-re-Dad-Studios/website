@@ -5,6 +5,7 @@ import { SendEmail } from "./SendEmail";
 import { useSessionStorage } from "@/hooks/useSessionStorage";
 import { usePathname, useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { isChromeless } from "@/lib/chrome";
 
 export const Newsletter = () => {
   const [isClient, setIsClient] = useState<boolean>(false);
@@ -32,7 +33,7 @@ export const Newsletter = () => {
   }
 }, [isClient, getItem, path]);
 
-  if (!show) return <></>;
+  if (!show || isChromeless(path)) return <></>;
   return (
     <div className="w-full xl:w-[80vw] mx-auto rounded-lg flex mb-12 overflow-hidden px-2">
       <div className="flex-1 rounded-l-lg flex relative bg-neutral-900 dark:bg-black">

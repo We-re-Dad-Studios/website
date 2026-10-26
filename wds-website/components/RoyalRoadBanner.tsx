@@ -2,12 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { X } from "lucide-react";
+import { usePathname } from "next/navigation";
 import { ROYAL_ROAD_LINKS } from "@/lib/royal-road";
+import { isChromeless } from "@/lib/chrome";
 
 const DISMISS_KEY = "wds:rr-banner-dismissed";
 
 export function RoyalRoadBanner() {
   const [show, setShow] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     try {
@@ -26,7 +29,7 @@ export function RoyalRoadBanner() {
     }
   };
 
-  if (!show) return null;
+  if (!show || isChromeless(pathname)) return null;
 
   // Electric Green: "important information requiring attention" — ink text on top.
   return (

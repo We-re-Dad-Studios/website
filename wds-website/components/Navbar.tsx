@@ -14,10 +14,13 @@ import { MegaMenu } from "./MegaMenu";
 
 import { FaTiktok, FaInstagram, FaDiscord } from "react-icons/fa6";
 import { NavLink } from "./nav-link";
+import { isChromeless } from "@/lib/chrome";
 import { IconType } from "react-icons/lib";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 
 export const Navbar = () => {
+  const pathname = usePathname();
+  if (isChromeless(pathname)) return null;
   return (
     <MenuProvider>
       <NavbarInner />

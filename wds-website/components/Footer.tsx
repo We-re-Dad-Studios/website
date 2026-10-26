@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { FaTiktok, FaInstagram, FaDiscord } from "react-icons/fa6";
 import { Crown } from "lucide-react";
 import { ROYAL_ROAD_LINKS } from "@/lib/royal-road";
+import { isChromeless } from "@/lib/chrome";
 
 export const Footer = () => {
   const path = usePathname();
@@ -24,7 +25,7 @@ export const Footer = () => {
     setShow(hasVisited || path !== "/");
   }, [path]);
 
-  if (!show) return <></>;
+  if (!show || isChromeless(path)) return <></>;
   return (
     <footer className="w-[98%] pt-6 pb-12 bg-primary-0 mt-6  mx-auto rounded-t-lg flex flex-col items-center">
       <Image
