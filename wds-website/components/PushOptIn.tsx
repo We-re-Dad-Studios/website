@@ -91,14 +91,14 @@ export function PushOptIn() {
   if (state === "loading" || state === "unsupported") return null;
 
   return (
-    <div className="flex flex-col gap-3 rounded-xl border border-border bg-wds-surface p-4 sm:flex-row sm:items-center sm:justify-between">
+    <div className="flex flex-col gap-4 border border-border border-t-4 border-t-primary-0 bg-card p-5 sm:flex-row sm:items-center sm:justify-between">
       <div className="flex items-start gap-3">
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary-0/10 text-primary-0">
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center bg-brand-indigo text-white">
           <Bell className="h-5 w-5" />
         </div>
         <div>
-          <div className="font-bold text-foreground">New chapter alerts</div>
-          <p className="text-sm text-wds-text-secondary">
+          <div className="text-[20px] font-bold leading-tight text-foreground">New chapter alerts</div>
+          <p className="m-0 text-[17px] text-wds-text-secondary">
             {state === "subscribed"
               ? "You'll get a notification when a new chapter drops."
               : state === "denied"
@@ -112,19 +112,19 @@ export function PushOptIn() {
         <button
           onClick={unsubscribe}
           disabled={busy}
-          className="inline-flex items-center justify-center gap-2 rounded-full border border-border px-4 py-2 text-sm font-medium text-wds-text-secondary transition-colors hover:bg-foreground/10 disabled:opacity-50"
+          className="inline-flex min-h-[44px] items-center justify-center gap-2 border-2 border-primary-0 px-4 text-[16px] font-bold uppercase tracking-[0.08em] text-primary-0 transition-colors hover:bg-foreground/5 disabled:opacity-50"
         >
           <BellOff className="h-4 w-4" /> Turn off
         </button>
       ) : state === "denied" ? (
-        <span className="inline-flex items-center gap-1.5 text-sm text-wds-text-secondary">
+        <span className="inline-flex items-center gap-1.5 text-[16px] font-bold uppercase tracking-[0.08em] text-wds-text-secondary">
           <BellOff className="h-4 w-4" /> Blocked
         </span>
       ) : (
         <button
           onClick={subscribe}
           disabled={busy}
-          className="inline-flex items-center justify-center gap-2 rounded-full bg-primary-0 px-4 py-2 text-sm font-semibold text-white transition-all hover:scale-105 disabled:opacity-50"
+          className="cut-corners-sm inline-flex min-h-[44px] shrink-0 items-center justify-center gap-2 bg-brand-indigo px-5 text-[17px] font-bold uppercase tracking-[0.08em] text-white transition-colors hover:bg-brand-indigo-deep disabled:opacity-50"
         >
           {busy ? "Enabling…" : <><Check className="h-4 w-4" /> Enable alerts</>}
         </button>

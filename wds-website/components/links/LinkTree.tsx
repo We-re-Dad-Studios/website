@@ -27,20 +27,20 @@ const SECTIONS: { title: string; items: LinkItem[] }[] = [
     title: "Read",
     items: [
       {
-        id: "dawnshipper",
+        id: "dawnshipper-royal-road",
         label: "Dawnshipper",
-        sub: "Dark epic fantasy · start free",
-        href: "/projects/dawnshipper",
+        sub: "Dark epic fantasy · read on Royal Road",
+        href: ROYAL_ROAD_LINKS.dawnshipper,
         accent: "pink",
-        secondary: { id: "dawnshipper-royal-road", label: "Royal Road", href: ROYAL_ROAD_LINKS.dawnshipper },
+        secondary: { id: "dawnshipper", label: "Start free on our site", href: "/projects/dawnshipper" },
       },
       {
-        id: "project-osiris",
+        id: "osiris-royal-road",
         label: "Project Osiris",
-        sub: "Sci-fi thriller · start free",
-        href: "/projects/project_osiris",
+        sub: "Sci-fi thriller · read on Royal Road",
+        href: ROYAL_ROAD_LINKS.project_osiris,
         accent: "green",
-        secondary: { id: "osiris-royal-road", label: "Royal Road", href: ROYAL_ROAD_LINKS.project_osiris },
+        secondary: { id: "project-osiris", label: "Start free on our site", href: "/projects/project_osiris" },
       },
     ],
   },
@@ -110,19 +110,7 @@ export function LinkTree() {
             {section.items.map((item) => (
               <li key={item.id}>
                 <LinkCard item={item} onClick={() => track(item.id, item.href)}>
-                  {item.secondary && (
-                    <a
-                      href={item.secondary.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={() => track(item.secondary!.id, item.secondary!.href)}
-                      className="flex min-h-[44px] items-center gap-2 border-t border-brand-rule px-4 text-[16px] font-bold uppercase tracking-[0.08em] text-brand-indigo transition-colors hover:bg-brand-lilac"
-                    >
-                      <Crown className="h-4 w-4" aria-hidden="true" />
-                      Also on {item.secondary.label}
-                      <ArrowUpRight className="ml-auto h-4 w-4" strokeWidth={2.5} aria-hidden="true" />
-                    </a>
-                  )}
+                  {item.secondary && <SecondaryLink link={item.secondary} onClick={() => track(item.secondary!.id, item.secondary!.href)} />}
                 </LinkCard>
               </li>
             ))}
@@ -130,6 +118,26 @@ export function LinkTree() {
         </section>
       ))}
     </div>
+  );
+}
+
+function SecondaryLink({ link, onClick }: { link: NonNullable<LinkItem["secondary"]>; onClick: () => void }) {
+  const cls =
+    "flex min-h-[44px] items-center gap-2 border-t border-brand-rule px-4 text-[16px] font-bold uppercase tracking-[0.08em] text-brand-indigo transition-colors hover:bg-brand-lilac";
+  if (isExternal(link.href)) {
+    return (
+      <a href={link.href} target="_blank" rel="noopener noreferrer" onClick={onClick} className={cls}>
+        <Crown className="h-4 w-4" aria-hidden="true" />
+        {link.label}
+        <ArrowUpRight className="ml-auto h-4 w-4" strokeWidth={2.5} aria-hidden="true" />
+      </a>
+    );
+  }
+  return (
+    <Link href={link.href} onClick={onClick} className={cls}>
+      {link.label}
+      <ArrowRight className="ml-auto h-4 w-4" strokeWidth={2.5} aria-hidden="true" />
+    </Link>
   );
 }
 

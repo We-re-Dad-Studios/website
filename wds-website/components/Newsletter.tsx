@@ -1,127 +1,169 @@
 "use client";
-import Image from "next/image";
+
+// Site-wide newsletter signup (rendered above the footer in the root layout).
+// Brand design from the rebrand canvas: "Never miss a chapter".
+
 import { useEffect, useState } from "react";
-import { SendEmail } from "./SendEmail";
-import { useSessionStorage } from "@/hooks/useSessionStorage";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { toast } from "sonner";
 import { isChromeless } from "@/lib/chrome";
 
-export const Newsletter = () => {
-  const [isClient, setIsClient] = useState<boolean>(false);
-  const path = usePathname();
-  const { getItem } = useSessionStorage();
-  const newSletterInfo =
-    typeof window !== "undefined"
-      ? JSON.parse(window.localStorage.getItem("newsletterInfo") || "{}")
-      : {};
- 
-  const router = useRouter();
-  useEffect(() => {
-    setIsClient(true);
-   
-  }, []);
-  const [show, setShow] = useState<boolean>(false);
- useEffect(() => {
-  if (!isClient) return;
+type NewsletterInfo = { email?: string; subscribed?: boolean };
 
-  const state = getItem("state");
-  const hasVisited = Boolean(JSON.parse(state || "{}").hasVisited);
+const STORAGE_KEY = "newsletterInfo";
 
-  if (hasVisited || path !== "/") {
-    setShow(true);
+function readInfo(): NewsletterInfo {
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+  } catch {
+    return {};
   }
-}, [isClient, getItem, path]);
+}
 
-  if (!show || isChromeless(path)) return <></>;
+function writeInfo(info: NewsletterInfo) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(info));
+  } catch {
+    // storage unavailable (private mode) — the signup itself still worked
+  }
+}
+
+// fetch only rejects on network errors; treat non-2xx as failures too.
+async function postJson(url: string, body: unknown) {
+  const res = await fetch(url, {
+    method: "POST",
+    body: JSON.stringify(body),
+    headers: { "Content-Type": "application/json" },
+  });
+  if (!res.ok) throw new Error(`Request failed (${res.status})`);
+  return res;
+}
+
+export const Newsletter = () => {
+  const path = usePathname();
+  const [show, setShow] = useState(false);
+  const [info, setInfo] = useState<NewsletterInfo>({});
+  const [pending, setPending] = useState(false);
+
+  // Hidden on the first-visit splash; read storage after mount so server and
+  // client render the same markup. (Reads sessionStorage directly: the
+  // useSessionStorage hook returns a new getItem each render, which would
+  // re-run this effect forever.)
+  useEffect(() => {
+    let hasVisited = false;
+    try {
+      hasVisited = Boolean(JSON.parse(sessionStorage.getItem("state") || "{}").hasVisited);
+    } catch {
+      hasVisited = false;
+    }
+    setShow(hasVisited || path !== "/");
+    setInfo(readInfo());
+  }, [path]);
+
+  if (!show || isChromeless(path)) return null;
+
+  const subscribe = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const data = new FormData(form);
+    const email = String(data.get("email") ?? "").trim();
+    const firstName = String(data.get("firstName") ?? "").trim();
+    setPending(true);
+    toast.promise(postJson("/api/newsletter", { email, firstName }), {
+      loading: "Subscribing…",
+      success: () => {
+        const next = { email, subscribed: true };
+        writeInfo(next);
+        setInfo(next);
+        form.reset();
+        return "You're on the list. Check your inbox!";
+      },
+      error: "Couldn't subscribe — please try again.",
+      finally: () => setPending(false),
+    });
+  };
+
+  const unsubscribe = () => {
+    setPending(true);
+    toast.promise(postJson("/api/newsletter/unsubscribe", { email: info.email ?? "" }), {
+      loading: "Unsubscribing…",
+      success: () => {
+        const next = { email: info.email, subscribed: false };
+        writeInfo(next);
+        setInfo(next);
+        return "You've been unsubscribed.";
+      },
+      error: "Couldn't unsubscribe — please try again.",
+      finally: () => setPending(false),
+    });
+  };
+
   return (
-    <div className="w-full xl:w-[80vw] mx-auto rounded-lg flex mb-12 overflow-hidden px-2">
-      <div className="flex-1 rounded-l-lg flex relative bg-neutral-900 dark:bg-black">
-        <div className=" place-items-center px-4 border-r-[2px] bg-primary-0  border-r-white news-1  absolute left-0 top-0 z-[10] h-full lg:grid hidden">
-          <Image
-            className="lg:w-40 md:w-32 w-24 aspect-square lg:h-40 my-auto"
-            alt="WDS Logo"
-            src={"/images/WDS LOGO WHITE.png"}
-            width={1000}
-            height={1000}
-          />
+    <section aria-labelledby="newsletter-heading" className="w-full border-t border-border bg-background px-4 py-16 sm:px-6 sm:py-20">
+      <div className="mx-auto flex max-w-7xl flex-wrap items-end justify-between gap-x-16 gap-y-8">
+        <div className="min-w-0 flex-[1_1_420px]">
+          <h2 id="newsletter-heading" className="m-0 mb-3 font-plaguard text-[32px] font-normal leading-[1.02] text-primary-0 sm:text-[46px]">
+            Never miss a chapter
+          </h2>
+          <p className="m-0 max-w-[520px] text-[19px] text-wds-text-secondary sm:text-[21px]">
+            New chapters, behind-the-scenes art and studio news. No spam.
+          </p>
         </div>
-        <div className="relative flex-1 lg:block hidden overflow-hidden">
-          <Image
-            alt="devvyn dawnshipper"
-            className="z-[3] news-2 absolute left-[10px] top-0 w-1/2 h-full object-cover object-top"
-            width={1000}
-            height={1000}
-            src={"/images/devvyn.jpg"}
-          />
-          <Image
-            alt="Nera blackthorne"
-            className="z-[2] news-2 absolute left-1/3 top-0 w-1/3 h-full object-cover object-top"
-            width={1000}
-            height={1000}
-            src={"/images/Nera.png"}
-          />
-          <Image
-            alt="Murphy"
-            className="z-[1] news-2 absolute left-1/2 top-0 w-1/3 h-full object-cover object-center"
-            width={1000}
-            height={1000}
-            src={"/images/murph.jpg"}
-          />
-          <Image
-            alt="John Doe"
-            className="z-[0]  absolute right-0 top-0 w-1/3 h-full object-cover object-left"
-            width={1000}
-            height={1000}
-            src={"/images/jd-2.jpg"}
-          />
-        </div>
-      </div>
-      <div className="ml-auto min-h-[50vh] py-4 h-max bg-neutral-900 dark:bg-primary-100 lg:px-0 md:max-w-[70%] w-full lg:w-[35%] flex flex-col justify-center items-center rounded-r-lg">
-        <p className="bg-[#F21170] px-2 xl:px-4 py-2 rounded-lg border-[2px] border-black text-white text-[16px] lg:text-[18px]">
-          JOIN THE ADVENTURE - SUBSCRIBE NOW!
-        </p>
-        <p className="w-[90%] lg:w-[70%] text-center text-neutral-300 dark:text-neutral_900 lg:text-[14px] text-[12px] my-4">
-          Be the first to know about our latest releases, exclusive content, and
-          behind-the-scenes updates. just for you. Subscribe today and never
-          miss out!
-        </p>
-        {"subscribed" in newSletterInfo && newSletterInfo.subscribed ? (
-          <div className="flex flex-col gap-4">
-            <p className="text-[18px] text-neutral-300 dark:text-neutral_900 w-full text-center">
-              You are already Subscribed!{" "}
+
+        {info.subscribed ? (
+          <div className="flex min-w-0 flex-[1_1_460px] flex-wrap items-center gap-x-6 gap-y-3" role="status">
+            <p className="m-0 flex items-center gap-3 text-[20px] font-bold text-foreground sm:text-[22px]">
+              <span className="h-3 w-3 bg-brand-green" aria-hidden="true" />
+              You&apos;re on the list{info.email ? ` as ${info.email}` : ""}.
             </p>
             <button
-              onClick={() => {
-                toast.promise(
-                  fetch("/api/newsletter/unsubscribe", {
-                    method: "POST",
-                    body: JSON.stringify({ email: newSletterInfo.email ?? "" }),
-                    headers: { "Content-Type": "application/json" },
-                  }),
-                  {
-                    loading: "Unsubscribing from newsletter...",
-                    success: () => {
-                      localStorage.setItem("newsletterInfo", JSON.stringify({ email: newSletterInfo.email, subscribed: false }));
-                      router.refresh();
-                      return "Unsubscribed from newsletter successfully!";
-                    },
-                    error: () => {
-                      return "Failed to unsubscribe from newsletter!";
-                    },
-                  }
-                );
-              }}
-              type="submit"
-              className="w-60 max-w-[80%] mx-auto rounded-lg bg-primary-0 py-2 px-6 text-white"
+              type="button"
+              onClick={unsubscribe}
+              disabled={pending}
+              className="min-h-[44px] text-[17px] font-bold uppercase tracking-[0.08em] text-primary-0 underline underline-offset-4 disabled:opacity-60"
             >
               Unsubscribe
             </button>
           </div>
         ) : (
-          <SendEmail />
+          <form onSubmit={subscribe} className="flex min-w-0 flex-[1_1_460px] flex-wrap items-end gap-3">
+            <div className="flex min-w-0 flex-[1_1_160px] flex-col gap-1.5">
+              <label htmlFor="newsletter-first-name" className="text-[16px] font-bold uppercase tracking-[0.1em] text-primary-0">
+                First name
+              </label>
+              <input
+                id="newsletter-first-name"
+                name="firstName"
+                type="text"
+                required
+                autoComplete="given-name"
+                className="h-[54px] border-2 border-primary-0 bg-background px-4 text-[20px] text-foreground placeholder:text-wds-text-secondary focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-brand-green"
+              />
+            </div>
+            <div className="flex min-w-0 flex-[2_1_240px] flex-col gap-1.5">
+              <label htmlFor="newsletter-email" className="text-[16px] font-bold uppercase tracking-[0.1em] text-primary-0">
+                Email
+              </label>
+              <input
+                id="newsletter-email"
+                name="email"
+                type="email"
+                required
+                autoComplete="email"
+                placeholder="you@example.com"
+                className="h-[54px] border-2 border-primary-0 bg-background px-4 text-[20px] text-foreground placeholder:text-wds-text-secondary focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-brand-green"
+              />
+            </div>
+            <button
+              type="submit"
+              disabled={pending}
+              className="cut-corners-sm h-[54px] flex-[1_0_auto] bg-brand-indigo px-7 text-[20px] font-bold uppercase tracking-[0.08em] text-white transition-colors hover:bg-brand-indigo-deep disabled:opacity-60 sm:flex-none"
+            >
+              {pending ? "Sending…" : "Subscribe"}
+            </button>
+          </form>
         )}
       </div>
-    </div>
+    </section>
   );
 };
