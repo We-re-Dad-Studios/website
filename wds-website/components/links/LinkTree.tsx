@@ -4,9 +4,9 @@
 // which links people actually use from social profiles.
 
 import Link from "next/link";
-import type { ComponentType, ReactNode } from "react";
+import type { ComponentType } from "react";
 import { usePostHog } from "posthog-js/react";
-import { ArrowRight, ArrowUpRight, Crown } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { FaDiscord, FaInstagram, FaTiktok } from "react-icons/fa6";
 import { ROYAL_ROAD_LINKS } from "@/lib/royal-road";
 
@@ -18,8 +18,6 @@ type LinkItem = {
   sub?: string;
   href: string;
   accent?: Accent;
-  /** Secondary link shown inside the same card, e.g. Royal Road */
-  secondary?: { id: string; label: string; href: string };
 };
 
 const SECTIONS: { title: string; items: LinkItem[] }[] = [
@@ -32,7 +30,6 @@ const SECTIONS: { title: string; items: LinkItem[] }[] = [
         sub: "Dark epic fantasy · read on Royal Road",
         href: ROYAL_ROAD_LINKS.dawnshipper,
         accent: "pink",
-        secondary: { id: "dawnshipper", label: "Start free on our site", href: "/projects/dawnshipper" },
       },
       {
         id: "osiris-royal-road",
@@ -40,7 +37,6 @@ const SECTIONS: { title: string; items: LinkItem[] }[] = [
         sub: "Sci-fi thriller · read on Royal Road",
         href: ROYAL_ROAD_LINKS.project_osiris,
         accent: "green",
-        secondary: { id: "project-osiris", label: "Start free on our site", href: "/projects/project_osiris" },
       },
     ],
   },
@@ -109,9 +105,7 @@ export function LinkTree() {
           <ul className="m-0 flex list-none flex-col gap-3 p-0">
             {section.items.map((item) => (
               <li key={item.id}>
-                <LinkCard item={item} onClick={() => track(item.id, item.href)}>
-                  {item.secondary && <SecondaryLink link={item.secondary} onClick={() => track(item.secondary!.id, item.secondary!.href)} />}
-                </LinkCard>
+                <LinkCard item={item} onClick={() => track(item.id, item.href)} />
               </li>
             ))}
           </ul>
@@ -121,27 +115,7 @@ export function LinkTree() {
   );
 }
 
-function SecondaryLink({ link, onClick }: { link: NonNullable<LinkItem["secondary"]>; onClick: () => void }) {
-  const cls =
-    "flex min-h-[44px] items-center gap-2 border-t border-brand-rule px-4 text-[16px] font-bold uppercase tracking-[0.08em] text-brand-indigo transition-colors hover:bg-brand-lilac";
-  if (isExternal(link.href)) {
-    return (
-      <a href={link.href} target="_blank" rel="noopener noreferrer" onClick={onClick} className={cls}>
-        <Crown className="h-4 w-4" aria-hidden="true" />
-        {link.label}
-        <ArrowUpRight className="ml-auto h-4 w-4" strokeWidth={2.5} aria-hidden="true" />
-      </a>
-    );
-  }
-  return (
-    <Link href={link.href} onClick={onClick} className={cls}>
-      {link.label}
-      <ArrowRight className="ml-auto h-4 w-4" strokeWidth={2.5} aria-hidden="true" />
-    </Link>
-  );
-}
-
-function LinkCard({ item, onClick, children }: { item: LinkItem; onClick: () => void; children?: ReactNode }) {
+function LinkCard({ item, onClick }: { item: LinkItem; onClick: () => void }) {
   const external = isExternal(item.href);
   const body = (
     <>
@@ -170,7 +144,6 @@ function LinkCard({ item, onClick, children }: { item: LinkItem; onClick: () => 
           {body}
         </Link>
       )}
-      {children}
     </div>
   );
 }
